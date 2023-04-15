@@ -1,9 +1,5 @@
-from decouple import config
-import os
-from datetime import timedelta
-
 from dotenv import load_dotenv
-
+import os
 
 load_dotenv()
 
