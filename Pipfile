@@ -10,6 +10,7 @@ flask-sqlalchemy = "*"
 flask-jwt-extended = "*"
 flask-cors = "*"
 python-dotenv = "*"
+numpy = "*"
 
 [dev-packages]
 
