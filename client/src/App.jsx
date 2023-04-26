@@ -1,37 +1,25 @@
-import { React, useState, useEffect } from 'react'
-import {LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend} from 'recharts';
-
+import AceEditor from "react-ace";
+import "ace-builds/src-noconflict/mode-java";
+import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/ext-language_tools";
+import { React, useState, useEffect } from 'react';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import ChartsPage from './pages/ChartsPage';
+import AlgorithmsPage from './pages/AlgorithmsPage';
 
 const App = () => {
-    const [meteoTest, setMeteoTest] = useState(null);
-
-    useEffect(() => {
-        fetch("/meteo_test").then(response =>
-            response.json().then(data => {
-                setMeteoTest(data.data);
-            })
-        );
-    }, []);
-    
-    var charts = [];
-    if (meteoTest) {
-        Object.entries(meteoTest).map(([columnName, columnData]) => {
-            charts.push(
-                <LineChart key={columnName} width={1000} height={200} data={columnData}>
-                    <XAxis dataKey="date"/>
-                    <YAxis/>
-                    <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                    <Line name={columnName} type="monotone" dataKey="value" stroke="#8884d8" />
-                    <Tooltip/>
-                    <Legend verticalAlign="top" height={36}/>
-                </LineChart>
-            );
-        })
-    }
-
     return (
         <div className="app">
-            {charts}
+            <Tabs defaultIndex={1} onSelect={(index) => console.log(index)}>
+                <TabList>
+                    <Tab> Graphs </Tab>
+                    <Tab> Algorithm loading </Tab>
+                </TabList>
+                <TabPanel> <ChartsPage/> </TabPanel>
+                <TabPanel> <AlgorithmsPage/> </TabPanel>
+            </Tabs>
         </div>
     )
 }

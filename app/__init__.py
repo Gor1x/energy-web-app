@@ -7,7 +7,7 @@ import numpy as np
 
 
 data = {}
-with open("app/data/indoor-temperature-prediction/Meteo_0_test_1.csv", "r") as f:
+with open("assets/data/Meteo_0_test_1.csv", "r") as f:
     reader = csv.reader(f, delimiter=",")
     header = next(reader)
     ts = header.index("ts")
