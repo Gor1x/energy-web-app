@@ -11,6 +11,8 @@ flask-jwt-extended = "*"
 flask-cors = "*"
 python-dotenv = "*"
 numpy = "*"
+flask-migrate = "*"
+werkzeug = "*"
 
 [dev-packages]
 

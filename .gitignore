@@ -2,8 +2,7 @@ assets/data/Meteo_0_test_1.csv
 
 .idea
 venv
-app/.env
-app/data
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
