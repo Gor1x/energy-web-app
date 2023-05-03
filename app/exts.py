@@ -6,6 +6,7 @@ import numpy as np
 db = SQLAlchemy()
 
 data = {}
+'''
 with open("assets/data/Meteo_0_test_1.csv", "r") as f:
     reader = csv.reader(f, delimiter=",")
     header = next(reader)
@@ -33,3 +34,4 @@ with open("assets/data/Meteo_0_test_1.csv", "r") as f:
         for k, column in enumerate(columns):
             day_batch[column].append(float(line[column_indices[k]]))
     append_batch()
+'''

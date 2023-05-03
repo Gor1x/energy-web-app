@@ -4,6 +4,7 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 import 'react-tabs/style/react-tabs.css';
+import axios from 'axios'
 
 
 const AlgorithmsPage = () => {
@@ -18,9 +19,9 @@ const AlgorithmsPage = () => {
             };
             reader.readAsBinaryString(file);
 
-            //let data = new FormData();
-            //data.append('file', file);
-            // axios.post('/files', data)...
+            let data = new FormData();
+            data.append('file', file);
+            axios.post('/algorithms', data);
         }
     }
 

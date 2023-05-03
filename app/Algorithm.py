@@ -40,10 +40,10 @@ class Algorithm:
 
 
 def load_algorithms_from_module(file: str) -> [Algorithm]:
-    lib = importlib.import_module('clustering.algorithms.' + os.path.splitext(os.path.basename(file))[0])
+    lib = importlib.import_module('app.algorithms.' + os.path.splitext(os.path.basename(file))[0])
     return lib.algorithms
 
-
+'''
 def load_algorithms() -> [Algorithm]:
     """
     This function scans all python files in ./algorithms folder.
@@ -61,3 +61,4 @@ def load_algorithms() -> [Algorithm]:
             print(f"Could not find algorithms variable in file {file}, skipping")
 
     return res
+'''

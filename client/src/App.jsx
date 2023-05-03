@@ -3,6 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import ChartsPage from './pages/ChartsPage';
 import AlgorithmsPage from './pages/AlgorithmsPage';
+import DatasetsPage from './pages/DatasetsPage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 
@@ -15,12 +16,14 @@ const App = () => {
                     <TabList>
                         <Tab> Графики </Tab>
                         <Tab> Загрузка алгоритма </Tab>
+                        <Tab> Загрузка датасета </Tab>
                         <Tab> Зарегистрироваться </Tab>
                         <Tab> Вход </Tab>
                     </TabList>
                 </div>
                 <TabPanel> <ChartsPage /> </TabPanel>
                 <TabPanel> <AlgorithmsPage /> </TabPanel>
+                <TabPanel> <DatasetsPage /> </TabPanel>
                 <TabPanel> <SignUpPage /> </TabPanel>
                 <TabPanel> <LoginPage /> </TabPanel>
             </Tabs>
