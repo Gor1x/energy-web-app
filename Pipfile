@@ -13,6 +13,7 @@ python-dotenv = "*"
 numpy = "*"
 flask-migrate = "*"
 werkzeug = "*"
+scikit-learn = "*"
 
 [dev-packages]
 

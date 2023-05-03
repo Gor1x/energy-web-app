@@ -1,9 +1,9 @@
 from app import app
 from app.exts import data
-from app.models import User
+from app.models import User, Algorithm, Dataset
 from flask import request, jsonify, make_response
 from flask_restx import Api, Resource, fields
-from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 
 JWTManager(app)
@@ -18,17 +18,57 @@ signup_model=api.model(
     }
 )
 
-@api.route("/")
-class index(Resource):
+algorithm_model=api.model(
+    'Algorithm',
+    {
+        'username': fields.String(),
+        'email': fields.String(),
+        'password': fields.String()
+    }
+)
+
+@api.route("/algorithms")
+class Algorithm(Resource):
+    @api.marshal_with(algorithm_model)
+    @jwt_required()
     def get(self):
-        return app.send_static_file("index.html")
+        pass
+    @api.marshal_with(algorithm_model)
+    @jwt_required()
+    def post(self):
+        pass
 
 
-@api.route("/meteo_test")
-class meteo_test(Resource):
-    #@jwt_required()
+@api.route("/algorithms/<int:id>")
+class AlgorithmById(Resource):
+    @api.marshal_with(algorithm_model)
+    @jwt_required()
+    def get(self, id):
+        algorithm = Algorithm.query.get_or_404(id)
+        return algorithm
+
+    @api.marshal_with(algorithm_model)
+    @jwt_required()
+    def put(self, id):
+        algorithm_to_update = Algorithm.query.get_or_404(id)
+        data = request.get_json()
+        algorithm_to_update.update(data.get("name"))
+        return algorithm_to_update
+    
+    @api.marshal_with(algorithm_model)
+    @jwt_required()
+    def delete(self, id):
+        algorithm_to_delete = Algorithm.query.get_or_404(id)
+        algorithm_to_delete.delete()
+        return algorithm_to_delete
+
+
+@api.route("/dataset")
+class dataset(Resource):
     def get(self):
-        return jsonify({"data": data})
+        pass
+    def post(self):
+        pass    
 
 @api.route("/signup")
 class sign_up(Resource):
@@ -63,3 +103,11 @@ class login(Resource):
                 'access_token': access_token,
                 'refresh_token': refresh_token
             })
+        
+@api.route("/refresh")
+class RefreshResource(Resource):
+    @jwt_required(refresh=True)
+    def post(self):
+        current_user = get_jwt_identity()
+        new_access_token = create_access_token(identity=current_user)
+        return make_response(jsonify({"access_token": new_access_token}), 200)

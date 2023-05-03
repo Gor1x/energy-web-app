@@ -11,6 +11,10 @@ db.init_app(app)
 migrate=Migrate(app, db)
 #CORS(app)
 
+@app.route("/")
+def index():
+    return app.send_static_file("index.html")
+
 @app.shell_context_processor
 def make_shell_context():
     return {
