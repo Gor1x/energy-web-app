@@ -6,6 +6,7 @@ import AlgorithmsPage from './pages/AlgorithmsPage';
 import DatasetsPage from './pages/DatasetsPage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
+import MapPage from './pages/MapPage';
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
                         <Tab> Загрузка датасета </Tab>
                         <Tab> Зарегистрироваться </Tab>
                         <Tab> Вход </Tab>
+                        <Tab> Карта </Tab>
                     </TabList>
                 </div>
                 <TabPanel> <ChartsPage /> </TabPanel>
@@ -26,6 +28,7 @@ const App = () => {
                 <TabPanel> <DatasetsPage /> </TabPanel>
                 <TabPanel> <SignUpPage /> </TabPanel>
                 <TabPanel> <LoginPage /> </TabPanel>
+                <TabPanel> <MapPage /> </TabPanel>
             </Tabs>
         </div>
     )
