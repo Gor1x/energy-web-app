@@ -1,5 +1,7 @@
 .container{
     margin-top: 50px;
+    width: 30em;
+    margin: 2em auto;
 }
 .heading{
     font-size: 3em;
@@ -10,4 +12,22 @@
 }
 .recipe{
     margin-top:20px;
+}
+.map_container {
+    width: 80%;
+    height: 500px;
+}
+.header {
+    min-height: 4em;
+    margin: 0 1em;
+}
+.roundbox {
+    border: 1px solid #b9b9b9;
+    position: relative;
+}
+.body {
+    padding-top: 0.75em;
+    max-width: 1200px;
+    min-width: 920px;
+    margin: 0 auto;
 }

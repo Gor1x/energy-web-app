@@ -1,35 +1,41 @@
 import { React, useState, useEffect } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import ChartsPage from './pages/ChartsPage';
-import AlgorithmsPage from './pages/AlgorithmsPage';
-import DatasetsPage from './pages/DatasetsPage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
-import MapPage from './pages/MapPage';
+import HomePage from './pages/HomePage';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { useAuth, logout } from './auth'
 
 const App = () => {
+    const [logged] = useAuth()
+
     return (
-        <div className="app">
-            <Tabs defaultIndex={3} onSelect={(index) => console.log(index)}>
-                <div>
-                    <img src="icsenergy-logo.png"/>
-                    <TabList>
-                        <Tab> Графики </Tab>
-                        <Tab> Загрузка алгоритма </Tab>
-                        <Tab> Загрузка датасета </Tab>
-                        <Tab> Зарегистрироваться </Tab>
-                        <Tab> Вход </Tab>
-                        <Tab> Карта </Tab>
-                    </TabList>
+        <div className="app body">
+            <BrowserRouter>
+                <div className='header' style={{ 'position': 'relative' }}>
+                    <div style={{ 'float': 'left', 'maxHeight': '50px' }}>
+                        <img height="50" src="icsenergy-logo.png" />
+                    </div>
+                    <div style={{ 'float': 'right', 'maxHeight': '50px' }}>
+                        {logged ?
+                            <a href="#" onClick={() => { logout() }}>Выйти</a> :
+                            <div>
+                                <Link to="/login">Войти</Link>
+                                {" | "}
+                                <Link to="/signup">Зарегистрироваться</Link>
+                            </div>
+                        }
+                    </div>
                 </div>
-                <TabPanel> <ChartsPage /> </TabPanel>
-                <TabPanel> <AlgorithmsPage /> </TabPanel>
-                <TabPanel> <DatasetsPage /> </TabPanel>
-                <TabPanel> <SignUpPage /> </TabPanel>
-                <TabPanel> <LoginPage /> </TabPanel>
-                <TabPanel> <MapPage /> </TabPanel>
-            </Tabs>
+
+                <div className="">
+                    <Routes>
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/" element={<HomePage />} />
+                    </Routes>
+                </div>
+            </BrowserRouter>
         </div>
     )
 }

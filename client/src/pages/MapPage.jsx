@@ -123,8 +123,6 @@ export default function MapPage() {
     });
 
     return (
-        <div>
-            <div ref={mapContainer} className="map-container" />
-        </div>
+        <div ref={mapContainer} className="map_container" />
     );
 }

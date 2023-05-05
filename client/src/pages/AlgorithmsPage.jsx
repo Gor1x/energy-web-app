@@ -5,7 +5,8 @@ import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 import 'react-tabs/style/react-tabs.css';
 import axios from 'axios'
-
+import { authFetch } from '../auth';
+import {RequestInfo} from 'react-token-auth'
 
 const AlgorithmsPage = () => {
     const [code, setCode] = useState("");
@@ -21,7 +22,13 @@ const AlgorithmsPage = () => {
 
             let data = new FormData();
             data.append('file', file);
-            axios.post('/algorithms', data);
+            
+            const requestOptions = {
+                method: 'POST',
+                body: data
+            };
+            authFetch('/algorithms', requestOptions)
+            //axios.post('/algorithms', data);
         }
     }
 

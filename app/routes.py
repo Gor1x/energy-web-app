@@ -62,7 +62,7 @@ class AlgorithmResource(Resource):
     def get(self):
         pass
     @api.marshal_with(algorithm_model)
-    #@jwt_required()
+    @jwt_required()
     def post(self):
         algorithms = []
         for (_, file) in request.files.items():

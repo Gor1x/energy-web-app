@@ -39,7 +39,7 @@ const SignUpPage = () => {
     }
 
     return (
-        <div className="container">
+        <div className="roundbox container" style={{"width": "30em", "margin": "2em auto"}}>
             <div className="form">
                 {show &&
                     <Alert variant="success" 

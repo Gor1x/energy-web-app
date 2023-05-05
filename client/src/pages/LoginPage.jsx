@@ -3,12 +3,12 @@ import {Form,Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import { login } from '../auth'
-//import {useHistory} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 
 const LoginPage = () => {
-    const {register,handleSubmit,reset,formState:{errors}}=useForm()
-    //const history=useHistory()
+    const {register, handleSubmit, reset, formState:{errors}} = useForm()
+    const navigate=useNavigate()
     
     const loginUser=(data)=>{
        console.log(data)
@@ -28,7 +28,7 @@ const LoginPage = () => {
            
            if (data){
             login(data.access_token)
-            //history.push('/')
+            navigate("/");
            }
            else{
                alert('Invalid username or password')
@@ -38,7 +38,7 @@ const LoginPage = () => {
     }
 
     return(
-        <div className="container">
+        <div className="roundbox container">
         <div className="form">
             <form>
                 <Form.Group>
