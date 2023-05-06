@@ -38,12 +38,19 @@
 *  `email`: String *(обязательно)* - Email пользователя
 *  `password`: String *(обязательно)* - Пароль пользователя
 #### Ответ
-*  `username`: String *(обязательно)* - Имя пользователя
-*  `email`: String *(обязательно)* - Email пользователя
-*  `password`: String *(обязательно)* - Пароль пользователя
+*  `username`: String - Имя пользователя
+*  `email`: String - Email пользователя
+*  `id`: Integer - id пользователя
 #### Пример ответа
 ```json
-
+{
+	"message": "User created successfully",
+	"data": {
+		"email": "fgfgfb93@gmail.com",
+		"id": 1,
+		"username": "astronomax"
+	}
+}
 ```
 
 ### POST /login/
@@ -56,7 +63,13 @@
 *  `refresh_token`: String - refresh-токен
 #### Пример ответа
 ```json
-
+{
+	"data": {
+		"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4MzM3NzkyNSwianRpIjoiZThkZTZlOTMtODcyYS00OTkwLWJhODgtYzdmZGU2YzliOWU2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImZlZ2llIiwibmJmIjoxNjgzMzc3OTI1LCJleHAiOjE2ODMzNzg4MjV9.h8IEzOW8Fv5njdsCdxZinOX6jB5u9AN2EfC_hdCdGSc",
+		"refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4MzM3NzkyNSwianRpIjoiNTE0MmQxMTAtYTA4ZC00ZDg1LThmZmYtZDIyMTZhZWZlZjIyIiwidHlwZSI6InJlZnJlc2giLCJzdWIiOiJmZWdpZSIsIm5iZiI6MTY4MzM3NzkyNSwiZXhwIjoxNjg1OTY5OTI1fQ.Nu-cL6Gf4gP61sKdYOb3Hw3IqUWW8alfZoayT9I-_gA"
+	},
+	"message": "Authorized succesfully"
+}
 ```
 
 ### POST /refresh/
@@ -65,7 +78,10 @@
 *  `access_token`: String - access-токен
 #### Пример ответа
 ```json
-
+{
+	"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4MzM3ODA4NywianRpIjoiZTgwNmJmYjItODRjYS00NmEwLTk4YWYtYmI2N2YwNWIyMjA1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImZlZ2llIiwibmJmIjoxNjgzMzc4MDg3LCJleHAiOjE2ODMzNzg5ODd9.5Y-HN2QHkGSvKoL_enQcUvVm5wunChoEEchpcEapruM",
+	"message": "Refreshed succesfully"
+}
 ```
 
 ### POST /algorithms/
@@ -79,7 +95,12 @@
 *  `file_path`: String - путь к файлу вида `app/algorithms/{uuid.uuid4()}.py`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "algorithm",
+	"user_id": 1,
+	"file_path": "./app/algorithms\\05aeee76-c314-4c92-88ab-23b6f1f14aec.py"
+}
 ```
 
 ### GET /algorithms/\<int:id\>
@@ -93,7 +114,12 @@
 *  `file_path`: String - путь к файлу вида `app/algorithms/{uuid.uuid4()}.py`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "algorithm",
+	"user_id": 1,
+	"file_path": "./app/algorithms\\05aeee76-c314-4c92-88ab-23b6f1f14aec.py"
+}
 ```
 
 ### PUT /algorithms/\<int:id\>
@@ -109,7 +135,12 @@
 *  `file_path`: String - путь к файлу вида `app/algorithms/{uuid.uuid4()}.py`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "algorithm",
+	"user_id": 1,
+	"file_path": "./app/algorithms\\05aeee76-c314-4c92-88ab-23b6f1f14aec.py"
+}
 ```
 
 ### DELETE /algorithms/\<int:id\>
@@ -123,7 +154,12 @@
 *  `file_path`: String - путь к файлу вида `app/algorithms/{uuid.uuid4()}.py`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "algorithm",
+	"user_id": 1,
+	"file_path": "./app/algorithms\\05aeee76-c314-4c92-88ab-23b6f1f14aec.py"
+}
 ```
 
 ### POST /datasets/
@@ -137,7 +173,12 @@
 *  `file_path`: String - путь к файлу вида `app/datasets/{uuid.uuid4()}.csv`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "dataset",
+	"user_id": 1,
+	"file_path": "./app/datasets\\30afcbe8-6774-4021-86df-d611b4eb84c7.py"
+}
 ```
 
 ### GET /datasets/\<int:id\>
@@ -151,7 +192,12 @@
 *  `file_path`: String - путь к файлу вида `app/datasets/{uuid.uuid4()}.py`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "dataset",
+	"user_id": 1,
+	"file_path": "./app/datasets\\30afcbe8-6774-4021-86df-d611b4eb84c7.py"
+}
 ```
 
 ### PUT /datasets/\<int:id\>
@@ -167,7 +213,12 @@
 *  `file_path`: String - путь к файлу вида `app/datasets/{uuid.uuid4()}.py`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "dataset",
+	"user_id": 1,
+	"file_path": "./app/datasets\\30afcbe8-6774-4021-86df-d611b4eb84c7.py"
+}
 ```
 
 ### DELETE /datasets/\<int:id\>
@@ -181,7 +232,12 @@
 *  `file_path`: String - путь к файлу вида `app/datasets/{uuid.uuid4()}.py`
 #### Пример ответа
 ```json
-
+{
+	"id": 1,
+	"name": "dataset",
+	"user_id": 1,
+	"file_path": "./app/datasets\\30afcbe8-6774-4021-86df-d611b4eb84c7.py"
+}
 ```
 
 ### GET /run/\<int:dataset_id\>/\<int:algorithm_id\>
