@@ -14,6 +14,7 @@ numpy = "*"
 flask-migrate = "*"
 werkzeug = "*"
 scikit-learn = "*"
+pandas = "*"
 
 [dev-packages]
 
