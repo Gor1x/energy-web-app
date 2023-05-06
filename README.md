@@ -2,12 +2,22 @@
 
 Тестовый деплой (ветка [prod](https://github.com/Astronomax/energy-web-app/tree/prod)): https://energy-web-app.onrender.com/
 
-### Инструкция по запуску:
-* Склонировать репозиторий: `git clone https://github.com/Astronomax/energy-web-app`
-* В корневой папке проекта создать virtual environment: `python -m venv ./`
-* Установить необходимые зависимости: `pip install -r requirements.txt`
-* (опционально) При необходимости сбилдить react в папке client, если /client/build в репозитории устарел: `npm run build`
-* Запустить сервер: `python run.py`
+### Инструкция по запуску backend-сервера:
+* Склонировать репозиторий: `git clone https://github.com/Astronomax/energy-web-app`.
+* В корневой папке проекта создать virtual environment: `python -m venv ./venv`.
+* Запустить скрипт `/venv/Scripts/activate.bat`.
+* В корневой папке проекта выполнить `pip install pipenv`, а затем `pipenv install`. Должны установиться все необходимые зависимости из файла `Pipfile.lock`/
+* В корневой папке проекта выполнить  `flask shell`. Затем исполнить `db.create_all()`, затем `quit()`. Должна создаться папка `instance` с файлом `dev.db`.
+* (опционально) Если вдруг вы добавили новую таблицу или изменили существующую, например, в файле `app/models.py` добавили новое поле в классе `User`, необходимо обновить базу данных в соответствии с этим изменением. Сначала нужно сохранить его в папку `migrations/versions` при помощи команды `flask db migrate -m "Add new table"` в корне проекта. После этого необходимо обновить локальную базу до последней версии командой `flask db upgrade` также в корне проекта.
+* Запустить backend-сервер командой `python run.py`
+
+### Инструкция по запуску frontend-сервера:
+* Перейти в папку `client`.
+* Выполнить команду `npm install`. Должны установиться все необходимые зависимости из `package.json` в папку `node_modules`.
+* Запустить frontend-сервер командой `npm start`
+
+frontend-сервер можно не запускать. Вместо этого можно сбилдить react командой `npm run build` в папке `client`. backend-сервер возвращает сбилженный сайт из папки `client/build`. Но при таком использовании, необходимо будет билдить проект после каждого изменения в react-приложении в папке `client`. Такой вариант используется в продакшене.
+
 
 ### API:
 * **/signup**
