@@ -7,12 +7,11 @@ import {useNavigate} from 'react-router-dom'
 
 
 const LoginPage = () => {
-    const {register, handleSubmit, reset, formState:{errors}} = useForm()
+    const {register, handleSubmit} = useForm()
     const navigate=useNavigate()
-    
-    const loginUser=(data)=>{
-       console.log(data)
+    const [error, setError] = useState(null)
 
+    const loginUser=(data)=>{
        const requestOptions={
            method:"POST",
            headers:{
@@ -20,21 +19,19 @@ const LoginPage = () => {
            },
            body:JSON.stringify(data)
        }
-        
        fetch('/login', requestOptions)
        .then(res => res.json())
        .then(data => {
-           console.log(data.access_token)
-           
-           if (data){
-            login(data.access_token)
-            navigate("/");
-           }
-           else{
-               alert('Invalid username or password')
-           }
-       })
-       reset()
+            if (data) {
+                setError(null)
+                login(data.data.access_token)
+                navigate("/");
+            } else {
+                setError('Некорректный логин или пароль')
+            }
+        }).catch(_ => {
+            setError('Некорректный логин или пароль')
+        })
     }
 
     return(
@@ -44,33 +41,22 @@ const LoginPage = () => {
                 <Form.Group>
                     <Form.Label>Логин</Form.Label>
                     <Form.Control type="text"
-                        placeholder="Your username"
-                        {...register('username',{required:true,maxLength:25})}
+                        {...register('username',{})}
                     />
                 </Form.Group>
-                {errors.username && <p style={{color:'red'}}><small>Username is required</small></p>}
-                {errors.username?.type === "maxLength" && <p style={{color:'red'}}><small>Username should be 25 characters</small></p>}
                 <br></br>
                 <Form.Group>
                     <Form.Label>Пароль</Form.Label>
                     <Form.Control type="password"
-                        placeholder="Your password"
-                        {...register('password',{required:true,minLength:8})}
+                        {...register('password',{})}
                     />
                 </Form.Group>
-                {errors.username && <p style={{color:'red'}}><small>Password is required</small></p>}
-                {errors.password?.type === "maxLength" && <p style={{color:'red'}}>
-                    <small>Password should be more than 8 characters</small>
-                    </p>}
+                {error && <span className="error subscription-row">{error}</span>}
                 <br></br>
                 <Form.Group>
                     <Button as="sub" variant="primary" onClick={handleSubmit(loginUser)}>Войти</Button>
                 </Form.Group>
                 <br></br>
-                <Form.Group>
-                    <small>Ещё не зарегистрированы?</small>
-                </Form.Group>
-                
             </form>
         </div>
     </div>

@@ -6,9 +6,9 @@
 .heading{
     font-size: 3em;
 }
-.form{
-    margin:auto;
-    width: 80%;
+.form {
+    padding: 0;
+    margin: 0;
 }
 .recipe{
     margin-top:20px;
@@ -30,4 +30,27 @@
     max-width: 1200px;
     min-width: 920px;
     margin: 0 auto;
+}
+.error {
+    color: red;
+}
+.subscription-row {
+    height: 1.2em;
+    line-height: 1.2em;
+    font-size: 0.7em;
+}
+
+.table-form {
+    margin: 1em auto;
+    font-size: 1.1em;
+}
+
+.table-form .field-name {
+    text-align: right;
+    padding: 0.5em 2em 0.5em 0.5em;
+    width: 7.5em;
+}
+
+.table-form tr td {
+    height: 2em;
 }

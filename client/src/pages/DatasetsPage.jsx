@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import 'react-tabs/style/react-tabs.css';
-import axios from 'axios'
+import { authFetch } from '../auth';
 
 
 const DatasetsPage = () => {
@@ -9,7 +9,12 @@ const DatasetsPage = () => {
         if (file) {
             let data = new FormData();
             data.append('file', file);
-            axios.post('/datasets', data);
+            const requestOptions = {
+                method: 'POST',
+                body: data
+            };
+            authFetch('/datasets', requestOptions)
+            //axios.post('/datasets', data);
         }
     }
 
