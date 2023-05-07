@@ -15,6 +15,7 @@ flask-migrate = "*"
 werkzeug = "*"
 scikit-learn = "*"
 pandas = "*"
+gunicorn = "*"
 
 [dev-packages]
 
