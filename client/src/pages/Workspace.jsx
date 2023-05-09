@@ -1,9 +1,18 @@
 import { React, useEffect, useState } from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import FileTab from './FileTab';
+import DatasetTab from './DatasetTab';
+import AlgorithmTab from './AlgorithmTab';
 
 const Workspace = (props) => {
+
+    const renderTab = (file) => {
+        switch(file.file_type) {
+            case 'algorithm':   return <AlgorithmTab file_id={file.file_id}/>
+            case 'dataset':     return <DatasetTab file_id={file.file_id}/>
+        } 
+    }
+
     return (
         <div>
             <Tabs>
@@ -15,7 +24,7 @@ const Workspace = (props) => {
                 </TabList>
                 {props.tabs.map(file => 
                 <TabPanel> 
-                    <FileTab file={file}/> 
+                    {renderTab(file)} 
                 </TabPanel>)}
             </Tabs>
         </div>
