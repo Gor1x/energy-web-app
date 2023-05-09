@@ -3,7 +3,6 @@ import uuid
 import app
 import app.Algorithm as alg
 import app.Dataset as dts
-from app.exts import data 
 from app.models import User, Algorithm, Dataset
 from flask import request, jsonify, make_response
 from flask_restx import Api, Resource, fields

@@ -9,9 +9,7 @@ const MyDatasetsPage = () => {
     useEffect(() => {
         authFetch('/datasets')
             .then(response => response.json())
-            .then(datasets => {
-                setDatasets(datasets.map(dataset => dataset.file_path));
-            });
+            .then(datasets => setDatasets(datasets.map(dataset => dataset.file_path)));
     }, []);
 
     return (

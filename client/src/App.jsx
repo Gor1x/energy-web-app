@@ -10,7 +10,7 @@ const App = () => {
     const [logged] = useAuth()
 
     return (
-        <div className="app body">
+        <div className="app">
             <BrowserRouter>
                 <div className='header' style={{ 'position': 'relative' }}>
                     <div style={{ 'float': 'left', 'maxHeight': '50px' }}>
@@ -27,8 +27,7 @@ const App = () => {
                         }
                     </div>
                 </div>
-
-                <div className="">
+                <div className="body">
                     <Routes>
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignUpPage />} />

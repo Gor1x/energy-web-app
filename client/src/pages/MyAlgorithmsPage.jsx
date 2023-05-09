@@ -9,9 +9,7 @@ const MyAlgorithmsPage = () => {
     useEffect(() => {
         authFetch('/algorithms')
             .then(response => response.json())
-            .then(algorithms => {
-                setAlgorithms(algorithms.map(algorithm => algorithm.file_path));
-            });
+            .then(algorithms => setAlgorithms(algorithms.map(algorithm => algorithm.file_path)));
     }, []);
 
     return (

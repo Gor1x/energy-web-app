@@ -1,32 +1,24 @@
 import { React, useState } from 'react';
 import 'react-tabs/style/react-tabs.css';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import MyAlgorithmsPage from './MyAlgorithmsPage';
-import MyDatasetsPage from './MyDatasetsPage';
-import AlgorithmsPage from './AlgorithmsPage';
-import DatasetsPage from './DatasetsPage';
-import MapPage from './MapPage';
+import FileList from './FileList';
+import Workspace from './Workspace';
+import Split from 'react-split'
 
 const HomePage = () => {
+    const [tabs, setTabs] = useState([])
     return (
-        <div>
-            <Tabs defaultIndex={0} onSelect={(index) => console.log(index)}>
-                <div>
-                    <TabList>
-                        <Tab> Карта </Tab>
-                        <Tab> Мои алгоритмы </Tab>
-                        <Tab> Мои датасеты </Tab>
-                        <Tab> Загрузка алгоритма </Tab>
-                        <Tab> Загрузка датасета </Tab>
-                    </TabList>
-                </div>
-                <TabPanel> <MapPage /> </TabPanel>
-                <TabPanel> <MyAlgorithmsPage /> </TabPanel>
-                <TabPanel> <MyDatasetsPage /> </TabPanel>
-                <TabPanel> <AlgorithmsPage /> </TabPanel>
-                <TabPanel> <DatasetsPage /> </TabPanel>           
-            </Tabs>
-        </div>
+        <Split className='horizontal-split'
+            direction='horizontal'
+            sizes={[20, 80]}>
+            <div className='file-list-container roundbox'>
+                <FileList onSelect={file => {
+                    setTabs([...tabs, file])
+                }}/>
+            </div>
+            <div className='workspace-container roundbox'>
+                <Workspace tabs={tabs}/>
+            </div>
+        </Split>
     );
 }
 
