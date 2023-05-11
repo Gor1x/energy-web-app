@@ -10,27 +10,40 @@ const DatasetTab = (props) => {
         {'date': '15-05-22', 'value': 2.0}, 
         {'date': '16-05-22', 'value': 3.0}, 
         {'date': '17-05-22', 'value': 4.0}
-    ]
+    ];
+
+    const [layout, setLayout] = useState([
+      { i: "a", x: 0, y: 5, w: 6, h: 6 },
+      { i: "b", x: 0, y: 11, w: 3, h: 4 },
+      { i: "c", x: 6, y: 0, w: 4, h: 12 }
+    ]);
+
     return (
-        <GridLayout className="layout" cols={12} rowHeight={30} width={1200}>
-          <div className='roundbox' key="b" data-grid={{ x: 0, y: 5, w: 6, h: 6, minW: 2, maxW: 4 }}>
-           график по какому-то столбцу датасета
-           <LineChart key={'temperature'} width={500} height={200}
-                data={exampleDataSnippet}>
-                <XAxis dataKey="date" />
-                <YAxis />
-                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                <Line name={'temperature'} type="monotone" dataKey="value" stroke="#8884d8" />
-                <Tooltip />
-                <Legend verticalAlign="top" height={36} />
-            </LineChart>
-          </div>
-          <div className='roundbox' key="c" data-grid={{ x: 0, y: 11, w: 3, h: 4, minW: 2, maxW: 4 }}>
-            результат запуска какого-то алгоритма датасете
-          </div>
-          <div className='roundbox' key="d" data-grid={{ x: 6, y: 0, w: 4, h: 12 }}>
-            строки датасета
-          </div>
+        <GridLayout
+          layout={layout}
+          className="layout" 
+          cols={12} 
+          rowHeight={30} 
+          width={1200}
+          onLayoutChange={(layout, layouts) => setLayout(layout)}>
+            <div className='roundbox' key="a" data-grid={{ x: 0, y: 5, w: 6, h: 6 }}>
+            график по какому-то столбцу датасета
+            <LineChart key={'temperature'} width={500} height={200}
+                  data={exampleDataSnippet}>
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                  <Line name={'temperature'} type="monotone" dataKey="value" stroke="#8884d8" />
+                  <Tooltip />
+                  <Legend verticalAlign="top" height={36} />
+              </LineChart>
+            </div>
+            <div className='roundbox' key="b" data-grid={{ x: 0, y: 11, w: 3, h: 4 }}>
+              результат запуска какого-то алгоритма датасете
+            </div>
+            <div className='roundbox' key="c" data-grid={{ x: 6, y: 0, w: 4, h: 12 }}>
+              строки датасета
+            </div>
         </GridLayout>
     );
 }
