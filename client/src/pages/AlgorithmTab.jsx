@@ -6,29 +6,17 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 import 'react-tabs/style/react-tabs.css';
+import { authFetch } from '../auth';
 
 const AlgorithmTab = (props) => {
-    const exampleCodeSnippet = `
-    import sklearn.cluster as sk
+    const [code, setCode] = useState('')
 
-    from clustering.model.Algorithm import Algorithm
-    from clustering.model.Algorithm import AlgoParams
-    from clustering.model.Algorithm import SelectableParam
-    
-    k_mans = Algorithm(name="edadws",
-                        params=AlgoParams(
-                            bool_params=[],
-                            float_params=["tol"],
-                            int_params=["n_clusters", "n_init", "max_iter", "verbose"],
-                            selectable_params=[SelectableParam(name="algorithm",
-                                                               items=["elkan", "auto", "full"])]
-                        ),
-                        run=lambda data, params:
-                        sk.KMeans(**params)
-                        .fit(data).labels_)
-    
-    algorithms = [k_mans]
-    `
+    useEffect(() => {
+      authFetch(`/algorithms/${props.file_id}/code`)
+        .then(response => response.text())
+        .then(text => setCode(text))
+    }, [])
+
     return (
         <GridLayout className="layout" cols={12} rowHeight={30} width={1200}>
           <div className='roundbox' key="a" data-grid={{ x: 0, y: 0, w: 3, h: 4, minW: 2, maxW: 4 }}>
@@ -41,13 +29,13 @@ const AlgorithmTab = (props) => {
             результат запуска алгоритма на каком-то датасете
           </div>
           <div style={{'overflow': 'scroll'}} 
-          className='roundbox' key="d" data-grid={{ x: 4, y: 0, w: 5, h: 12 }}>
+            className='roundbox' key="d" data-grid={{ x: 4, y: 0, w: 5, h: 12 }}>
             код алгоритма (редактируемый сохраняемый с возможностью загрузить из файла и выгрузить в файл)
             <AceEditor
                 mode="python"
                 theme="github"
                 name="UNIQUE_ID_OF_DIV"
-                value={exampleCodeSnippet}
+                value={code}
                 editorProps={{ $blockScrolling: true }}
             />
           </div>

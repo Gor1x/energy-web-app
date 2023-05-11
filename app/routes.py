@@ -4,7 +4,7 @@ import app
 import app.Algorithm as alg
 import app.Dataset as dts
 from app.models import User, Algorithm, Dataset
-from flask import request, jsonify, make_response
+from flask import request, jsonify, make_response, send_from_directory
 from flask_restx import Api, Resource, fields
 from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -41,6 +41,8 @@ dataset_model=api.model(
     }
 )
 
+def normalize_path(path):
+    return os.path.normpath(path).replace("\\", os.sep).replace("/", os.sep)
 
 @api.route("/run/<int:dataset_id>/<int:algorithm_id>")
 class RunResource(Resource):
@@ -63,8 +65,6 @@ class AlgorithmResource(Resource):
     def get(self):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithms=Algorithm.query.filter_by(user_id=user_id).all()
-        print("algorithms:\n")
-        print(user_id)
         return algorithms
     
     @api.marshal_with(algorithm_model)
@@ -76,6 +76,7 @@ class AlgorithmResource(Resource):
             algorithms_dir = "./app/algorithms" 
             filename = f"{str(uuid.uuid4())}.py"
             algorithm_path = os.path.join(algorithms_dir, filename)
+            algorithm_path = normalize_path(algorithm_path)
             file.save(algorithm_path)
             new_algorithm = Algorithm(
                 name="algorithm",
@@ -113,9 +114,23 @@ class AlgorithmByIdResource(Resource):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithm_to_delete = Algorithm.query.get_or_404(id)
         if algorithm_to_delete.user_id == user_id:
-            os.remove(algorithm_to_delete.file_path)
+            path = normalize_path(algorithm_to_delete.file_path)
+            os.remove(path)
             algorithm_to_delete.delete()
             return algorithm_to_delete  
+
+
+@api.route("/algorithms/<int:id>/code")
+class AlgorithmCodeByIdResource(Resource):
+    @jwt_required()
+    def get(self, id):
+        user_id=User.query.filter_by(username=get_jwt_identity()).first().id
+        algorithm = Algorithm.query.get_or_404(id)
+        if algorithm.user_id == user_id:
+            file_path = normalize_path(algorithm.file_path)
+            directory = os.path.join(*os.path.dirname(file_path).split(os.sep)[1:])
+            filename = os.path.basename(file_path)
+            return send_from_directory(directory=directory, path=filename)
 
 
 @api.route("/datasets")
@@ -136,6 +151,7 @@ class DatasetResource(Resource):
             datasets_dir = "./app/datasets" 
             filename = f"{str(uuid.uuid4())}.csv"
             dataset_path = os.path.join(datasets_dir, filename)
+            dataset_path = normalize_path(dataset_path)
             file.save(dataset_path)
             new_dataset = Dataset(
                 name="dataset",
@@ -173,7 +189,8 @@ class DatasetByIdResource(Resource):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         dataset_to_delete = Dataset.query.get_or_404(id)
         if dataset_to_delete.user_id == user_id:
-            os.remove(dataset_to_delete.file_path)
+            path = normalize_path(dataset_to_delete.file_path)
+            os.remove(path)
             dataset_to_delete.delete()
             return dataset_to_delete  
 
@@ -223,6 +240,7 @@ class login(Resource):
                 }
             }), 200)
         return make_response(jsonify({'message': 'Invalid username or password'}), 401)
+
 
 @api.route("/refresh")
 class RefreshResource(Resource):
