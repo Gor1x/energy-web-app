@@ -1,6 +1,6 @@
 # energy-web-app
 
-Тестовый деплой (ветка [prod](https://github.com/Astronomax/energy-web-app/tree/prod)): https://energy-web-app.onrender.com/
+Тестовый деплой: https://energy-web-app-m79t.onrender.com/
 
 ### Инструкция по запуску backend-сервера:
 * В корневой папке проекта создать virtual environment: `python -m venv ./venv`.
