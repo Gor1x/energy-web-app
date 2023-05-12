@@ -80,3 +80,27 @@
     padding: 15px; 
     height: 100%;
 }
+
+
+
+.folder-title {
+    display: table;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.file-container {
+    display: table;
+    width: 100%;
+}
+
+.file-name {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.file-button {
+    float: right;
+    display: table-cell;
+    vertical-align: middle;
+}

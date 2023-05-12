@@ -1,12 +1,9 @@
-import 'react-tabs/style/react-tabs.css';
-
 import { React, useEffect, useState } from 'react';
-//import axios from 'axios';
 import { authFetch } from '../auth';
 import ListGroup from 'react-bootstrap/ListGroup';
-
-import AlgorithmsPage from './AlgorithmsPage';
-
+import CloseButton from 'react-bootstrap/CloseButton';
+import { Button } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 
 const FileList = (props) => {
     const [algorithms, setAlgorithms] = useState([])
@@ -28,13 +25,12 @@ const FileList = (props) => {
                 method: 'POST',
                 body: data
             };
-            
+
             authFetch('/algorithms', requestOptions)
-            .then(response => response.json())
-            .then(algorithm => {
-                setAlgorithms([...algorithms, algorithm[0]])
-            });
-            //axios.post('/algorithms', data);
+                .then(response => response.json())
+                .then(algorithm => {
+                    setAlgorithms([...algorithms, algorithm[0]])
+                });
         }
     }
 
@@ -62,44 +58,95 @@ const FileList = (props) => {
                 setDatasets(datasets.map(dataset => dataset));
             });
     }, []);
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     return (
         <div>
-            <div>Алгоритмы:</div>
-
-            <input type="file"
-                name="myFile"
-                onChange={uploadFile} />
-
-            <ListGroup variant="flush">
-                {algorithms.map((algorithm, i) =>
-                    <ListGroup.Item 
-                        action 
-                        href={`#algorithm_${i}`}
-                        onClick={() => props.onSelect({
-                            file_name: algorithm.name,
-                            file_id: algorithm.id,
-                            file_type: 'algorithm'
-                        })}>
-                        {algorithm.name}
-                        <button onClick={() => onClick(algorithm)}>X</button>
-                    </ListGroup.Item>
-                )}
-            </ListGroup>
-            <div>Датасеты:</div>
-            <ListGroup variant="flush">
-                {datasets.map((dataset, i) =>
-                    <ListGroup.Item 
-                        action 
-                        href={`#dataset_${i}`}
-                        onClick={() => props.onSelect({
-                            file_name: dataset.name,
-                            file_id: dataset.id,
-                            file_type: 'dataset'
-                        })}>
-                        {dataset.name}
-                    </ListGroup.Item>
-                )}
-            </ListGroup>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Загрузка алгоритма</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <input type="file"
+                        name="myFile"
+                        onChange={uploadFile} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Отмена
+                    </Button>
+                    {/*<Button variant="primary" onClick={handleClose}>
+                        Сохранить
+                    </Button>*/}
+                </Modal.Footer>
+            </Modal>
+            <div style={{ 'marginBottom': '10px' }}>
+                <div className='folder-title'>
+                    <p className="file-name fw-normal">
+                        Алгоритмы
+                    </p>
+                    <Button className='file-button'
+                        variant="outline-primary"
+                        onClick={handleShow}>
+                        <i class="bi bi-file-plus" aria-hidden="true"></i>
+                    </Button>
+                </div>
+                <ListGroup variant="flush">
+                    {algorithms.map((algorithm, i) =>
+                        <ListGroup.Item
+                            action
+                            href={`#algorithm_${i}`}
+                            onClick={() => props.onSelect({
+                                file_name: algorithm.name,
+                                file_id: algorithm.id,
+                                file_type: 'algorithm'
+                            })}>
+                            <div className='file-container'>
+                                <p className="file-name fw-normal">
+                                    {algorithm.name}
+                                </p>
+                                <Button className='file-button'
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        onClick(algorithm)
+                                    }}
+                                    variant="outline-dark">
+                                    <i class="bi bi-x" aria-hidden="true"></i>
+                                </Button>
+                            </div>
+                        </ListGroup.Item>
+                    )}
+                </ListGroup>
+            </div>
+            <div>
+                <div className='folder-title'>
+                    <p className="file-name fw-normal">
+                        Датасеты
+                    </p>
+                </div>
+                <ListGroup variant="flush">
+                    {datasets.map((dataset, i) =>
+                        <ListGroup.Item
+                            action
+                            href={`#dataset_${i}`}
+                            onClick={() => props.onSelect({
+                                file_name: dataset.name,
+                                file_id: dataset.id,
+                                file_type: 'dataset'
+                            })}>
+                            <div className='file-container'>
+                                <p className="file-name fw-normal">
+                                    {dataset.name}
+                                </p>
+                            </div>
+                        </ListGroup.Item>
+                    )}
+                </ListGroup>
+            </div>
         </div>
     );
 }

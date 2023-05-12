@@ -16,7 +16,8 @@ const Workspace = (props) => {
     
     return (
         <div>
-            <Tabs activeKey={props.workspaceInfo.activeKey}>
+            <Tabs activeKey={props.workspaceInfo.activeKey}
+                onSelect={props.onSelect}>
                 {props.workspaceInfo.tabs.map((file, i) =>
                     <Tab eventKey={i} title={file.file_name}>
                         {renderTab(file)}

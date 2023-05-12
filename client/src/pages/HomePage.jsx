@@ -3,7 +3,8 @@ import 'react-tabs/style/react-tabs.css';
 import { React, useState } from 'react';
 import Split from 'react-split'
 
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import FileList from './FileList';
 import Workspace from './Workspace';
 
@@ -34,7 +35,13 @@ const HomePage = () => {
                 }}/>
             </div>
             <div className='workspace-container roundbox'>
-                <Workspace workspaceInfo={workspaceInfo}/>
+                <Workspace onSelect={(id) => {
+                        setWorkspaceInfo({
+                            tabs: [...workspaceInfo.tabs],
+                            activeKey: id
+                        })
+                    }} 
+                    workspaceInfo={workspaceInfo}/>
             </div>
         </Split>
     );
