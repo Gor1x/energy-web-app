@@ -1,0 +1,106 @@
+.container{
+    margin-top: 50px;
+    width: 30em;
+    margin: 2em auto;
+}
+.heading{
+    font-size: 3em;
+}
+.form {
+    padding: 0;
+    margin: 0;
+}
+.recipe{
+    margin-top:20px;
+}
+.map_container {
+    width: 80%;
+    height: 500px;
+}
+.header {
+    min-height: 4em;
+    margin: 0 1em;
+}
+.roundbox {
+    border: 2px solid #b9b9b9;
+    position: relative;
+}
+
+.error {
+    color: red;
+}
+.subscription-row {
+    height: 1.2em;
+    line-height: 1.2em;
+    font-size: 0.7em;
+}
+
+.table-form {
+    margin: 1em auto;
+    font-size: 1.1em;
+}
+
+.table-form .field-name {
+    text-align: right;
+    padding: 0.5em 2em 0.5em 0.5em;
+    width: 7.5em;
+}
+
+.table-form tr td {
+    height: 2em;
+}
+
+.app {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.body {
+    flex-grow: 1;
+    width: 100%;
+    min-width: 920px;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+.horizontal-split {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.file-list-container {
+    padding: 15px; 
+    height: 100%;
+}
+
+.workspace-container {
+    padding: 15px; 
+    height: 100%;
+}
+
+
+
+.folder-title {
+    display: table;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.file-container {
+    display: table;
+    width: 100%;
+}
+
+.file-name {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.file-button {
+    float: right;
+    display: table-cell;
+    vertical-align: middle;
+}
