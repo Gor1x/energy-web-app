@@ -1,4 +1,6 @@
 import { React, useState } from 'react';
+import axios from 'axios';
+
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-github";
@@ -25,19 +27,19 @@ const AlgorithmsPage = () => {
                 body: data
             };
             authFetch('/algorithms', requestOptions)
-            //axios.post('/algorithms', data);
+            axios.post('/algorithms', data);
         }
     }
 
     return (
         <div>
-            <AceEditor
+            {/* <AceEditor
                 mode="python"
                 theme="github"
                 name="UNIQUE_ID_OF_DIV"
                 value={code}
                 editorProps={{ $blockScrolling: true }}
-            />
+            /> */}
             <input type="file"
                 name="myFile"
                 onChange={uploadFile} />

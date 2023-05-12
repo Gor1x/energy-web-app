@@ -1,8 +1,11 @@
-import { React, useState } from 'react';
 import 'react-tabs/style/react-tabs.css';
+
+import { React, useState } from 'react';
+import Split from 'react-split'
+
+
 import FileList from './FileList';
 import Workspace from './Workspace';
-import Split from 'react-split'
 
 const HomePage = () => {
     const [tabs, setTabs] = useState([])

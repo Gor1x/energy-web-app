@@ -1,12 +1,15 @@
-import { React, useState, useEffect } from 'react';
 import 'react-tabs/style/react-tabs.css';
-import SignUpPage from './pages/SignUpPage';
-import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
+
+import { React, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { useAuth, logout } from './auth'
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+
+import SignUpPage from './pages/SignUpPage';
+import LoginPage from './pages/LoginPage';
+import HomePage from './pages/HomePage';
+
 
 const App = () => {
     const [logged] = useAuth()
