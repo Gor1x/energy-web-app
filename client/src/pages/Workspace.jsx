@@ -13,11 +13,11 @@ const Workspace = (props) => {
             case 'dataset': return <DatasetTab file_id={file.file_id} />
         }
     }
-
+    
     return (
         <div>
-            <Tabs>
-                {props.tabs.map((file, i) =>
+            <Tabs activeKey={props.workspaceInfo.activeKey}>
+                {props.workspaceInfo.tabs.map((file, i) =>
                     <Tab eventKey={i} title={file.file_name}>
                         {renderTab(file)}
                     </Tab>)}

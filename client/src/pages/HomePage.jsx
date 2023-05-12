@@ -8,18 +8,33 @@ import FileList from './FileList';
 import Workspace from './Workspace';
 
 const HomePage = () => {
-    const [tabs, setTabs] = useState([])
+    const [workspaceInfo, setWorkspaceInfo] = useState({
+        tabs: [],
+        activeKey: null
+    })
+
     return (
         <Split className='horizontal-split'
             direction='horizontal'
             sizes={[20, 80]}>
             <div className='file-list-container roundbox'>
                 <FileList onSelect={file => {
-                    setTabs([...tabs, file])
+                    const id = workspaceInfo.tabs.findIndex((el) => el.file_id == file.file_id)
+                    if (id == -1) {
+                        setWorkspaceInfo({
+                            tabs: [...workspaceInfo.tabs, file],
+                            activeKey: workspaceInfo.tabs.length
+                        })
+                    } else {
+                        setWorkspaceInfo({
+                            tabs: [...workspaceInfo.tabs],
+                            activeKey: id
+                        })
+                    }
                 }}/>
             </div>
             <div className='workspace-container roundbox'>
-                <Workspace tabs={tabs}/>
+                <Workspace workspaceInfo={workspaceInfo}/>
             </div>
         </Split>
     );
