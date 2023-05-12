@@ -1,31 +1,26 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState, useId } from 'react';
 import 'react-tabs/style/react-tabs.css';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import DatasetTab from './DatasetTab';
 import AlgorithmTab from './AlgorithmTab';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 
 const Workspace = (props) => {
-
     const renderTab = (file) => {
-        switch(file.file_type) {
-            case 'algorithm':   return <AlgorithmTab file_id={file.file_id}/>
-            case 'dataset':     return <DatasetTab file_id={file.file_id}/>
-        } 
+        switch (file.file_type) {
+            case 'algorithm': return <AlgorithmTab file_id={file.file_id} />
+            case 'dataset': return <DatasetTab file_id={file.file_id} />
+        }
     }
 
     return (
         <div>
             <Tabs>
-                <TabList>
-                    {props.tabs.map(file => 
-                        <Tab>
-                            {`${file.file_type} ${file.file_id}`}
-                        </Tab>)}
-                </TabList>
-                {props.tabs.map(file => 
-                <TabPanel> 
-                    {renderTab(file)} 
-                </TabPanel>)}
+                {props.tabs.map((file, i) =>
+                    <Tab eventKey={i} title={file.file_name}>
+                        {renderTab(file)}
+                    </Tab>)}
             </Tabs>
         </div>
     );
