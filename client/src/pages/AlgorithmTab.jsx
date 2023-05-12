@@ -23,7 +23,7 @@ const AlgorithmTab = (props) => {
       { i: "a", x: 0, y: 0, w: 3, h: 4 },
       { i: "b", x: 0, y: 5, w: 3, h: 4 },
       { i: "c", x: 0, y: 9, w: 3, h: 4 },
-      { i: "d",  x: 4, y: 0, w: 6, h: 15 }
+      { i: "d", x: 4, y: 0, w: 6, h: 15 }
     ]);
 
     return (

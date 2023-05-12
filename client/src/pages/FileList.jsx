@@ -8,12 +8,12 @@ const FileList = (props) => {
     const [datasets, setDatasets] = useState([])
 
     useEffect(() => {
-        authFetch('/algorithms')
+        authFetch('/algorithms/')
             .then(response => response.json())
             .then(algorithms => {
                 setAlgorithms(algorithms.map(algorithm => algorithm));
             });
-        authFetch('/datasets')
+        authFetch('/datasets/',)
             .then(response => response.json())
             .then(datasets => {
                 setDatasets(datasets.map(dataset => dataset));

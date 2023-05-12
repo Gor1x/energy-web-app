@@ -14,7 +14,6 @@ const DatasetsPage = () => {
                 body: data
             };
             authFetch('/datasets', requestOptions)
-            //axios.post('/datasets', data);
         }
     }
 

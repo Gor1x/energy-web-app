@@ -19,7 +19,7 @@ const LoginPage = () => {
            },
            body:JSON.stringify(data)
        }
-       fetch('/login', requestOptions)
+       fetch('/auth/login', requestOptions)
        .then(res => res.json())
        .then(data => {
             if (data) {

@@ -42,23 +42,3 @@ class Algorithm:
 def load_algorithms_from_module(file: str) -> [Algorithm]:
     lib = importlib.import_module('app.algorithms.' + os.path.splitext(os.path.basename(file))[0])
     return lib.algorithms
-
-'''
-def load_algorithms() -> [Algorithm]:
-    """
-    This function scans all python files in ./algorithms folder.
-    Each file should contain a global variable `algorithms` containing an Iterable of Algorithm with all algorithms
-    defined in the file.
-
-    :return: list with all algorithms extracted from those `algorithms` variables
-    """
-    res = []
-    files = filter(lambda it: os.path.isfile(os.path.join('algorithms', it)), os.listdir('algorithms'))
-    for file in files:
-        try:
-            res.extend(load_algorithms_from_module(file))
-        except AttributeError:
-            print(f"Could not find algorithms variable in file {file}, skipping")
-
-    return res
-'''

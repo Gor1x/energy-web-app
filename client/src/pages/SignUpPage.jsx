@@ -23,7 +23,7 @@ const SignUpPage = () => {
                 body: JSON.stringify(body)
             }
             console.log(JSON.stringify(body))
-            fetch('/signup', requestOptions)
+            fetch('/auth/signup', requestOptions)
                 .then(res => {
                     if (res.status == 201) {
                         setError(null)

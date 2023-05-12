@@ -1,18 +1,21 @@
 import os
 import uuid
-import app
 import app.Algorithm as alg
 import app.Dataset as dts
 from app.models import User, Algorithm, Dataset
 from flask import request, jsonify, make_response, send_from_directory
-from flask_restx import Api, Resource, fields
-from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required, get_jwt_identity
+from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 
-JWTManager(app.app)
-api = Api(app.app, doc="/docs")
 
-signup_model=api.model(
+running_ns = Namespace("run", description="Run")
+algorithm_ns = Namespace("algorithms", description="Algorithm")
+dataset_ns = Namespace("datasets", description="Dataset")
+auth_ns = Namespace("auth", description="Auth")
+
+
+signup_model=auth_ns.model(
     'SignUp',
     {
         'username': fields.String(),
@@ -21,7 +24,7 @@ signup_model=api.model(
     }
 )
 
-algorithm_model=api.model(
+algorithm_model=algorithm_ns.model(
     'Algorithm',
     {
         'id': fields.Integer(),
@@ -31,7 +34,7 @@ algorithm_model=api.model(
     }
 )
 
-dataset_model=api.model(
+dataset_model=dataset_ns.model(
     'Dataset',
     {
         'id': fields.Integer(),
@@ -44,7 +47,7 @@ dataset_model=api.model(
 def normalize_path(path):
     return os.path.normpath(path).replace("\\", os.sep).replace("/", os.sep)
 
-@api.route("/run/<int:dataset_id>/<int:algorithm_id>")
+@running_ns.route("/<int:dataset_id>/<int:algorithm_id>")
 class RunResource(Resource):
     @jwt_required()
     def get(self, dataset_id, algorithm_id):
@@ -58,16 +61,16 @@ class RunResource(Resource):
             return make_response(jsonify(list(map(int, list(pred)))), 200)
 
 
-@api.route("/algorithms")
+@algorithm_ns.route("/")
 class AlgorithmResource(Resource):
-    @api.marshal_with(algorithm_model)
+    @algorithm_ns.marshal_with(algorithm_model)
     @jwt_required()
     def get(self):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithms=Algorithm.query.filter_by(user_id=user_id).all()
         return algorithms
     
-    @api.marshal_with(algorithm_model)
+    @algorithm_ns.marshal_with(algorithm_model)
     @jwt_required()
     def post(self):
         algorithms = []
@@ -88,9 +91,9 @@ class AlgorithmResource(Resource):
         return algorithms
 
 
-@api.route("/algorithms/<int:id>")
+@algorithm_ns.route("/<int:id>")
 class AlgorithmByIdResource(Resource):
-    @api.marshal_with(algorithm_model)
+    @algorithm_ns.marshal_with(algorithm_model)
     @jwt_required()
     def get(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
@@ -98,7 +101,7 @@ class AlgorithmByIdResource(Resource):
         if algorithm.user_id == user_id:
             return algorithm
 
-    @api.marshal_with(algorithm_model)
+    @algorithm_ns.marshal_with(algorithm_model)
     @jwt_required()
     def put(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
@@ -108,7 +111,7 @@ class AlgorithmByIdResource(Resource):
             algorithm_to_update.update(data.get("name"))
             return algorithm_to_update
     
-    @api.marshal_with(algorithm_model)
+    @algorithm_ns.marshal_with(algorithm_model)
     @jwt_required()
     def delete(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
@@ -120,7 +123,7 @@ class AlgorithmByIdResource(Resource):
             return algorithm_to_delete  
 
 
-@api.route("/algorithms/<int:id>/code")
+@algorithm_ns.route("/<int:id>/code")
 class AlgorithmCodeByIdResource(Resource):
     @jwt_required()
     def get(self, id):
@@ -133,16 +136,16 @@ class AlgorithmCodeByIdResource(Resource):
             return send_from_directory(directory=directory, path=filename)
 
 
-@api.route("/datasets")
+@dataset_ns.route("/")
 class DatasetResource(Resource):
-    @api.marshal_with(dataset_model)
+    @dataset_ns.marshal_with(dataset_model)
     @jwt_required()
     def get(self):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         datasets=Dataset.query.filter_by(user_id=user_id).all()
         return datasets
     
-    @api.marshal_with(dataset_model)
+    @dataset_ns.marshal_with(dataset_model)
     @jwt_required()
     def post(self):
         datasets = []
@@ -163,9 +166,9 @@ class DatasetResource(Resource):
         return datasets
 
 
-@api.route("/datasets/<int:id>")
+@dataset_ns.route("/<int:id>")
 class DatasetByIdResource(Resource):
-    @api.marshal_with(dataset_model)
+    @dataset_ns.marshal_with(dataset_model)
     @jwt_required()
     def get(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
@@ -173,7 +176,7 @@ class DatasetByIdResource(Resource):
         if dataset.user_id == user_id:
             return dataset
 
-    @api.marshal_with(dataset_model)
+    @dataset_ns.marshal_with(dataset_model)
     @jwt_required()
     def put(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
@@ -183,7 +186,7 @@ class DatasetByIdResource(Resource):
             dataset_to_update.update(data.get("name"))
             return dataset_to_update
     
-    @api.marshal_with(dataset_model)
+    @dataset_ns.marshal_with(dataset_model)
     @jwt_required()
     def delete(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
@@ -195,9 +198,9 @@ class DatasetByIdResource(Resource):
             return dataset_to_delete  
 
 
-@api.route("/signup")
+@auth_ns.route("/signup")
 class sign_up(Resource):
-    @api.expect(signup_model)
+    @auth_ns.expect(signup_model)
     def post(self):
         data = request.get_json()
         username=data.get('username')
@@ -222,7 +225,7 @@ class sign_up(Resource):
         }), 201)
 
 
-@api.route("/login")
+@auth_ns.route("/login")
 class login(Resource):
     def post(self):
         data = request.get_json()
@@ -242,7 +245,7 @@ class login(Resource):
         return make_response(jsonify({'message': 'Invalid username or password'}), 401)
 
 
-@api.route("/refresh")
+@auth_ns.route("/refresh")
 class RefreshResource(Resource):
     @jwt_required(refresh=True)
     def post(self):
