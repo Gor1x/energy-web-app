@@ -31,16 +31,16 @@ frontend-сервер можно не запускать. Вместо этог�
    * [GET /algorithms/\<int:id\>](#get-algorithmsintid)
    * [PUT /algorithms/\<int:id\>](#put-algorithmsintid)
    * [DELETE /algorithms/\<int:id\>](#delete-algorithmsintid)
-* **/algorithms/\<int:id\>/code**
-   * [GET /algorithms/\<int:id\>/code](#get-algorithmsintidcode)
+* **/algorithms/code/\<int:id\>**
+   * [GET /algorithms/code/\<int:id\>](#get-algorithmscodeintid)
 * **/datasets**
    * [POST /datasets/](#post-datasets)
 * **/datasets/\<int:id\>**
    * [GET /datasets/\<int:id\>](#get-datasetsintid)
    * [PUT /datasets/\<int:id\>](#put-datasetsintid)
    * [DELETE /datasets/\<int:id\>](#delete-datasetsintid)
-* **/run/\<int:dataset_id\>/\<int:algorithm_id\>**
-   * [GET /run/\<int:dataset_id\>/\<int:algorithm_id\>](#get-runintdataset_idintalgorithm_id)
+* **/run**
+   * [GET /run](#get-run)
 
 ### POST /auth/signup/
 Реализует стандарт JSON Web Tokens. Регистрирует, и возвращает json-представление созданного пользователя.
@@ -173,7 +173,7 @@ frontend-сервер можно не запускать. Вместо этог�
 }
 ```
 
-### GET /algorithms/\<int:id\>/code
+### GET /algorithms/code/\<int:id\>
 Принимает id алгоритма в строке запроса. Возвращает файл с кодом алгоритма. 
 #### Строка запроса
 *  `id`: Integer - id алгоритма
@@ -258,9 +258,9 @@ frontend-сервер можно не запускать. Вместо этог�
 }
 ```
 
-### GET /run/\<int:dataset_id\>/\<int:algorithm_id\>
+### GET /run>
 Принимает id датасета и алгоритма в строке запроса. Запускает выбранный алгоритм на выбранном датасете и возвращает результат запуска. 
-#### Строка запроса
+#### Параметры запроса
 *  `dataset_id`: Integer - id датасета
 *  `algorithm_id`: Integer - id алгоритма
 #### Ответ

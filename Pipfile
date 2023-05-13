@@ -16,6 +16,7 @@ werkzeug = "*"
 scikit-learn = "*"
 pandas = "*"
 gunicorn = "*"
+dask = "*"
 
 [dev-packages]
 

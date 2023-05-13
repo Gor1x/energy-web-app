@@ -1,5 +1,5 @@
 from app.exts import db
-
+from sqlalchemy import text
 
 class User(db.Model):
     id=db.Column(db.Integer(), primary_key=True)
@@ -39,6 +39,7 @@ class Dataset(db.Model):
     user_id=db.Column(db.Integer())
     name=db.Column(db.String(80), nullable=False)
     file_path=db.Column(db.String(80), nullable=False, unique=True)
+    num_rows=db.Column(db.Integer(), nullable=False, server_default=text('0'))
 
     def save(self):
         db.session.add(self)
