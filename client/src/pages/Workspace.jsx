@@ -1,5 +1,8 @@
-import { React, useEffect, useState, useId } from 'react';
 import 'react-tabs/style/react-tabs.css';
+
+import { React, useEffect, useState, useId } from 'react';
+import { Button } from 'react-bootstrap';
+
 //import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import DatasetTab from './DatasetTab';
 import AlgorithmTab from './AlgorithmTab';
@@ -18,10 +21,26 @@ const Workspace = (props) => {
         <div>
             <Tabs activeKey={props.workspaceInfo.activeKey}
                 onSelect={props.onSelect}>
-                {props.workspaceInfo.tabs.map((file, i) =>
-                    <Tab eventKey={i} title={file.file_name}>
+                {props.workspaceInfo.tabs.map((file, i) => 
+                    <Tab eventKey={i} 
+                        title={
+                            <div>
+                                {file.file_name+file.file_id}
+                                <Button className='file-button'
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        props.onClose(i)
+                                    }}
+                                    variant="outline-dark">
+                                    <i class="bi bi-x" aria-hidden="true"></i>
+                                </Button>
+                            </div>
+                        }>
+                        <div>
                         {renderTab(file)}
-                    </Tab>)}
+                        </div>
+                    </Tab>
+                )}
             </Tabs>
         </div>
     );

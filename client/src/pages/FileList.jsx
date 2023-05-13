@@ -1,13 +1,14 @@
 import { React, useEffect, useState } from 'react';
 import { authFetch } from '../auth';
+import { Button } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 import CloseButton from 'react-bootstrap/CloseButton';
-import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 
 const FileList = (props) => {
-    const [algorithms, setAlgorithms] = useState([])
-    const [datasets, setDatasets] = useState([])
+    const [listitems, setlistitems] = useState([])
+
+    const urlBench = props.urlBenchName
 
     const [code, setCode] = useState("")
     const uploadFile = (event) => {
@@ -26,36 +27,29 @@ const FileList = (props) => {
                 body: data
             };
 
-            authFetch('/algorithms', requestOptions)
+            authFetch(`/${urlBench}`, requestOptions)
                 .then(response => response.json())
-                .then(algorithm => {
-                    setAlgorithms([...algorithms, algorithm[0]])
+                .then(listitem => {
+                    setlistitems([...listitems, listitem[0]])
                 });
         }
     }
 
-    const onClick = (algorithm) => {
-        algorithms.splice(algorithms.indexOf(algorithm), 1)
-        setAlgorithms([...algorithms])
+    const onClick = (listitem) => {
+        listitems.splice(listitems.indexOf(listitem), 1)
+        setlistitems([...listitems])
 
         const requestOptions = {
             method: 'DELETE'
         };
-        authFetch(`/algorithms/${algorithm.id}`, requestOptions)
+        authFetch(`/${urlBench}/${listitem.id}`, requestOptions)
     }
 
     useEffect(() => {
-        authFetch('/algorithms/')
+        authFetch(`/${urlBench}/`)
             .then(response => response.json())
-            .then(algorithms => {
-                setAlgorithms(algorithms.map(algorithm => algorithm));
-            });
-    }, []);
-    useEffect(() => {
-        authFetch('/datasets/',)
-            .then(response => response.json())
-            .then(datasets => {
-                setDatasets(datasets.map(dataset => dataset));
+            .then(listitems => {
+                setlistitems(listitems.map(listitem => listitem));
             });
     }, []);
 
@@ -68,7 +62,7 @@ const FileList = (props) => {
         <div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Загрузка алгоритма</Modal.Title>
+                    <Modal.Title>props.modalTitle</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <input type="file"
@@ -87,7 +81,7 @@ const FileList = (props) => {
             <div style={{ 'marginBottom': '10px' }}>
                 <div className='folder-title'>
                     <p className="file-name fw-normal">
-                        Алгоритмы
+                        {props.listName}
                     </p>
                     <Button className='file-button'
                         variant="outline-primary"
@@ -96,52 +90,27 @@ const FileList = (props) => {
                     </Button>
                 </div>
                 <ListGroup variant="flush">
-                    {algorithms.map((algorithm, i) =>
+                    {listitems.map((listitem, i) =>
                         <ListGroup.Item
                             action
-                            href={`#algorithm_${i}`}
+                            //href={`#${props.fileType}_${i}`}
                             onClick={() => props.onSelect({
-                                file_name: algorithm.name,
-                                file_id: algorithm.id,
-                                file_type: 'algorithm'
+                                file_name: listitem.name,
+                                file_id: listitem.id,
+                                file_type: `${props.fileType}`
                             })}>
                             <div className='file-container'>
                                 <p className="file-name fw-normal">
-                                    {algorithm.name}
+                                    {listitem.name + listitem.id}
                                 </p>
                                 <Button className='file-button'
                                     onClick={(e) => {
                                         e.stopPropagation()
-                                        onClick(algorithm)
+                                        onClick(listitem)
                                     }}
                                     variant="outline-dark">
                                     <i class="bi bi-x" aria-hidden="true"></i>
                                 </Button>
-                            </div>
-                        </ListGroup.Item>
-                    )}
-                </ListGroup>
-            </div>
-            <div>
-                <div className='folder-title'>
-                    <p className="file-name fw-normal">
-                        Датасеты
-                    </p>
-                </div>
-                <ListGroup variant="flush">
-                    {datasets.map((dataset, i) =>
-                        <ListGroup.Item
-                            action
-                            href={`#dataset_${i}`}
-                            onClick={() => props.onSelect({
-                                file_name: dataset.name,
-                                file_id: dataset.id,
-                                file_type: 'dataset'
-                            })}>
-                            <div className='file-container'>
-                                <p className="file-name fw-normal">
-                                    {dataset.name}
-                                </p>
                             </div>
                         </ListGroup.Item>
                     )}
