@@ -86,7 +86,7 @@ const FileList = (props) => {
                     <Button className='file-button'
                         variant="outline-primary"
                         onClick={handleShow}>
-                        <i class="bi bi-file-plus" aria-hidden="true"></i>
+                        <i className="bi bi-file-plus" aria-hidden="true"></i>
                     </Button>
                 </div>
                 <ListGroup variant="flush">
@@ -109,7 +109,7 @@ const FileList = (props) => {
                                         onClick(listitem)
                                     }}
                                     variant="outline-dark">
-                                    <i class="bi bi-x" aria-hidden="true"></i>
+                                    <i className="bi bi-x" aria-hidden="true"></i>
                                 </Button>
                             </div>
                         </ListGroup.Item>

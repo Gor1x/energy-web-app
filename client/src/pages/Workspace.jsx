@@ -32,7 +32,7 @@ const Workspace = (props) => {
                                         props.onClose(i)
                                     }}
                                     variant="outline-dark">
-                                    <i class="bi bi-x" aria-hidden="true"></i>
+                                    <i className="bi bi-x" aria-hidden="true"></i>
                                 </Button>
                             </div>
                         }>

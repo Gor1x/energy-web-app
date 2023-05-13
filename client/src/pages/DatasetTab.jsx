@@ -1,9 +1,11 @@
-import { React, useEffect, useState } from 'react';
 import 'react-tabs/style/react-tabs.css';
+
+import { React, useEffect, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Table from 'react-bootstrap/Table';
+
+import TableCSV from './TableCSV';
 
 const DatasetTab = (props) => {
   const exampleHeader = ['datetime', 'season', 'holiday', 'workingday', 'weather',
@@ -22,7 +24,31 @@ const DatasetTab = (props) => {
     { "w": 7, "h": 6, "x": 0, "y": 7, "i": "a" },
     { "w": 4, "h": 5, "x": 7, "y": 0, "i": "b" },
     { "w": 7, "h": 7, "x": 0, "y": 0, "i": "c" }
-]);
+  ]);
+
+  const products = [
+    { id: 1, name: 'George', animal: 'Monkey' },
+    { id: 2, name: 'Jeffrey', animal: 'Giraffe' },
+    { id: 3, name: 'Alice', animal: 'Giraffe' },
+    { id: 4, name: 'Foster', animal: 'Tiger' },
+    { id: 5, name: 'Tracy', animal: 'Bear' },
+    { id: 6, name: 'Joesph', animal: 'Lion' },
+    { id: 7, name: 'Tania', animal: 'Deer' },
+    { id: 8, name: 'Chelsea', animal: 'Tiger' },
+    { id: 9, name: 'Benedict', animal: 'Tiger' },
+    { id: 10, name: 'Chadd', animal: 'Lion' },
+    { id: 11, name: 'Delphine', animal: 'Deer' },
+    { id: 12, name: 'Elinore', animal: 'Bear' },
+    { id: 13, name: 'Stokes', animal: 'Tiger' },
+    { id: 14, name: 'Tamara', animal: 'Lion' },
+    { id: 15, name: 'Zackery', animal: 'Bear' }
+  ];
+
+  const columns = [
+    { dataField: 'id', text: 'Id', sort: true },
+    { dataField: 'name', text: 'Name', sort: true },
+    { dataField: 'animal', text: 'Animal', sort: true }
+  ];
 
   return (
     <div>
@@ -43,7 +69,6 @@ const DatasetTab = (props) => {
         rowHeight={30}
         width={1200}
         onLayoutChange={(layout, layouts) => {
-          console.log(layout)
           setLayout(layout)}}>
         <div style={{ 'paddingRight': '30px' }} className='roundbox' key="a">
           <ResponsiveContainer width="100%" height="100%">
@@ -62,22 +87,9 @@ const DatasetTab = (props) => {
         <div className='roundbox' key="b">
           результат запуска какого-то алгоритма датасете
         </div>
+
         <div style={{'overflow': 'scroll'}} className='roundbox' key="c">
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>#</th>
-                {exampleHeader.map(name => <th>{name}</th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {exampleData.map((row, i) => 
-                <tr>
-                  <td>{i + 1}</td>
-                  {row.map(value => <td>{value}</td>)}
-                </tr>)}
-            </tbody>
-          </Table>
+          <TableCSV table = {{columns: columns,data: products}}/>
         </div>
       </GridLayout>
     </div>
