@@ -225,7 +225,7 @@ class DatasetDataByIdResource(Resource):
         if dataset.user_id == user_id:
             file_path = normalize_path(f"{dataset.file_path}/*.part")
             df = dd.read_csv(file_path).set_index('idx')
-            return make_response(df.loc[int(from_row):int(to_row)].compute().to_json(orient='records'), 200)
+            return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
 
 
 @auth_ns.route("/signup")

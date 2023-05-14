@@ -12,8 +12,8 @@ import Tabs from 'react-bootstrap/Tabs';
 const Workspace = (props) => {
     const renderTab = (file) => {
         switch (file.file_type) {
-            case 'algorithm': return <AlgorithmTab file_id={file.file_id} />
-            case 'dataset': return <DatasetTab file_id={file.file_id} />
+            case 'algorithm': return <AlgorithmTab id={file.id} />
+            case 'dataset': return <DatasetTab numRows={file.num_rows} id={file.id} />
         }
     }
     
@@ -25,7 +25,7 @@ const Workspace = (props) => {
                     <Tab eventKey={i} 
                         title={
                             <div>
-                                {file.file_name+file.file_id}
+                                {file.name+file.id}
                                 <Button className='file-button'
                                     onClick={(e) => {
                                         e.stopPropagation()

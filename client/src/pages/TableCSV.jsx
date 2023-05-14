@@ -9,33 +9,61 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { authFetch } from '../auth';
 
 const TableCSV = (props) => {
-    const [table, setTable] = useState(props.table)
+    const [page, setPage] = useState(1)
+    const [table, setTable] = useState({
+        data: [],
+        columns: []
+    })
 
-    console.log(props)
+    useEffect(() => {
+        const from = (page-1)*props.sizePerPage
+        let to = from + props.sizePerPage
+        if (to>=props.totalSize) {
+            to = props.totalSize
+        }
+
+        authFetch(`/${props.url}?from=${from}&to=${to}`)
+            .then(response => response.json())
+            .then(data_ => {
+                const data = data_.map(line => line);
+                const columns = []
+                for (const [key, _] of Object.entries(data[0])) {
+                    columns.push({
+                        dataField: key,
+                        text: key
+                    })
+                }
+                setTable({
+                    data: data,
+                    columns: columns
+                })
+            });
+    }, [page])
+
 
     const pagination = paginationFactory({
-        page: 1,
-        sizePerPage: 5,
+        pageStartIndex: 1,
+        page: page,
+        sizePerPage: props.sizePerPage,
+        totalSize: props.totalSize,
         sizePerPageList: [],
-        lastPageText: '>>',
-        firstPageText: '<<',
         nextPageText: '>',
         prePageText: '<',
         alwaysShowAllBtns: true,
-        onPageChange: function (page, sizePerPage) {
-            authFetch(`/${props.url}/${page*sizePerPage}/${sizePerPage}`)
-            .then(response => response.json())
-            .then(data => {
-                setTable(data.map(line => line));
-            });
+        withFirstAndLast: false,
+        onPageChange: function (page, _) {
+            setPage(page)
         }
     });
     return (
+        table.data.length!=0 && 
         <BootstrapTable bootstrap4
-                        keyField='id' 
+                        keyField='Unnamed: 0' 
                         data={table.data} 
                         columns={table.columns} 
-                        pagination={pagination}/>
+                        pagination={pagination}
+                        remote={true}
+                        onTableChange={()=>{}}/>
     );
 }
 

@@ -15,7 +15,7 @@ const HomePage = () => {
     })
 
     const onSelect = (file) => {
-        const id = workspaceInfo.tabs.findIndex((el) => el.file_type == file.file_type && el.file_id == file.file_id)
+        const id = workspaceInfo.tabs.findIndex((el) => el.file_type == file.file_type && el.id == file.id)
         
         setWorkspaceInfo({
             tabs: (id == -1 ? [...workspaceInfo.tabs, file] : [...workspaceInfo.tabs]),

@@ -22,12 +22,11 @@ const FileList = (props) => {
 
             let data = new FormData();
             data.append('file', file);
-            const requestOptions = {
+
+            authFetch(`/${urlBench}`, {
                 method: 'POST',
                 body: data
-            };
-
-            authFetch(`/${urlBench}`, requestOptions)
+            })
                 .then(response => response.json())
                 .then(listitem => {
                     setlistitems([...listitems, listitem[0]])
@@ -95,9 +94,8 @@ const FileList = (props) => {
                             action
                             //href={`#${props.fileType}_${i}`}
                             onClick={() => props.onSelect({
-                                file_name: listitem.name,
-                                file_id: listitem.id,
-                                file_type: `${props.fileType}`
+                                ...listitem,
+                                file_type: props.fileType
                             })}>
                             <div className='file-container'>
                                 <p className="file-name fw-normal">

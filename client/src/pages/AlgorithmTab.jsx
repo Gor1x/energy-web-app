@@ -15,7 +15,7 @@ const AlgorithmTab = (props) => {
   const [code, setCode] = useState('')
 
   useEffect(() => {
-    authFetch(`/algorithms/code/${props.file_id}`)
+    authFetch(`/algorithms/code/${props.id}`)
       .then(response => response.text())
       .then(text => setCode(text))
   }, [])
