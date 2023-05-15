@@ -1,4 +1,6 @@
+import hashlib
 import os
+import shutil
 import uuid
 import app.Algorithm as alg
 import app.Dataset as dts
@@ -7,6 +9,7 @@ from flask import request, jsonify, make_response, send_from_directory
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
+import dask.dataframe as dd
 
 
 running_ns = Namespace("run", description="Run")
@@ -40,26 +43,29 @@ dataset_model=dataset_ns.model(
         'id': fields.Integer(),
         'name': fields.String(),
         'user_id': fields.Integer(),
-        'file_path': fields.String()
+        'file_path': fields.String(),
+        'num_rows': fields.Integer()
     }
 )
 
 def normalize_path(path):
     return os.path.normpath(path).replace("\\", os.sep).replace("/", os.sep)
 
-@running_ns.route("/<int:dataset_id>/<int:algorithm_id>")
+@running_ns.route("/")
 class RunResource(Resource):
     @jwt_required()
-    def get(self, dataset_id, algorithm_id):
+    def get(self):
+        args = request.args
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
-        algorithm = Algorithm.query.get_or_404(algorithm_id)
-        dataset = Dataset.query.get_or_404(dataset_id)
+        algorithm = Algorithm.query.get_or_404(args['algorithm_id'])
+        dataset = Dataset.query.get_or_404(args['dataset_id'])
+        print(algorithm.user_id, dataset.user_id, user_id)
         if algorithm.user_id == user_id and dataset.user_id == user_id:
             algorithms = alg.load_algorithms_from_module(algorithm.file_path)
             dataset = dts.load_dataset(dataset.file_path)
             pred = algorithms[0].run(dataset.data, {})
             return make_response(jsonify(list(map(int, list(pred)))), 200)
-
+        
 
 @algorithm_ns.route("/")
 class AlgorithmResource(Resource):
@@ -123,7 +129,7 @@ class AlgorithmByIdResource(Resource):
             return algorithm_to_delete  
 
 
-@algorithm_ns.route("/<int:id>/code")
+@algorithm_ns.route("/code/<int:id>")
 class AlgorithmCodeByIdResource(Resource):
     @jwt_required()
     def get(self, id):
@@ -149,17 +155,24 @@ class DatasetResource(Resource):
     @jwt_required()
     def post(self):
         datasets = []
+        datasets_dir = "./app/datasets"
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         for (_, file) in request.files.items():
-            datasets_dir = "./app/datasets" 
-            filename = f"{str(uuid.uuid4())}.csv"
-            dataset_path = os.path.join(datasets_dir, filename)
-            dataset_path = normalize_path(dataset_path)
-            file.save(dataset_path)
+            fileid = str(uuid.uuid4())
+            file_path = normalize_path(os.path.join(datasets_dir, f"{fileid}"))
+            tmpfile_path = normalize_path(os.path.join(datasets_dir, f"tmp_{fileid}.csv"))
+            file.save(tmpfile_path)
+            df = dd.read_csv(tmpfile_path)
+            df["idx"] = 1
+            df["idx"] = df["idx"].cumsum()
+            df.to_csv(file_path)
+            num_rows=df.shape[0].compute()
+            os.remove(tmpfile_path)
             new_dataset = Dataset(
                 name="dataset",
-                file_path=dataset_path,
-                user_id=user_id
+                file_path=file_path,
+                user_id=user_id,
+                num_rows=num_rows
             )
             new_dataset.save()
             datasets.append(new_dataset)
@@ -193,10 +206,27 @@ class DatasetByIdResource(Resource):
         dataset_to_delete = Dataset.query.get_or_404(id)
         if dataset_to_delete.user_id == user_id:
             path = normalize_path(dataset_to_delete.file_path)
-            os.remove(path)
+            shutil.rmtree(path)
+            #os.remove(path)
             dataset_to_delete.delete()
             return dataset_to_delete  
 
+
+@dataset_ns.route("/data/<int:id>")
+class DatasetDataByIdResource(Resource):
+    @jwt_required()
+    def get(self, id):
+        args = request.args
+        print(args)
+        from_row = args['from']
+        to_row = args['to']
+        user_id=User.query.filter_by(username=get_jwt_identity()).first().id
+        dataset = Dataset.query.get_or_404(id)
+        if dataset.user_id == user_id:
+            file_path = normalize_path(f"{dataset.file_path}/*.part")
+            df = dd.read_csv(file_path).set_index('idx')
+            return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
+        
 
 @auth_ns.route("/signup")
 class sign_up(Resource):
