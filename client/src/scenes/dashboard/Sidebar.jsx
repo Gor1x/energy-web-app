@@ -94,14 +94,16 @@ const Sidebar = (props) => {
           authFetch("/algorithms", requestOptions)
             .then(response => response.json())
             .then(newItem => {
-              it['algorithms'] = [...it['algorithms'], newItem[0]]
+              let entry = newItem[0]
+              it['algorithms'] = [...it['algorithms'], {...entry, type: "algorithm"}]
               setItems(it)
             });
         case 'dataset':
           authFetch("/datasets", requestOptions)
             .then(response => response.json())
             .then(newItem => {
-              it['datasets'] = [...it['datasets'], newItem[0]]
+              let entry = newItem[0]
+              it['datasets'] = [...it['datasets'], {...entry, type: "dataset"}]
               setItems(it)
             });
       }
@@ -160,9 +162,9 @@ const Sidebar = (props) => {
           "background": colors.primary[500]
         }}>
         <ListTitle type="algorithm" />
-        {items['algorithms'].map(item => <Item title={item.name} file={item} />)}
+        {items['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
         <ListTitle type="dataset" />
-        {items['datasets'].map(item => <Item title={item.name} file={item} />)}
+        {items['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
       </MenuList>
     </>
   );

@@ -75,16 +75,17 @@ const Topbar = () => {
               <ListItemIcon sx={{ color: colors.grey[600] }}><LogoutIcon /></ListItemIcon>
               <ListItemText sx={{ color: colors.grey[600] }}>Выйти</ListItemText>
             </MenuItem>) :
-            (<>
-              <Item
+            ([<Item
+                key="login"
                 icon={<LoginIcon />}
                 title="Войти"
-                to="/login" />
+                to="/login" />,
               <Item
+                key="signup"
                 icon={<PersonAddIcon />}
                 title="Зарегистрироваться"
                 to="/signup" />
-            </>)}
+            ])}
         </Menu>
       </Box>
     </Box>

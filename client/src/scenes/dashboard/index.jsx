@@ -18,7 +18,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -71,12 +71,12 @@ const Dashboard = () => {
             scrollButtons={false}
             aria-label="scrollable prevent tabs example"
           >
-            {tabs.map(file => <Tab label={file.name} />)}
+            {tabs.map((file, i) => <Tab key={`tab-${i}`} label={file.name} />)}
           </Tabs>
           {/*</AppBar>*/}
           <Box>
             {tabs.map((file, i) =>
-              <TabPanel value={value} index={i} dir={theme.direction}>
+              <TabPanel key={`tab-panel=${i}`} value={value} index={i} dir={theme.direction}>
                 <TabContent file={file}/>
               </TabPanel>
             )}
