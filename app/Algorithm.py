@@ -24,7 +24,7 @@ class Algorithm:
     This class is used to represent an instance of clustering algorithm.
     """
 
-    def __init__(self, name: str, params: AlgoParams, run: Callable[[np.ndarray, dict], np.ndarray]):
+    def __init__(self, name: str, params: AlgoParams, run):
         """
         :param name: title for algorithm
         :param run: function that implements clustering. It should take exactly two arguments: 2d-array with data

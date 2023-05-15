@@ -1,2 +1,3 @@
 #!/bin/bash
-python3 -m pip install -r requirements3.7.txt
+pip install -r requirements3.7.txt
+printf 'db.create_all()\nquit()' | python3 -m flask --app run shell
