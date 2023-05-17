@@ -32,6 +32,8 @@
     "react-tabs": "^6.0.1",
     "react-token-auth": "^2.3.8",
     "recharts": "^2.5.0",
+    "sass": "^1.62.1",
+    "scss": "^0.2.4",
     "web-vitals": "^2.1.4",
     "yup": "^1.1.1"
   },
@@ -59,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "echarts": "^5.4.2"
   }
 }

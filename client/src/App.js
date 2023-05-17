@@ -5,6 +5,7 @@ import Dashboard from "./scenes/dashboard";
 import { ColorModeContext, useMode } from "./theme";
 import Signup from "./scenes/signup";
 import Login from "./scenes/login";
+import './assets/scss/base.scss'
 
 function App() {
   const [theme, colorMode] = useMode();

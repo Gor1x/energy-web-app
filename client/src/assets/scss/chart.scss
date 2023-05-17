@@ -1,0 +1,35 @@
+section.chart {
+    // border-bottom: 1px solid $framing;
+    border-top: 1px solid $framing;
+    padding-bottom: 15px;
+    margin-left: 5px;
+    margin-right: 5px;
+    min-width: 350px;
+    margin-bottom: 20px;
+    float: left;
+
+    .chart-header-container {
+        color: $carboncopy;
+        display: flex;
+        text-align: left;
+        justify-content: space-between;
+        // border-bottom: 1px solid $framing;
+        padding: 10px 20px;
+        i {
+            cursor: pointer;
+            font-size: 20px;
+            &:hover {
+                color: $primary;
+            }
+        }
+    }
+
+    .options-container {
+        position: relative;
+    }
+
+    div.chart {
+        width: 100%;
+        height: 100%;
+    }
+}

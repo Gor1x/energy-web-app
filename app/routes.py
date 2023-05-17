@@ -55,14 +55,14 @@ def normalize_path(path):
 class RunResource(Resource):
     @jwt_required()
     def get(self):
+        print(request.args)
         args = request.args
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithm = Algorithm.query.get_or_404(args['algorithm_id'])
         dataset = Dataset.query.get_or_404(args['dataset_id'])
-        print(algorithm.user_id, dataset.user_id, user_id)
         if algorithm.user_id == user_id and dataset.user_id == user_id:
             algorithms = alg.load_algorithms_from_module(algorithm.file_path)
-            dataset = dts.load_dataset(dataset.file_path)
+            dataset = dts.load_dataset(normalize_path(f"{dataset.file_path}/*.part"))
             pred = algorithms[0].run(dataset.data, {})
             return make_response(jsonify(list(map(int, list(pred)))), 200)
         
@@ -207,7 +207,6 @@ class DatasetByIdResource(Resource):
         if dataset_to_delete.user_id == user_id:
             path = normalize_path(dataset_to_delete.file_path)
             shutil.rmtree(path)
-            #os.remove(path)
             dataset_to_delete.delete()
             return dataset_to_delete  
 
@@ -217,13 +216,13 @@ class DatasetDataByIdResource(Resource):
     @jwt_required()
     def get(self, id):
         args = request.args
-        print(args)
         from_row = args['from']
         to_row = args['to']
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         dataset = Dataset.query.get_or_404(id)
         if dataset.user_id == user_id:
             file_path = normalize_path(f"{dataset.file_path}/*.part")
+            print(file_path)
             df = dd.read_csv(file_path).set_index('idx')
             return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
         

@@ -3,8 +3,10 @@ import { Box, IconButton, Typography, useTheme, Button, Modal, MenuList, MenuIte
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import MapIcon from '@mui/icons-material/Map';
 import { authFetch } from '../../auth';
 import { tokens } from "../../theme";
+import Map from "../../components/Map";
 
 const Sidebar = (props) => {
   const theme = useTheme();
@@ -64,7 +66,7 @@ const Sidebar = (props) => {
         ml={2}>
         {type == "algorithm" ? "Алгоритмы" : "Датасеты"}
       </Typography>
-      <IconButton onClick={() => handleOpen(type)}>
+      <IconButton onClick={() => handleOpenFileLoading(type)}>
         <UploadFileIcon
           sx={{
             color: colors.grey[500],
@@ -76,7 +78,8 @@ const Sidebar = (props) => {
 
   const [modal, setModal] = useState(null)
 
-  const handleOpen = (type) => setModal(LoadFileModal(type))
+  const handleOpenFileLoading = (type) => setModal(LoadFileModal(type))
+  const handleOpenMap = (type) => setModal(MapModal(type))
   const handleClose = () => setModal(null);
 
   const handleUpload = (event, type) => {
@@ -95,7 +98,7 @@ const Sidebar = (props) => {
             .then(response => response.json())
             .then(newItem => {
               let entry = newItem[0]
-              it['algorithms'] = [...it['algorithms'], {...entry, type: "algorithm"}]
+              it['algorithms'] = [...it['algorithms'], { ...entry, type: "algorithm" }]
               setItems(it)
             });
         case 'dataset':
@@ -103,7 +106,7 @@ const Sidebar = (props) => {
             .then(response => response.json())
             .then(newItem => {
               let entry = newItem[0]
-              it['datasets'] = [...it['datasets'], {...entry, type: "dataset"}]
+              it['datasets'] = [...it['datasets'], { ...entry, type: "dataset" }]
               setItems(it)
             });
       }
@@ -111,7 +114,7 @@ const Sidebar = (props) => {
     handleClose(false)
   }
 
-  const LoadFileModal = (type) => 
+  const LoadFileModal = (type) =>
     <Modal
       open
       onClose={handleClose}
@@ -140,6 +143,28 @@ const Sidebar = (props) => {
       </Box>
     </Modal>
 
+  const MapModal = () =>
+    <Modal
+      open
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <Box sx={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        height: 500,
+        width: 700,
+        bgcolor: 'background.paper',
+        boxShadow: 24,
+        p: 4,
+      }}>
+        <Map height="100%"/>
+      </Box>
+    </Modal>
+
   useEffect(() => {
     Promise.all([
       authFetch(`/algorithms/`)
@@ -165,6 +190,12 @@ const Sidebar = (props) => {
         {items['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
         <ListTitle type="dataset" />
         {items['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
+        <MenuItem onClick={handleOpenMap}>
+          <ListItemIcon sx={{ color: colors.grey[900] }}>
+            <MapIcon />
+          </ListItemIcon>
+          <ListItemText sx={{ color: colors.grey[900] }}>Данные с полигона</ListItemText>
+        </MenuItem>
       </MenuList>
     </>
   );
