@@ -1,4 +1,3 @@
-import hashlib
 import os
 import shutil
 import uuid
@@ -10,6 +9,7 @@ from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash, check_password_hash
 import dask.dataframe as dd
+import pandas as pd
 
 
 running_ns = Namespace("run", description="Run")
@@ -55,7 +55,6 @@ def normalize_path(path):
 class RunResource(Resource):
     @jwt_required()
     def get(self):
-        print(request.args)
         args = request.args
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithm = Algorithm.query.get_or_404(args['algorithm_id'])
@@ -64,7 +63,7 @@ class RunResource(Resource):
             algorithms = alg.load_algorithms_from_module(algorithm.file_path)
             dataset = dts.load_dataset(normalize_path(f"{dataset.file_path}/*.part"))
             pred = algorithms[0].run(dataset.data, {})
-            return make_response(jsonify(list(map(int, list(pred)))), 200)
+            return make_response(pred.__str__(), 200)
         
 
 @algorithm_ns.route("/")
@@ -160,14 +159,16 @@ class DatasetResource(Resource):
         for (_, file) in request.files.items():
             fileid = str(uuid.uuid4())
             file_path = normalize_path(os.path.join(datasets_dir, f"{fileid}"))
-            tmpfile_path = normalize_path(os.path.join(datasets_dir, f"tmp_{fileid}.csv"))
-            file.save(tmpfile_path)
-            df = dd.read_csv(tmpfile_path)
+            #tmpfile_path = normalize_path(os.path.join(datasets_dir, f"tmp_{fileid}.csv"))
+            #file.save(tmpfile_path)
+            #df = dd.read_csv(tmpfile_path)
+
+            df = dd.from_pandas(pd.read_csv(file), chunksize=100)
             df["idx"] = 1
             df["idx"] = df["idx"].cumsum()
             df.to_csv(file_path)
             num_rows=df.shape[0].compute()
-            os.remove(tmpfile_path)
+            #os.remove(tmpfile_path)
             new_dataset = Dataset(
                 name="dataset",
                 file_path=file_path,

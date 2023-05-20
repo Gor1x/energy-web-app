@@ -1,26 +1,23 @@
 import { useState } from "react";
-import { Box, Typography, useTheme, Tabs, Tab } from "@mui/material";
+import { Box, IconButton, useTheme, Tabs, Tab } from "@mui/material";
 import Split from 'react-split'
 import Sidebar from "./Sidebar";
 import TabContent from "./TabContent";
 import { tokens } from "../../theme";
+import useTabs from "./hooks/useTabs";
+import CloseIcon from '@mui/icons-material/Close';
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const { children, id, ...other } = props;
 
   return (
     <div
       role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`simple-tabpanel-${id}`}
+      aria-labelledby={`simple-tab-${id}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {<Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -28,61 +25,58 @@ function TabPanel(props) {
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
-  const [value, setValue] = useState(-1);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const [tabs, setTabs] = useState([]);
+  const { tabs, openTab, closeTab, activeTab, selectTab } = useTabs();
 
   return (
     <Box style={{
         "width": "100%",
         "height": "100%"
       }}>
-      <Split style={{
+      <Box style={{
           "display": "flex",
           "width": "100%",
           "height": "100%"
-        }}
-        direction='horizontal'
-        sizes={[20, 80]}
-        minSize={[200, 1000]}
-        expandToMin
-        gutterSize={5}
-        cursor="col-resize">
-        <Sidebar onSelect={file => {
-          const id = tabs.indexOf(file)
-          if (id == -1) {
-            setTabs([...tabs, file])
-            setValue(tabs.length)
-          } else {
-            setValue(id)
-          }
-        }}/>
-        <Box height="100%">
+        }}>
+        <Sidebar height="100%"
+          width="15%"
+          onSelect={file => openTab(file)}/>
+        <Box height="100%"
+          width="85%">
           {/*<AppBar position="static">*/}
           <Tabs
-            value={value}
-            onChange={handleChange}
+            value={activeTab}
+            onChange={(e, i) => selectTab(i)}
             variant="scrollable"
             scrollButtons={false}
             aria-label="scrollable prevent tabs example"
           >
-            {tabs.map((file, i) => <Tab key={`tab-${i}`} label={file.name} />)}
+            {tabs.map((file, i) => 
+              <Tab 
+                key={`tab-${i}`} 
+                label={
+                  <span> 
+                      {file.name}
+                      <IconButton size="small" component="span" onClick={(e) => { 
+                        e.stopPropagation()
+                        closeTab(i) 
+                        }}>
+                          <CloseIcon />
+                      </IconButton>
+                  </span>
+                }
+              />
+            )}
           </Tabs>
           {/*</AppBar>*/}
           <Box>
             {tabs.map((file, i) =>
-              <TabPanel key={`tab-panel=${i}`} value={value} index={i} dir={theme.direction}>
+              (activeTab === i && <TabPanel key={`tab-panel-${file.id}`} dir={theme.direction} id={file.id}>
                 <TabContent file={file}/>
-              </TabPanel>
+              </TabPanel>)
             )}
           </Box>
         </Box>
-      </Split>
+      </Box>
     </Box>
   );
 };

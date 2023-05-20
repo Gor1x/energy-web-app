@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box, IconButton, Typography, useTheme, Button, Modal, MenuList, MenuItem, ListItemText, ListItemIcon } from "@mui/material";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import DeleteIcon from '@mui/icons-material/Delete';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import MapIcon from '@mui/icons-material/Map';
-import { authFetch } from '../../auth';
 import { tokens } from "../../theme";
 import Map from "../../components/Map";
+import useUserFiles from "./hooks/useUserFiles";
 
 const Sidebar = (props) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [items, setItems] = useState({ algorithms: [], datasets: [] })
-  const { onSelect } = props;
+  const { userFiles, uploadFile, deleteFile } = useUserFiles();
+  const { onSelect, ...other } = props;
 
   const Item = ({ title, file }) => {
     return (
@@ -24,28 +24,7 @@ const Sidebar = (props) => {
         <ListItemText sx={{ color: colors.grey[900] }}>{title}</ListItemText>
         <IconButton onClick={(e) => {
           e.stopPropagation()
-          let it = Object.assign({}, items)
-          const requestOptions = {
-            method: 'DELETE'
-          };
-          switch (file.type) {
-            case 'algorithm':
-              authFetch(`/algorithms/${file.id}`, requestOptions)
-                .then(response => {
-                  if (response.status == 200) {
-                    it['algorithms'].splice(it['algorithms'].indexOf(file), 1)
-                    setItems(it)
-                  }
-                })
-            case 'dataset':
-              authFetch(`/datasets/${file.id}`, requestOptions)
-                .then(response => {
-                  if (response.status == 200) {
-                    it['datasets'].splice(it['datasets'].indexOf(file), 1)
-                    setItems(it)
-                  }
-                })
-          }
+          deleteFile(file)
         }}>
           <ListItemIcon
             sx={{ color: colors.grey[500] }}>
@@ -84,33 +63,7 @@ const Sidebar = (props) => {
 
   const handleUpload = (event, type) => {
     let file = event.target.files[0];
-    if (file) {
-      let data = new FormData();
-      data.append('file', file);
-      const requestOptions = {
-        method: 'POST',
-        body: data
-      };
-      let it = Object.assign({}, items)
-      switch (type) {
-        case 'algorithm':
-          authFetch("/algorithms", requestOptions)
-            .then(response => response.json())
-            .then(newItem => {
-              let entry = newItem[0]
-              it['algorithms'] = [...it['algorithms'], { ...entry, type: "algorithm" }]
-              setItems(it)
-            });
-        case 'dataset':
-          authFetch("/datasets", requestOptions)
-            .then(response => response.json())
-            .then(newItem => {
-              let entry = newItem[0]
-              it['datasets'] = [...it['datasets'], { ...entry, type: "dataset" }]
-              setItems(it)
-            });
-      }
-    }
+    uploadFile(file, type)
     handleClose(false)
   }
 
@@ -165,31 +118,20 @@ const Sidebar = (props) => {
       </Box>
     </Modal>
 
-  useEffect(() => {
-    Promise.all([
-      authFetch(`/algorithms/`)
-        .then(response => response.json()),
-      authFetch(`/datasets/`)
-        .then(response => response.json()),
-    ]).then((values) =>
-      setItems({
-        algorithms: values[0].map(entry => ({ ...entry, type: "algorithm" })),
-        datasets: values[1].map(entry => ({ ...entry, type: "dataset" }))
-      })
-    )
-  }, []);
+
 
   return (
-    <>
+    <Box {...other}>
       {modal}
       <MenuList
         style={{
+          "height": "100%",
           "background": colors.primary[500]
         }}>
         <ListTitle type="algorithm" />
-        {items['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
+        {userFiles['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
         <ListTitle type="dataset" />
-        {items['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
+        {userFiles['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
         <MenuItem onClick={handleOpenMap}>
           <ListItemIcon sx={{ color: colors.grey[900] }}>
             <MapIcon />
@@ -197,7 +139,7 @@ const Sidebar = (props) => {
           <ListItemText sx={{ color: colors.grey[900] }}>Данные с полигона</ListItemText>
         </MenuItem>
       </MenuList>
-    </>
+    </Box>
   );
 };
 
