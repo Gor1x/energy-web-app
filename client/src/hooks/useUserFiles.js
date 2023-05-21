@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { authFetch } from '../../../auth';
+import { authFetch } from '../auth';
 
 
 const useUserFiles = () => {
@@ -31,10 +31,8 @@ const useUserFiles = () => {
                 body: data
             };
             let it = Object.assign({}, userFiles)
-            console.log(type)
             switch (type) {
                 case 'algorithm':
-                    console.log('algorithm!!!')
                     authFetch("/algorithms", requestOptions)
                         .then(response => response.json())
                         .then(newItem => {

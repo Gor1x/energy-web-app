@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import uuid
@@ -10,7 +11,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, jwt_re
 from werkzeug.security import generate_password_hash, check_password_hash
 import dask.dataframe as dd
 import pandas as pd
-
+import numpy as np
 
 running_ns = Namespace("run", description="Run")
 algorithm_ns = Namespace("algorithms", description="Algorithm")
@@ -51,6 +52,17 @@ dataset_model=dataset_ns.model(
 def normalize_path(path):
     return os.path.normpath(path).replace("\\", os.sep).replace("/", os.sep)
 
+class NumpyEncoder(json.JSONEncoder):
+    """ Special json encoder for numpy types """
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
 @running_ns.route("/")
 class RunResource(Resource):
     @jwt_required()
@@ -63,7 +75,10 @@ class RunResource(Resource):
             algorithms = alg.load_algorithms_from_module(algorithm.file_path)
             dataset = dts.load_dataset(normalize_path(f"{dataset.file_path}/*.part"))
             pred = algorithms[0].run(dataset.data, {})
-            return make_response(pred.__str__(), 200)
+            json_dump = json.dumps(pred, cls=NumpyEncoder)
+            response = make_response(json_dump, 200)
+            response.headers['Content-Type'] = 'application/json'
+            return response
         
 
 @algorithm_ns.route("/")

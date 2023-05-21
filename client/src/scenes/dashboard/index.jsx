@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Box, IconButton, useTheme, Tabs, Tab } from "@mui/material";
 import Split from 'react-split'
 import Sidebar from "./Sidebar";
-import TabContent from "./TabContent";
+import AlgorithmTabContent from "./TabContent/AlgorithmTabContent";
+import DatasetTabContent from "./TabContent/DatasetTabContent";
 import { tokens } from "../../theme";
 import useTabs from "./hooks/useTabs";
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,7 +18,7 @@ function TabPanel(props) {
       aria-labelledby={`simple-tab-${id}`}
       {...other}
     >
-      {<Box sx={{ p: 3 }}>{children}</Box>}
+      {children}
     </div>
   );
 }
@@ -26,6 +27,17 @@ const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { tabs, openTab, closeTab, activeTab, selectTab } = useTabs();
+
+  const renderTab = (file) => {
+    switch (file.type) {
+      case 'algorithm':
+        return <AlgorithmTabContent file={file}/>
+        break;
+      case 'dataset':
+        return <DatasetTabContent file={file}/>
+        break;
+    }
+  };
 
   return (
     <Box style={{
@@ -42,14 +54,12 @@ const Dashboard = () => {
           onSelect={file => openTab(file)}/>
         <Box height="100%"
           width="85%">
-          {/*<AppBar position="static">*/}
           <Tabs
             value={activeTab}
             onChange={(e, i) => selectTab(i)}
             variant="scrollable"
             scrollButtons={false}
-            aria-label="scrollable prevent tabs example"
-          >
+            aria-label="scrollable prevent tabs example">
             {tabs.map((file, i) => 
               <Tab 
                 key={`tab-${i}`} 
@@ -67,11 +77,11 @@ const Dashboard = () => {
               />
             )}
           </Tabs>
-          {/*</AppBar>*/}
           <Box>
             {tabs.map((file, i) =>
-              (activeTab === i && <TabPanel key={`tab-panel-${file.id}`} dir={theme.direction} id={file.id}>
-                <TabContent file={file}/>
+              (activeTab === i && 
+              <TabPanel key={`tab-panel-${file.id}`} dir={theme.direction} id={file.id}>
+                {renderTab(file)}
               </TabPanel>)
             )}
           </Box>

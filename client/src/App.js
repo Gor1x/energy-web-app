@@ -6,9 +6,11 @@ import { ColorModeContext, useMode } from "./theme";
 import Signup from "./scenes/signup";
 import Login from "./scenes/login";
 import './assets/scss/base.scss'
+import { useModal, openModal, closeModal } from './modal';
 
 function App() {
   const [theme, colorMode] = useMode();
+  const {modal} = useModal();
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -25,6 +27,7 @@ function App() {
             }}
           >
             <div className="content">
+              {modal}
               <Topbar />
               <Routes>
                 <Route path="/" element={<Dashboard />} />

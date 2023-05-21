@@ -5,8 +5,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import MapIcon from '@mui/icons-material/Map';
 import { tokens } from "../../theme";
-import Map from "../../components/Map";
-import useUserFiles from "./hooks/useUserFiles";
+import MapModal from "./modals/MapModal";
+import LoadFileModal from "./modals/LoadFileModal";
+import useUserFiles from "../../hooks/useUserFiles";
+import { openModal, closeModal } from '../../modal';
 
 const Sidebar = (props) => {
   const theme = useTheme();
@@ -45,7 +47,11 @@ const Sidebar = (props) => {
         ml={2}>
         {type == "algorithm" ? "Алгоритмы" : "Датасеты"}
       </Typography>
-      <IconButton onClick={() => handleOpenFileLoading(type)}>
+      <IconButton onClick={() => openModal(
+          <LoadFileModal 
+            type={type} 
+            handleUpload={handleUpload} 
+            handleClose={closeModal}/>)}>
         <UploadFileIcon
           sx={{
             color: colors.grey[500],
@@ -55,74 +61,14 @@ const Sidebar = (props) => {
       </IconButton>
     </Box>
 
-  const [modal, setModal] = useState(null)
-
-  const handleOpenFileLoading = (type) => setModal(LoadFileModal(type))
-  const handleOpenMap = (type) => setModal(MapModal(type))
-  const handleClose = () => setModal(null);
-
   const handleUpload = (event, type) => {
     let file = event.target.files[0];
     uploadFile(file, type)
-    handleClose(false)
+    closeModal()
   }
-
-  const LoadFileModal = (type) =>
-    <Modal
-      open
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 400,
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        p: 4,
-      }}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Загрузить {type == "algorithm" ? "алгоритм" : "датасет"}
-        </Typography>
-        <input type="file"
-          name="myFile"
-          onChange={(event) => handleUpload(event, type)} />
-        <Button variant="secondary" onClick={handleClose}>
-          Отмена
-        </Button>
-      </Box>
-    </Modal>
-
-  const MapModal = () =>
-    <Modal
-      open
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        height: 500,
-        width: 700,
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        p: 4,
-      }}>
-        <Map height="100%"/>
-      </Box>
-    </Modal>
-
-
 
   return (
     <Box {...other}>
-      {modal}
       <MenuList
         style={{
           "height": "100%",
@@ -132,7 +78,7 @@ const Sidebar = (props) => {
         {userFiles['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
         <ListTitle type="dataset" />
         {userFiles['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
-        <MenuItem onClick={handleOpenMap}>
+        <MenuItem onClick={() => openModal(<MapModal/>)}>
           <ListItemIcon sx={{ color: colors.grey[900] }}>
             <MapIcon />
           </ListItemIcon>

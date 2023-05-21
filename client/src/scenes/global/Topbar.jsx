@@ -53,9 +53,9 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>*/}
-        <IconButton>
+        {/*<IconButton>
           <SettingsOutlinedIcon />
-        </IconButton>
+      </IconButton>*/}
         <IconButton
           id="demo-positioned-button"
           aria-controls={open ? 'demo-positioned-menu' : undefined}
