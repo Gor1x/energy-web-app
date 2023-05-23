@@ -26,7 +26,7 @@ const Login = () => {
             .then(res => res.json())
             .then(data => {
                 if (data) {
-                    login(data.data.access_token)
+                    login(data.data)
                     navigate("/");
                 } else {
                     console.log('Некорректный логин или пароль')

@@ -1,11 +1,15 @@
-import {createAuthProvider} from 'react-token-auth'
+//import {createAuthProvider} from 'react-token-auth'
+import { createAuthProvider } from './react-token-auth/createAuthProvider'
 
 export const {useAuth, authFetch, login, logout} =
     createAuthProvider({
-        accessTokenKey: 'access_token',
-        onUpdateToken: (token) => fetch('/refresh', {
+        getAccessToken: (session) => session.access_token,
+        onUpdateToken: (session) => 
+        fetch('/auth/refresh', {
             method: 'POST',
-            body: token.refresh_token
+            headers: {'Authorization': `Bearer ${session.refresh_token}`}
         })
         .then(r => r.json())
+        .then(json => ({...json, 'refresh_token': session.refresh_token})),
+        expirationThresholdMillisec: 5000
     })

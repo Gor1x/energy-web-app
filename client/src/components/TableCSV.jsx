@@ -22,8 +22,10 @@ const TableCSV = (props) => {
             to = props.totalSize
         }
 
-        authFetch(`/${props.url}?from=${from}&to=${to}`)
-            .then(response => response.json())
+        authFetch(`/${props.url}?` + new URLSearchParams({
+            from: from,
+            to: to,
+        })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map(line => line);
                 const columns = []

@@ -23,8 +23,10 @@ const AlgorithmTabContent = (props) => {
         const [result, setResult] = useState('');
 
         useEffect(() => {
-            authFetch(`/run/?dataset_id=${dataset_id}&algorithm_id=${algorithm_id}`)
-                .then(response => response.json())
+            authFetch('/run/?' + new URLSearchParams({
+                algorithm_id: algorithm_id,
+                dataset_id: dataset_id,
+            })).then(response => response.json())
                 .then(json => setResult(JSON.stringify(json)))
         }, [])
 

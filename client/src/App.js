@@ -7,10 +7,12 @@ import Signup from "./scenes/signup";
 import Login from "./scenes/login";
 import './assets/scss/base.scss'
 import { useModal, openModal, closeModal } from './modal';
+import { useAuth } from "./auth";
 
 function App() {
   const [theme, colorMode] = useMode();
   const {modal} = useModal();
+  const [isLoggedIn] = useAuth();
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -30,7 +32,7 @@ function App() {
               {modal}
               <Topbar />
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={isLoggedIn ? <Dashboard /> : <div>Вы не вошли в аккаунт</div>} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
               </Routes>
