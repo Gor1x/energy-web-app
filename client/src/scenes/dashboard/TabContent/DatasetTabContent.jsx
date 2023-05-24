@@ -14,7 +14,6 @@ const DatasetTabContent = (props) => {
     const colors = tokens(theme.palette.mode);
     const { file } = props;
 
-    //const [config, setConfig] = useState(null);
     const [resize, setResize] = useState(false)
     const [timer, setTimer] = useState(0)
 

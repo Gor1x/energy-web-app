@@ -58,8 +58,6 @@ export const createAuthProvider = <Session>({
 
     const getSessionState: Getter<Maybe<Session>> = () => _session;
 
-
-    const logger = createLogger(true);
     const getSession = async () => {
         let accessToken = extractAccessToken(getSessionState(), getAccessToken);
 
@@ -67,7 +65,7 @@ export const createAuthProvider = <Session>({
             let split = accessToken.split('.');
             split[1] += "="
             accessToken = split.join('.')
-            if (isTokenExpired(accessToken, expirationThresholdMillisec, logger)) {
+            if (isTokenExpired(accessToken, expirationThresholdMillisec)) {
                 const updatedSession = await tokenUpdater.updateToken(_session);
                 updateSession(updatedSession);
             }

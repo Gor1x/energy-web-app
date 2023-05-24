@@ -7,6 +7,7 @@ import DatasetTabContent from "./TabContent/DatasetTabContent";
 import { tokens } from "../../theme";
 import useTabs from "./hooks/useTabs";
 import CloseIcon from '@mui/icons-material/Close';
+import { getFileLabel } from "../../utils/getFileLabel";
 
 function TabPanel(props) {
   const { children, id, ...other } = props;
@@ -65,12 +66,12 @@ const Dashboard = () => {
                 key={`tab-${i}`} 
                 label={
                   <span> 
-                      {file.name}
+                      {getFileLabel(file)}
                       <IconButton size="small" component="span" onClick={(e) => { 
                         e.stopPropagation()
                         closeTab(i) 
                         }}>
-                          <CloseIcon />
+                          <CloseIcon fontSize="inherit"/>
                       </IconButton>
                   </span>
                 }

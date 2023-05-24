@@ -7,17 +7,6 @@
  * http://www.webtoolkit.info/
  **/
 
-const createLogger = () => {
-    const log = (name, message, ...objs) => {
-            // tslint:disable-next-line:no-console
-            console.log(`[react-token-auth]${name}::${message}`, ...objs.map((it) => JSON.stringify(it)));
-    };
-    return {
-        log,
-    };
-};
-
-
 var Base64 = {
     // private property
     _keyStr: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=',
@@ -64,9 +53,7 @@ var Base64 = {
         var i = 0;
 
         input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
-        const logger = createLogger();
-        logger.log('input', 'str', input);
-        logger.log('input', 'len', input.length);
+
         while (i < input.length) {
             enc1 = this._keyStr.indexOf(input.charAt(i++));
             enc2 = this._keyStr.indexOf(input.charAt(i++));
@@ -78,16 +65,12 @@ var Base64 = {
             chr3 = ((enc3 & 3) << 6) | enc4;
             
             output = output + String.fromCharCode(chr1);
-            logger.log('current prefix', '1', output);
 
             if (enc3 != 64) {
                 output = output + String.fromCharCode(chr2);
-                logger.log('current prefix', '2', output);
             }
-            logger.log('enc4', '', enc4);
             if (enc4 != 64) {
                 output = output + String.fromCharCode(chr3);
-                logger.log('current prefix', '3', output);
             }
         }
         output = Base64._utf8_decode(output);

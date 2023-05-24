@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { Box, IconButton, Typography, useTheme, Button, Modal, MenuList, MenuItem, ListItemText, ListItemIcon } from "@mui/material";
-import FileOpenIcon from '@mui/icons-material/FileOpen';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { Box, IconButton, Typography, useTheme, ListItemButton, MenuList, MenuItem, ListItemText, ListItemIcon, ListItem } from "@mui/material";
+import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import MapIcon from '@mui/icons-material/Map';
 import { tokens } from "../../theme";
 import MapModal from "./modals/MapModal";
 import LoadFileModal from "./modals/LoadFileModal";
 import useUserFiles from "../../hooks/useUserFiles";
 import { openModal, closeModal } from '../../modal';
+import { getFileLabel } from "../../utils/getFileLabel";
 
 const Sidebar = (props) => {
   const theme = useTheme();
@@ -21,18 +22,18 @@ const Sidebar = (props) => {
       <MenuItem
         onClick={() => onSelect(file)}>
         <ListItemIcon sx={{ color: colors.grey[900] }}>
-          <FileOpenIcon />
+          <FileOpenOutlinedIcon />
         </ListItemIcon>
         <ListItemText sx={{ color: colors.grey[900] }}>{title}</ListItemText>
-        <IconButton onClick={(e) => {
-          e.stopPropagation()
-          deleteFile(file)
-        }}>
-          <ListItemIcon
-            sx={{ color: colors.grey[500] }}>
-            <DeleteIcon />
-          </ListItemIcon>
-        </IconButton>
+        {file.user_id != -1 ?
+          <IconButton size="small" sx={{ color: colors.grey[900] }}
+            onClick={(e) => {
+              e.stopPropagation()
+              deleteFile(file)
+            }}>
+            <DeleteOutlineIcon />
+          </IconButton> : <div style={{height: '30px', width: '30px'}}/>
+        }
       </MenuItem>
     );
   };
@@ -43,19 +44,21 @@ const Sidebar = (props) => {
       justifyContent="space-between">
       <Typography
         variant="h6"
-        color={colors.grey[600]}
+        color={colors.grey[800]}
         ml={2}>
         {type == "algorithm" ? "Алгоритмы" : "Датасеты"}
       </Typography>
-      <IconButton onClick={() => openModal(
-          <LoadFileModal 
-            type={type} 
-            handleUpload={handleUpload} 
-            handleClose={closeModal}/>)}>
-        <UploadFileIcon
+      <IconButton
+        size="small"
+        sx={{ mr: "15px" }}
+        onClick={() => openModal(
+          <LoadFileModal
+            type={type}
+            handleUpload={handleUpload}
+            handleClose={closeModal} />)}>
+        <UploadFileOutlinedIcon
           sx={{
-            color: colors.grey[500],
-            marginRight: 4
+            color: colors.grey[800]
           }}
         />
       </IconButton>
@@ -72,17 +75,18 @@ const Sidebar = (props) => {
       <MenuList
         style={{
           "height": "100%",
-          "background": colors.primary[500]
+          "background": colors.primary[600]
         }}>
         <ListTitle type="algorithm" />
-        {userFiles['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
+        {userFiles['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getFileLabel(item)} file={item} />)}
         <ListTitle type="dataset" />
-        {userFiles['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
-        <MenuItem onClick={() => openModal(<MapModal/>)}>
+        {userFiles['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getFileLabel(item)} file={item} />)}
+        <MenuItem onClick={() => openModal(<MapModal />)}>
           <ListItemIcon sx={{ color: colors.grey[900] }}>
             <MapIcon />
           </ListItemIcon>
-          <ListItemText sx={{ color: colors.grey[900] }}>Данные с полигона</ListItemText>
+          <ListItemText sx={{ color: colors.grey[900] }}>Выбрать на карте</ListItemText>
+          <div style={{height: '30px', width: '30px'}}/>
         </MenuItem>
       </MenuList>
     </Box>

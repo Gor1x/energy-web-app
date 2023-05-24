@@ -9,19 +9,20 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 
 const TableCSV = (props) => {
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(null)
     const [table, setTable] = useState({
         data: [],
         columns: []
     })
 
-    useEffect(() => {
-        const from = (page - 1) * props.sizePerPage
-        let to = from + props.sizePerPage
+    const updatePage = (page) => {
+        setPage(page)
+
+        const from = (page - 1) * props.sizePerPage;
+        let to = from + props.sizePerPage;
         if (to >= props.totalSize) {
             to = props.totalSize
         }
-
         authFetch(`/${props.url}?` + new URLSearchParams({
             from: from,
             to: to,
@@ -40,8 +41,11 @@ const TableCSV = (props) => {
                     columns: columns
                 })
             });
-    }, [page])
+    };
 
+    useEffect(() => {
+        updatePage(1);
+    }, [])
 
     const pagination = paginationFactory({
         pageStartIndex: 1,
@@ -53,9 +57,7 @@ const TableCSV = (props) => {
         prePageText: '<',
         alwaysShowAllBtns: true,
         withFirstAndLast: false,
-        onPageChange: function (page, _) {
-            setPage(page)
-        }
+        onPageChange: (page, _) => updatePage(page)
     });
     return (
         table.data.length != 0 &&

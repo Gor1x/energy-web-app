@@ -15,7 +15,9 @@ import numpy as np
 
 running_ns = Namespace("run", description="Run")
 algorithm_ns = Namespace("algorithms", description="Algorithm")
+default_algorithm_ns = Namespace("default algorithms", description="Default algorithms")
 dataset_ns = Namespace("datasets", description="Dataset")
+default_dataset_ns = Namespace("default datasets", description="Default dataset")
 auth_ns = Namespace("auth", description="Auth")
 
 
@@ -71,10 +73,13 @@ class RunResource(Resource):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithm = Algorithm.query.get_or_404(args['algorithm_id'])
         dataset = Dataset.query.get_or_404(args['dataset_id'])
-        if algorithm.user_id == user_id and dataset.user_id == user_id:
-            algorithms = alg.load_algorithms_from_module(algorithm.file_path)
+        if (algorithm.user_id == -1 or algorithm.user_id == user_id) and (dataset.user_id == -1 or dataset.user_id == user_id):
+            module = os.path.splitext(algorithm.file_path)
+            module = module[0].replace( os.sep, '.')
+            print(module)
+            algorithms = alg.load_algorithms_from_module(module)
             dataset = dts.load_dataset(normalize_path(f"{dataset.file_path}/*.part"))
-            pred = algorithms[0].run(dataset.data, {})
+            pred = algorithms[0].run(dataset.data)
             json_dump = json.dumps(pred, cls=NumpyEncoder)
             response = make_response(json_dump, 200)
             response.headers['Content-Type'] = 'application/json'
@@ -87,7 +92,7 @@ class AlgorithmResource(Resource):
     @jwt_required()
     def get(self):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
-        algorithms=Algorithm.query.filter_by(user_id=user_id).all()
+        algorithms=Algorithm.query.filter_by(user_id=user_id).all()+Algorithm.query.filter_by(user_id=-1).all()
         return algorithms
     
     @algorithm_ns.marshal_with(algorithm_model)
@@ -118,7 +123,7 @@ class AlgorithmByIdResource(Resource):
     def get(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithm = Algorithm.query.get_or_404(id)
-        if algorithm.user_id == user_id:
+        if algorithm.user_id ==  -1 or algorithm.user_id == user_id:
             return algorithm
 
     @algorithm_ns.marshal_with(algorithm_model)
@@ -149,7 +154,7 @@ class AlgorithmCodeByIdResource(Resource):
     def get(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         algorithm = Algorithm.query.get_or_404(id)
-        if algorithm.user_id == user_id:
+        if algorithm.user_id == -1 or algorithm.user_id == user_id:
             file_path = normalize_path(algorithm.file_path)
             directory = os.path.join(*os.path.dirname(file_path).split(os.sep)[1:])
             filename = os.path.basename(file_path)
@@ -162,7 +167,7 @@ class DatasetResource(Resource):
     @jwt_required()
     def get(self):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
-        datasets=Dataset.query.filter_by(user_id=user_id).all()
+        datasets=Dataset.query.filter_by(user_id=user_id).all()+Dataset.query.filter_by(user_id=-1).all()
         return datasets
     
     @dataset_ns.marshal_with(dataset_model)
@@ -174,16 +179,11 @@ class DatasetResource(Resource):
         for (_, file) in request.files.items():
             fileid = str(uuid.uuid4())
             file_path = normalize_path(os.path.join(datasets_dir, f"{fileid}"))
-            #tmpfile_path = normalize_path(os.path.join(datasets_dir, f"tmp_{fileid}.csv"))
-            #file.save(tmpfile_path)
-            #df = dd.read_csv(tmpfile_path)
-
             df = dd.from_pandas(pd.read_csv(file), chunksize=100)
             df["idx"] = 1
             df["idx"] = df["idx"].cumsum()
             df.to_csv(file_path)
             num_rows=df.shape[0].compute()
-            #os.remove(tmpfile_path)
             new_dataset = Dataset(
                 name="dataset",
                 file_path=file_path,
@@ -202,7 +202,7 @@ class DatasetByIdResource(Resource):
     def get(self, id):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         dataset = Dataset.query.get_or_404(id)
-        if dataset.user_id == user_id:
+        if dataset.user_id == -1 or dataset.user_id == user_id:
             return dataset
 
     @dataset_ns.marshal_with(dataset_model)
@@ -236,10 +236,12 @@ class DatasetDataByIdResource(Resource):
         to_row = args['to']
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         dataset = Dataset.query.get_or_404(id)
-        if dataset.user_id == user_id:
+        if dataset.user_id == -1 or dataset.user_id == user_id:
             file_path = normalize_path(f"{dataset.file_path}/*.part")
-            print(file_path)
-            df = dd.read_csv(file_path).set_index('idx')
+            if dataset.user_id == -1:     
+                df = dd.read_csv(file_path, compression='gzip').set_index('idx')
+            else:
+                df = dd.read_csv(file_path).set_index('idx')
             return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
         
 
