@@ -7,8 +7,10 @@ import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
+import LoadingSpinner from './LoadingSpinner';
 
 const TableCSV = (props) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(null)
     const [table, setTable] = useState({
         data: [],
@@ -16,6 +18,7 @@ const TableCSV = (props) => {
     })
 
     const updatePage = (page) => {
+        setIsLoading(true);
         setPage(page)
 
         const from = (page - 1) * props.sizePerPage;
@@ -40,7 +43,9 @@ const TableCSV = (props) => {
                     data: data,
                     columns: columns
                 })
+                setIsLoading(false);
             });
+        
     };
 
     useEffect(() => {
@@ -60,19 +65,21 @@ const TableCSV = (props) => {
         onPageChange: (page, _) => updatePage(page)
     });
     return (
-        table.data.length != 0 &&
-        <BootstrapTable
-            bootstrap4
-            keyField='Unnamed: 0'
-            data={table.data}
-            columns={table.columns}
-            pagination={pagination}
-            remote
-            onTableChange={() => {}}
-            striped
-            bordered
-            hover
-            responsive />
+        isLoading 
+        ? <LoadingSpinner/>
+        : table.data.length != 0 &&
+            <BootstrapTable
+                bootstrap4
+                keyField='Unnamed: 0'
+                data={table.data}
+                columns={table.columns}
+                pagination={pagination}
+                remote
+                onTableChange={() => {}}
+                striped
+                bordered
+                hover
+                responsive />
     );
 }
 

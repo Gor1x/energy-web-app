@@ -8,6 +8,7 @@ import Item from './Item';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddchartIcon from '@mui/icons-material/Addchart';
 import TableRowsIcon from '@mui/icons-material/TableRows';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 
 const DatasetTabContent = (props) => {
     const theme = useTheme();
@@ -60,10 +61,10 @@ const DatasetTabContent = (props) => {
                     columns={6}
                     rows={4}
                     backgroundColor={colors.primary[400]}>
-                    <TableCSV
-                        sizePerPage={7}
-                        totalSize={file.num_rows}
-                        url={`datasets/data/${file.id}`} />
+                <TableCSV
+                    sizePerPage={7}
+                    totalSize={file.num_rows}
+                    url={`datasets/data/${file.id}`} />
                 </Item>
                 <Item rows={4} columns={6}>
                     <div>

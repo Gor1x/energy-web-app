@@ -75,7 +75,7 @@ class RunResource(Resource):
         dataset = Dataset.query.get_or_404(args['dataset_id'])
         if (algorithm.user_id == -1 or algorithm.user_id == user_id) and (dataset.user_id == -1 or dataset.user_id == user_id):
             module = os.path.splitext(algorithm.file_path)
-            module = module[0].replace( os.sep, '.')
+            module = module[0].replace( '\\', '.').replace('/', '.')
             print(module)
             algorithms = alg.load_algorithms_from_module(module)
             dataset = dts.load_dataset(normalize_path(f"{dataset.file_path}/*.part"))
