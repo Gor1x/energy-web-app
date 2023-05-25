@@ -82,7 +82,12 @@ const Sidebar = (props) => {
         {userFiles['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getFileLabel(item)} file={item} />)}
         <ListTitle type="dataset" />
         {userFiles['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getFileLabel(item)} file={item} />)}
-        <MenuItem onClick={() => openModal(<MapModal />)}>
+        <MenuItem onClick={() => 
+            openModal(<MapModal onClick={(i) => {
+              onSelect(userFiles['datasets'][0])
+              closeModal()
+            }}/>)
+          }>
           <ListItemIcon sx={{ color: colors.grey[900] }}>
             <MapIcon />
           </ListItemIcon>

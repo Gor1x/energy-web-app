@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import Map from "../../../components/Map";
 
-const MapModal = () =>
+const MapModal = (props) =>
     <Box sx={{
         position: 'absolute',
         top: '50%',
@@ -13,7 +13,7 @@ const MapModal = () =>
         boxShadow: 24,
         p: 4,
     }}>
-        <Map height="100%" />
+        <Map onClick={props.onClick} height="100%" />
     </Box>
 
 export default MapModal;

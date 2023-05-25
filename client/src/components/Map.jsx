@@ -105,12 +105,8 @@ export default function Map(props) {
             });
         });
 
-        mapboxMap.on('click', i+'story-room-extrusion', (e) => {
+        mapboxMap.on('click', i+'story-room-extrusion', () => {
           props.onClick(i)
-          new mapboxgl.Popup({ closeOnClick: false })
-            .setLngLat(e.lngLat)
-            .setHTML(e.features[0].properties.name)
-            .addTo(mapboxMap);
         });
 
         mapboxMap.on('mousemove', i+'story-room-extrusion', (event) => {
