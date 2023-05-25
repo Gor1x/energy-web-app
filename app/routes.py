@@ -92,7 +92,7 @@ class AlgorithmResource(Resource):
     @jwt_required()
     def get(self):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
-        algorithms=Algorithm.query.filter_by(user_id=user_id).all()+Algorithm.query.filter_by(user_id=-1).all()
+        algorithms=Algorithm.query.filter_by(user_id=-1).all()+Algorithm.query.filter_by(user_id=user_id).all()
         return algorithms
     
     @algorithm_ns.marshal_with(algorithm_model)
@@ -167,7 +167,7 @@ class DatasetResource(Resource):
     @jwt_required()
     def get(self):
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
-        datasets=Dataset.query.filter_by(user_id=user_id).all()+Dataset.query.filter_by(user_id=-1).all()
+        datasets=Dataset.query.filter_by(user_id=-1).all()+Dataset.query.filter_by(user_id=user_id).all()
         return datasets
     
     @dataset_ns.marshal_with(dataset_model)

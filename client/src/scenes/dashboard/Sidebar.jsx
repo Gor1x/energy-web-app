@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, IconButton, Typography, useTheme, ListItemButton, MenuList, MenuItem, ListItemText, ListItemIcon, ListItem } from "@mui/material";
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -10,11 +10,29 @@ import LoadFileModal from "./modals/LoadFileModal";
 import useUserFiles from "../../hooks/useUserFiles";
 import { openModal, closeModal } from '../../modal';
 import { getFileLabel } from "../../utils/getFileLabel";
+import { useStoreon } from 'storeon/react';
 
 const Sidebar = (props) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { userFiles, uploadFile, deleteFile } = useUserFiles();
+  const { dispatch, algorithms, datasets } = useStoreon('algorithms', 'datasets')
+
+  useEffect(() => {
+    dispatch('algorithms/load')
+    dispatch('datasets/load')
+  }, [])
+
+  const mapTypeToActions = {
+    algorithm: {
+      add: 'algorithms/add',
+      delete: 'algorithms/delete'
+    },
+    dataset: {
+      add: 'datasets/add',
+      delete: 'datasets/delete'
+    }
+  };
+
   const { onSelect, closeTabByFile, ...other } = props;
 
   const Item = ({ title, file }) => {
@@ -28,9 +46,9 @@ const Sidebar = (props) => {
         {file.user_id != -1 ?
           <IconButton size="small" sx={{ color: colors.grey[900] }}
             onClick={(e) => {
-              e.stopPropagation()
-              closeTabByFile(file)
-              deleteFile(file)
+              e.stopPropagation();
+              closeTabByFile(file);
+              dispatch(mapTypeToActions[file.type].delete, file);
             }}>
             <DeleteOutlineIcon />
           </IconButton> : <div style={{height: '30px', width: '30px'}}/>
@@ -67,8 +85,8 @@ const Sidebar = (props) => {
 
   const handleUpload = (event, type) => {
     let file = event.target.files[0];
-    uploadFile(file, type)
-    closeModal()
+    dispatch(mapTypeToActions[type].add, file);
+    closeModal();
   }
 
   return (
@@ -79,12 +97,12 @@ const Sidebar = (props) => {
           "background": colors.primary[600]
         }}>
         <ListTitle type="algorithm" />
-        {userFiles['algorithms'].map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getFileLabel(item)} file={item} />)}
+        {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getFileLabel(item)} file={item} />)}
         <ListTitle type="dataset" />
-        {userFiles['datasets'].map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getFileLabel(item)} file={item} />)}
+        {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getFileLabel(item)} file={item} />)}
         <MenuItem onClick={() => 
             openModal(<MapModal onClick={(i) => {
-              onSelect(userFiles['datasets'][0])
+              onSelect(datasets[0])
               closeModal()
             }}/>)
           }>

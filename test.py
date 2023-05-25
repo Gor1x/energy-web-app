@@ -124,8 +124,7 @@ class APITestCase(unittest.TestCase):
         )
         status_code = run_response.status_code
         self.assertEqual(status_code, 200)
-        print(run_response)
-        #self.assertEqual(len(run_response.json), num_rows)
+        self.assertEqual(len(run_response.json), num_rows)
 
 
 if __name__ == "__main__":

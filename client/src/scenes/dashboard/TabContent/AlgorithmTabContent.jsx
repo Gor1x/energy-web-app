@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, useTheme, IconButton } from "@mui/material";
+import { Box, useTheme, IconButton, Typography } from "@mui/material";
 import { tokens } from "../../../theme";
 import CodeEditor from "../../../components/CodeEditor";
 import Item from './Item';
@@ -8,6 +8,7 @@ import TableRowsIcon from '@mui/icons-material/TableRows';
 import { openModal, closeModal } from '../../../modal';
 import RunOnDatasetModal from '../modals/RunOnDatasetModal';
 import { authFetch } from '../../../auth';
+import { getFileLabel } from '../../../utils/getFileLabel';
 
 const AlgorithmTabContent = (props) => {
     const theme = useTheme();
@@ -19,7 +20,7 @@ const AlgorithmTabContent = (props) => {
         </Item>
     ]);
 
-    const Run = ({algorithm_id, dataset_id}) => {
+    const Run = ({title, algorithm_id, dataset_id}) => {
         const [result, setResult] = useState('');
 
         useEffect(() => {
@@ -32,6 +33,9 @@ const AlgorithmTabContent = (props) => {
 
         return (
             <Item rows={1} columns={6}>
+                <Typography id="run-title" variant="h6" component="h2">
+                    {title}
+                </Typography>
                 <Box p='20px'>
                     {result}
                 </Box>
@@ -49,7 +53,7 @@ const AlgorithmTabContent = (props) => {
                 <IconButton onClick={() => openModal(
                 <RunOnDatasetModal onSelect={(dataset) => {
                     closeModal()
-                    setItems([...items, <Run algorithm_id={file.id} dataset_id={dataset.id}/>])
+                    setItems([...items, <Run title={`Результат запуска на ${getFileLabel(dataset)}`} algorithm_id={file.id} dataset_id={dataset.id}/>])
                 }} />)}>
                     <PlayArrowIcon />
                 </IconButton>

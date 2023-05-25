@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Box, IconButton, useTheme, Tabs, Tab } from "@mui/material";
-import Split from 'react-split'
 import Sidebar from "./Sidebar";
 import AlgorithmTabContent from "./TabContent/AlgorithmTabContent";
 import DatasetTabContent from "./TabContent/DatasetTabContent";
@@ -10,15 +9,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import { getFileLabel } from "../../utils/getFileLabel";
 
 function TabPanel(props) {
-  const { children, id, ...other } = props;
+  const { children, value, index, ...other } = props;
 
   return (
     <div
+      hidden={value !== index}
       role="tabpanel"
-      id={`simple-tabpanel-${id}`}
-      aria-labelledby={`simple-tab-${id}`}
-      {...other}
-    >
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}>
       {children}
     </div>
   );
@@ -58,19 +57,20 @@ const Dashboard = () => {
           width="85%">
           <Tabs
             value={activeTab}
-            onChange={(e, i) => selectTab(i)}
+            onChange={(_, i) => selectTab(i)}
             variant="scrollable"
             scrollButtons={false}
             aria-label="scrollable prevent tabs example">
-            {tabs.map((file, i) => 
+            {tabs.map((file, index) => 
               <Tab 
-                key={`tab-${i}`} 
+                id={`simple-tab-${index}`}
+                aria-controls={`simple-tabpanel-${index}`}
                 label={
                   <span> 
                       {getFileLabel(file)}
                       <IconButton size="small" component="span" onClick={(e) => { 
                         e.stopPropagation()
-                        closeTab(i) 
+                        closeTab(index) 
                         }}>
                           <CloseIcon fontSize="inherit"/>
                       </IconButton>
@@ -80,9 +80,8 @@ const Dashboard = () => {
             )}
           </Tabs>
           <Box>
-            {tabs.map((file, i) =>
-              (activeTab === i && 
-              <TabPanel key={`tab-panel-${file.id}`} dir={theme.direction} id={file.id}>
+            {tabs.map((file, index) =>
+              (<TabPanel dir={theme.direction} value={activeTab} index={index}>
                 {renderTab(file)}
               </TabPanel>)
             )}

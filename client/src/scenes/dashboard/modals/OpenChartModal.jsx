@@ -1,28 +1,36 @@
-import { useEffect } from "react";
 import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
 import useUserFiles from "../../../hooks/useUserFiles";
 import { tokens } from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import ProgressCircle from "../../../components/ProgressCircle";
-import { useStoreon } from 'storeon/react';
+import { useEffect, useState } from "react";
+import { authFetch } from "../../../auth";
 
-const RunOnDatasetModal = ({ onSelect }) => {
+const OpenChartModal = ({ dataset, onSelect }) => {
     //const { userFiles } = useUserFiles();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const { dispatch, datasets } = useStoreon('datasets')
+
+    const [columns, setColumns] = useState([])
 
     useEffect(() => {
-      dispatch('datasets/load')
-    }, [])
+        authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
+            from: 0,
+            to: 1,
+        })).then(response => response.json())
+            .then(data_ => {
+                const data = data_.map(line => line);
+                setColumns(Object.entries(data[0]).map(([key, _]) => key))
+            });
+    }, []);
 
-    const Item = ({ title, file }) => {
+    const Item = ({ column }) => {
         return (
-            <MenuItem onClick={() => onSelect(file)}>
+            <MenuItem onClick={() => onSelect(column)}>
                 <ListItemIcon sx={{ color: colors.grey[200] }}>
                     <FileOpenIcon />
                 </ListItemIcon>
-                <ListItemText sx={{ color: colors.grey[200] }}>{title}</ListItemText>
+                <ListItemText sx={{ color: colors.grey[200] }}>{column}</ListItemText>
             </MenuItem>
         );
     };
@@ -39,16 +47,16 @@ const RunOnDatasetModal = ({ onSelect }) => {
             p: 4,
         }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-                Запустить на датасете
+                Построить график по столбцу
             </Typography>
             <MenuList
                 style={{
                     "height": "100%"
                 }}></MenuList>
-            {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
+            {columns.map((column, i) => <Item key={`modal-column-${i}`} column={column} />)}
             <MenuList />
         </Box>
     )
 }
 
-export default RunOnDatasetModal;
+export default OpenChartModal;
