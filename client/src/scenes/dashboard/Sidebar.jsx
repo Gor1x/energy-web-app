@@ -15,7 +15,7 @@ const Sidebar = (props) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { userFiles, uploadFile, deleteFile } = useUserFiles();
-  const { onSelect, ...other } = props;
+  const { onSelect, closeTabByFile, ...other } = props;
 
   const Item = ({ title, file }) => {
     return (
@@ -29,6 +29,7 @@ const Sidebar = (props) => {
           <IconButton size="small" sx={{ color: colors.grey[900] }}
             onClick={(e) => {
               e.stopPropagation()
+              closeTabByFile(file)
               deleteFile(file)
             }}>
             <DeleteOutlineIcon />

@@ -27,7 +27,7 @@ function TabPanel(props) {
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const { tabs, openTab, closeTab, activeTab, selectTab } = useTabs();
+  const { tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab } = useTabs();
 
   const renderTab = (file) => {
     switch (file.type) {
@@ -52,7 +52,8 @@ const Dashboard = () => {
         }}>
         <Sidebar height="100%"
           width="15%"
-          onSelect={file => openTab(file)}/>
+          onSelect={file => openTab(file)}
+          closeTabByFile={closeTabByFile}/>
         <Box height="100%"
           width="85%">
           <Tabs

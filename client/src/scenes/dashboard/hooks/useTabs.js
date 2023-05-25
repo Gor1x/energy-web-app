@@ -26,6 +26,13 @@ const useTabs = () => {
         setActiveTab(Math.min(activeTab, tabs.length - 1))
     };
 
-    return { tabs, openTab, closeTab, activeTab, selectTab };
+    const closeTabByFile = (file) => {
+        const tab = tabs.indexOf(file)
+        if (tab != -1) {
+            closeTab(tab)
+        }
+    };
+
+    return { tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab };
 }
 export default useTabs;
