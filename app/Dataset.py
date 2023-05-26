@@ -3,7 +3,7 @@ import numpy as np
 import pandas
 import os
 import json
-
+import dask.dataframe as dd
 from sklearn.datasets import make_blobs
 
 
@@ -28,18 +28,12 @@ class Dataset:
         """
         self.data = data
 
-
-def _dataset_filename(name: str) -> str:
-    return os.path.join('app/datasets', os.path.splitext(os.path.basename(name))[0]) + '.csv'
-
-
 def normalise_dataset(data: np.ndarray) -> np.ndarray:
     return preprocessing.MinMaxScaler().fit_transform(data)
 
 
 def load_from_csv(file_name: str) -> pandas.DataFrame:
-    return pandas.read_csv(file_name)
-
+    return dd.read_csv(file_name, compression='gzip').set_index('iddx').compute()
 
 def get_cols_with_type(df: pandas.DataFrame, types: [str]) -> pandas.DataFrame:
     groups = df.columns.to_series().groupby(df.dtypes).groups
@@ -55,6 +49,6 @@ def get_feature_cols(df: pandas.DataFrame) -> pandas.DataFrame:
 
 
 def load_dataset(file: str) -> Dataset:
-    df = load_from_csv(_dataset_filename(file))
+    df = load_from_csv(file)
     data = get_feature_cols(df).to_numpy()
     return Dataset(data, feature_names=get_feature_cols(df).columns.tolist())

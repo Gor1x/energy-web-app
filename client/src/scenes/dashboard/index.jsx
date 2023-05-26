@@ -1,26 +1,24 @@
 import { useState } from "react";
-import { Box, Typography, useTheme, Tabs, Tab } from "@mui/material";
-import Split from 'react-split'
+import { Box, IconButton, useTheme, Tabs, Tab } from "@mui/material";
 import Sidebar from "./Sidebar";
-import TabContent from "./TabContent";
+import AlgorithmTabContent from "./TabContent/AlgorithmTabContent";
+import DatasetTabContent from "./TabContent/DatasetTabContent";
 import { tokens } from "../../theme";
+import useTabs from "./hooks/useTabs";
+import CloseIcon from '@mui/icons-material/Close';
+import { getFileLabel } from "../../utils/getFileLabel";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
       hidden={value !== index}
+      role="tabpanel"
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
+      {...other}>
+      {children}
     </div>
   );
 }
@@ -28,63 +26,72 @@ function TabPanel(props) {
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab } = useTabs();
 
-  const [value, setValue] = useState(-1);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const renderTab = (file) => {
+    switch (file.type) {
+      case 'algorithm':
+        return <AlgorithmTabContent file={file}/>
+        break;
+      case 'dataset':
+        return <DatasetTabContent file={file}/>
+        break;
+    }
   };
-
-  const [tabs, setTabs] = useState([]);
 
   return (
     <Box style={{
         "width": "100%",
         "height": "100%"
       }}>
-      <Split style={{
+      <Box style={{
           "display": "flex",
           "width": "100%",
           "height": "100%"
-        }}
-        direction='horizontal'
-        sizes={[20, 80]}
-        minSize={[200, 1000]}
-        expandToMin
-        gutterSize={5}
-        cursor="col-resize">
-        <Sidebar onSelect={file => {
-          const id = tabs.indexOf(file)
-          if (id == -1) {
-            setTabs([...tabs, file])
-            setValue(tabs.length)
-          } else {
-            setValue(id)
-          }
-        }}/>
-        <Box height="100%">
-          {/*<AppBar position="static">*/}
+        }}>
+        <Sidebar height="100%"
+          width="15%"
+          onSelect={file => openTab(file)}
+          closeTabByFile={closeTabByFile}/>
+        <Box height="100%"
+          width="85%">
           <Tabs
-            value={value}
-            onChange={handleChange}
+            value={activeTab}
+            onChange={(_, i) => selectTab(i)}
             variant="scrollable"
             scrollButtons={false}
-            aria-label="scrollable prevent tabs example"
-          >
-            {tabs.map((file, i) => <Tab key={`tab-${i}`} label={file.name} />)}
+            aria-label="scrollable prevent tabs example">
+            {tabs.map((file, index) => 
+              <Tab 
+                id={`simple-tab-${index}`}
+                aria-controls={`simple-tabpanel-${index}`}
+                label={
+                  <span> 
+                      {getFileLabel(file)}
+                      <IconButton size="small" component="span" onClick={(e) => { 
+                        e.stopPropagation()
+                        closeTab(index) 
+                        }}>
+                          <CloseIcon fontSize="inherit"/>
+                      </IconButton>
+                  </span>
+                }
+              />
+            )}
           </Tabs>
-          {/*</AppBar>*/}
           <Box>
-            {tabs.map((file, i) =>
-              <TabPanel key={`tab-panel=${i}`} value={value} index={i} dir={theme.direction}>
-                <TabContent file={file}/>
-              </TabPanel>
+            {tabs.map((file, index) =>
+              (<TabPanel dir={theme.direction} value={activeTab} index={index}>
+                {renderTab(file)}
+              </TabPanel>)
             )}
           </Box>
         </Box>
-      </Split>
+      </Box>
     </Box>
   );
 };
 
 export default Dashboard;
+
+

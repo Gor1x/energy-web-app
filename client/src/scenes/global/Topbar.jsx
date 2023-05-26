@@ -38,9 +38,14 @@ const Topbar = () => {
   };
 
   return (
-    <Box p={2}>
+    <Box display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      style={{"background": colors.grey[900]}}>
+      {/* LOGO */}
+      <img height="50" src="icsenergy-logo.png" style={{"marginLeft": "20px"}}/>
       {/* ICONS */}
-      <Box display="flex" sx={{ "float": "right" }}>
+      <Box m={2} display="flex">
         {/*<IconButton onClick={colorMode.toggleColorMode}>
           {theme.palette.mode === "dark" ? (
             <DarkModeOutlinedIcon />
@@ -48,9 +53,9 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>*/}
-        <IconButton>
+        {/*<IconButton>
           <SettingsOutlinedIcon />
-        </IconButton>
+      </IconButton>*/}
         <IconButton
           id="demo-positioned-button"
           aria-controls={open ? 'demo-positioned-menu' : undefined}
@@ -68,23 +73,23 @@ const Topbar = () => {
           TransitionComponent={Fade}>
           {logged ? (
             <MenuItem
-            onClick={() => {
-              handleClose()
-              logout()
-            }}>
+              onClick={() => {
+                handleClose()
+                logout()
+              }}>
               <ListItemIcon sx={{ color: colors.grey[600] }}><LogoutIcon /></ListItemIcon>
               <ListItemText sx={{ color: colors.grey[600] }}>Выйти</ListItemText>
             </MenuItem>) :
             ([<Item
-                key="login"
-                icon={<LoginIcon />}
-                title="Войти"
-                to="/login" />,
-              <Item
-                key="signup"
-                icon={<PersonAddIcon />}
-                title="Зарегистрироваться"
-                to="/signup" />
+              key="login"
+              icon={<LoginIcon />}
+              title="Войти"
+              to="/login" />,
+            <Item
+              key="signup"
+              icon={<PersonAddIcon />}
+              title="Зарегистрироваться"
+              to="/signup" />
             ])}
         </Menu>
       </Box>

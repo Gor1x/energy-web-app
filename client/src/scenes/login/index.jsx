@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, Button, TextField } from "@mui/material";
 import { useNavigate } from 'react-router-dom'
 import { Formik } from "formik";
@@ -7,6 +8,8 @@ import Header from "../../components/Header";
 import { login } from '../../auth'
 
 const Login = () => {
+    const [errorMessage, setErrorMessage] = useState("");
+
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate()
 
@@ -23,16 +26,20 @@ const Login = () => {
             body: JSON.stringify(body)
         }
         fetch('/auth/login', requestOptions)
-            .then(res => res.json())
-            .then(data => {
-                if (data) {
-                    login(data.data.access_token)
-                    navigate("/");
-                } else {
-                    console.log('Некорректный логин или пароль')
+            .then(
+                res => {
+                    if(res.status==401) {
+                        throw new Error("Некорректный логин или пароль");
+                    } else {
+                        return res.json()
+                    }
                 }
-            }).catch(_ => {
-                console.log('Некорректный логин или пароль')
+            )
+            .then(data => {
+                login(data.data)
+                navigate("/");
+            }).catch(e => {
+                setErrorMessage(e.message);
             })
     }
 
@@ -99,6 +106,7 @@ const Login = () => {
                                     Войти
                                 </Button>
                             </Box>
+                            {errorMessage && <div className="error">{errorMessage}</div>}
                         </form>
                     )}
                 </Formik>
