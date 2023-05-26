@@ -15,8 +15,8 @@ const OpenChartModal = ({ dataset, onSelect }) => {
 
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
-            from: 0,
-            to: 1,
+            from: 1,
+            to: 2,
         })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map(line => line);
