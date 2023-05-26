@@ -21,7 +21,7 @@ const TableCSV = (props) => {
         setIsLoading(true);
         setPage(page)
 
-        const from = (page - 1) * props.sizePerPage;
+        const from = (page - 1) * props.sizePerPage + 1;
         let to = from + props.sizePerPage;
         if (to >= props.totalSize) {
             to = props.totalSize

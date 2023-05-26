@@ -12,6 +12,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import dask.dataframe as dd
 import pandas as pd
 import numpy as np
+from glob import glob
+import codecs
 
 running_ns = Namespace("run", description="Run")
 algorithm_ns = Namespace("algorithms", description="Algorithm")
@@ -179,10 +181,23 @@ class DatasetResource(Resource):
         for (_, file) in request.files.items():
             fileid = str(uuid.uuid4())
             file_path = normalize_path(os.path.join(datasets_dir, f"{fileid}"))
-            df = dd.from_pandas(pd.read_csv(file), chunksize=100)
-            df["idx"] = 1
-            df["idx"] = df["idx"].cumsum()
-            df.to_csv(file_path)
+            
+            
+            part_size=60000
+            #npart = (len(df) + part_size - 1)
+            df = dd.from_pandas(pd.read_csv(file), chunksize=part_size)
+            #df = df.repartition(npartitions=npart)
+            pfsums = np.cumsum(df.map_partitions(len).compute()).tolist()
+            df["iddx"] = 1
+            df["iddx"] = df["iddx"].cumsum()
+            df = df.set_index("iddx")
+            df.to_csv(file_path, compression='gzip')
+            json_file = f"{file_path}/index.json" 
+            json.dump(pfsums, codecs.open(json_file, 'w', encoding='utf-8'), sort_keys=True, indent=4)
+
+            #df["idx"] = 1
+            #df["idx"] = df["idx"].cumsum()
+            #df.to_csv(file_path)
             num_rows=df.shape[0].compute()
             new_dataset = Dataset(
                 name="dataset",
@@ -232,17 +247,27 @@ class DatasetDataByIdResource(Resource):
     @jwt_required()
     def get(self, id):
         args = request.args
-        from_row = args['from']
-        to_row = args['to']
+        from_row = int(args['from'])
+        to_row = int(args['to'])
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         dataset = Dataset.query.get_or_404(id)
         if dataset.user_id == -1 or dataset.user_id == user_id:
-            file_path = normalize_path(f"{dataset.file_path}/*.part")
-            if dataset.user_id == -1:     
-                df = dd.read_csv(file_path, compression='gzip').set_index('idx')
-            else:
-                df = dd.read_csv(file_path).set_index('idx')
-            return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
+            #file_path = normalize_path(f"{dataset.file_path}/*.part")
+            
+            #if dataset.user_id == -1:     
+            #    df = dd.read_csv(file_path, compression='gzip').set_index('Unnamed: 0')
+            #else:
+            #    df = dd.read_csv(file_path).set_index('Unnamed: 0')
+
+            with open(normalize_path(f"{dataset.file_path}/index.json"), 'r', encoding='utf-8') as f:
+                pfsum = json.load(f)
+            from_file = np.searchsorted(pfsum, from_row, side='left')
+            to_file = np.searchsorted(pfsum, to_row - 2, side='rigth')
+            filenames = glob(normalize_path(f"{dataset.file_path}/*.part"))
+            df = dd.read_csv(filenames[from_file:to_file+1], compression='gzip').set_index('iddx')
+            return make_response(df.loc[from_row:to_row-1].compute().to_json(orient='records'), 200)
+            
+            #return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
         
 
 @auth_ns.route("/signup")

@@ -33,7 +33,7 @@ def normalise_dataset(data: np.ndarray) -> np.ndarray:
 
 
 def load_from_csv(file_name: str) -> pandas.DataFrame:
-    return dd.read_csv(file_name).set_index('idx').compute()
+    return dd.read_csv(file_name, compression='gzip').set_index('iddx').compute()
 
 def get_cols_with_type(df: pandas.DataFrame, types: [str]) -> pandas.DataFrame:
     groups = df.columns.to_series().groupby(df.dtypes).groups
