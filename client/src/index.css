@@ -1,13 +1,25 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap");
 
+.app {
+  height: 100vh;
+  width: 100vw;
+}
+
 html,
 body,
 #root,
-.app,
 .content {
   height: 100%;
   width: 100%;
   font-family: "Source Sans Pro", sans-serif;
+}
+
+.appTopbar {
+  height: 70px;
+}
+
+.appBody {
+  height: calc(100% - 70px);
 }
 
 .app {

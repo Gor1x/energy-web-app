@@ -6,13 +6,14 @@ import { ColorModeContext, useMode } from "./theme";
 import Signup from "./scenes/signup";
 import Login from "./scenes/login";
 import './assets/scss/base.scss'
-import { useModal, openModal, closeModal } from './modal';
+//import { useModal } from './modal';
 import { useAuth } from "./auth";
+import { useStoreon } from "storeon/react";
 
 function App() {
   const [theme, colorMode] = useMode();
-  const {modal} = useModal();
   const [isLoggedIn] = useAuth();
+  const { modal } = useStoreon('modal')
 
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -21,7 +22,7 @@ function App() {
         <div className="app">
           <Box
             sx={{
-              "height": "100%",
+              "height": "100vh",
               "width": "100%",
               "& .gutter": {
                 "cursor": "col-resize"
@@ -30,12 +31,16 @@ function App() {
           >
             <div className="content">
               {modal}
-              <Topbar />
-              <Routes>
-                <Route path="/" element={isLoggedIn ? <Dashboard /> : <div>Вы не вошли в аккаунт</div>} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-              </Routes>
+              <Box className='appTopbar'>
+                <Topbar/>
+              </Box>
+              <Box className='appBody'>
+                <Routes>
+                  <Route path="/" element={isLoggedIn ? <Dashboard /> : <div>Вы не вошли в аккаунт</div>} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                </Routes>
+              </Box>
             </div>
           </Box>
         </div>

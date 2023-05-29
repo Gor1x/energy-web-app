@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box, IconButton, useTheme, Tabs, Tab } from "@mui/material";
 import Sidebar from "./Sidebar";
 import AlgorithmTabContent from "./TabContent/AlgorithmTabContent";
@@ -6,7 +5,7 @@ import DatasetTabContent from "./TabContent/DatasetTabContent";
 import { tokens } from "../../theme";
 import useTabs from "./hooks/useTabs";
 import CloseIcon from '@mui/icons-material/Close';
-import { getFileLabel } from "../../utils/getFileLabel";
+import { getNameWithExtension } from "../../utils/getFileLabel";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -31,59 +30,65 @@ const Dashboard = () => {
   const renderTab = (file) => {
     switch (file.type) {
       case 'algorithm':
-        return <AlgorithmTabContent file={file}/>
+        return <AlgorithmTabContent file={file} />
         break;
       case 'dataset':
-        return <DatasetTabContent file={file}/>
+        return <DatasetTabContent file={file} />
         break;
     }
   };
 
   return (
     <Box style={{
+      "width": "100%",
+      "height": "100%"
+    }}>
+      <Box style={{
+        "display": "flex",
         "width": "100%",
         "height": "100%"
       }}>
-      <Box style={{
-          "display": "flex",
-          "width": "100%",
-          "height": "100%"
-        }}>
-        <Sidebar height="100%"
-          width="15%"
-          onSelect={file => openTab(file)}
-          closeTabByFile={closeTabByFile}/>
-        <Box height="100%"
-          width="85%">
-          <Tabs
-            value={activeTab}
-            onChange={(_, i) => selectTab(i)}
-            variant="scrollable"
-            scrollButtons={false}
-            aria-label="scrollable prevent tabs example">
-            {tabs.map((file, index) => 
-              <Tab 
-                id={`simple-tab-${index}`}
-                aria-controls={`simple-tabpanel-${index}`}
-                label={
-                  <span> 
-                      {getFileLabel(file)}
-                      <IconButton size="small" component="span" onClick={(e) => { 
+        <Box sx={{width: '200px'}}>
+          <Sidebar height="100%"
+            width="100%"
+            onSelect={file => openTab(file)}
+            closeTabByFile={closeTabByFile} />
+        </Box>
+        <Box
+          height="100%"
+          width="calc(100% - 200px)">
+          <Box height='50px'>
+            <Tabs
+              value={activeTab}
+              onChange={(_, i) => selectTab(i)}
+              variant="scrollable"
+              scrollButtons={false}
+              aria-label="scrollable prevent tabs example">
+              {tabs.map((file, index) =>
+                <Tab
+                  key={`tab-${index}`}
+                  id={`simple-tab-${index}`}
+                  aria-controls={`simple-tabpanel-${index}`}
+                  label={
+                    <span>
+                      {getNameWithExtension(file)}
+                      <IconButton size="small" component="span" onClick={(e) => {
                         e.stopPropagation()
-                        closeTab(index) 
-                        }}>
-                          <CloseIcon fontSize="inherit"/>
+                        closeTab(index)
+                      }}>
+                        <CloseIcon fontSize="inherit" />
                       </IconButton>
-                  </span>
-                }
-              />
-            )}
-          </Tabs>
-          <Box>
-            {tabs.map((file, index) =>
-              (<TabPanel dir={theme.direction} value={activeTab} index={index}>
-                {renderTab(file)}
-              </TabPanel>)
+                    </span>
+                  }
+                />
+              )}
+            </Tabs>
+          </Box>
+          <Box height='calc(100% - 50px)'>
+            {tabs.map((file, i) =>
+            (<TabPanel style={{ height: '100%'}} key={`tab-panel-${i}`} dir={theme.direction} value={activeTab} index={i}>
+              {renderTab(file)}
+            </TabPanel>)
             )}
           </Box>
         </Box>

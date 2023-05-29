@@ -1,13 +1,10 @@
 import { useEffect } from "react";
 import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
-import useUserFiles from "../../../hooks/useUserFiles";
 import { tokens } from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import ProgressCircle from "../../../components/ProgressCircle";
 import { useStoreon } from 'storeon/react';
 
 const RunOnDatasetModal = ({ onSelect }) => {
-    //const { userFiles } = useUserFiles();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const { dispatch, datasets } = useStoreon('datasets')

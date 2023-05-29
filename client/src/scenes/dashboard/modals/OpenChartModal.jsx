@@ -1,13 +1,10 @@
 import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
-import useUserFiles from "../../../hooks/useUserFiles";
 import { tokens } from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import ProgressCircle from "../../../components/ProgressCircle";
 import { useEffect, useState } from "react";
 import { authFetch } from "../../../auth";
 
 const OpenChartModal = ({ dataset, onSelect }) => {
-    //const { userFiles } = useUserFiles();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 

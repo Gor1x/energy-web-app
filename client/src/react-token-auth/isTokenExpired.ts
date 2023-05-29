@@ -18,6 +18,7 @@ const jwtExp = (token: string, logger?: SimpleLogger): number | null => {
         logger?.log('jwtExp', 'middlePart', middlePart);
         const jwt = JSON.parse(middlePart);
         logger?.log('jwtExp', 'jwt', jwt);
+        logger?.log('jwtExp', 'jwtExp', jwt.exp);
         if (jwt && jwt.exp && Number.isFinite(jwt.exp)) {
             return jwt.exp * 1000;
         } else {

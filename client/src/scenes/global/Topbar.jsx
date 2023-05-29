@@ -38,7 +38,9 @@ const Topbar = () => {
   };
 
   return (
-    <Box display="flex"
+    <Box 
+      height="100%"
+      display="flex"
       justifyContent="space-between"
       alignItems="center"
       style={{"background": colors.grey[900]}}>

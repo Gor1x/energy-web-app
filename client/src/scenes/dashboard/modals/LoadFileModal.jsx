@@ -1,8 +1,11 @@
 import { Box, Typography, Button} from "@mui/material";
-import { closeModal } from '../../../modal';
 
-const LoadFileModal = ({type, handleUpload, handleClose}) => 
-    <Box sx={{
+const LoadFileModal = ({type, handleUpload, handleClose}) => { 
+    const mapTypeToTitle = {
+        algorithm: "Загрузить алгоритм",
+        dataset: "Загрузить датасет"
+    };
+    return (<Box sx={{
         position: 'absolute',
         top: '50%',
         left: '50%',
@@ -13,7 +16,7 @@ const LoadFileModal = ({type, handleUpload, handleClose}) =>
         p: 4,
     }}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-            Загрузить {type == "algorithm" ? "алгоритм" : "датасет"}
+            {mapTypeToTitle[type]}
         </Typography>
         <input type="file"
             name="myFile"
@@ -21,6 +24,7 @@ const LoadFileModal = ({type, handleUpload, handleClose}) =>
         <Button variant="secondary" onClick={handleClose}>
             Отмена
         </Button>
-    </Box>
+    </Box>)
+}
 
 export default LoadFileModal;
