@@ -1,39 +1,38 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Box, useTheme, IconButton, Typography } from "@mui/material";
+import { Box, useTheme, IconButton } from "@mui/material";
 import { tokens } from "../../../theme";
 import TableCSV from '../../../components/TableCSV';
 import LineChart from "../../../components/LineChart/LineChart";
-import Item from './Item';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddchartIcon from '@mui/icons-material/Addchart';
 import TableRowsIcon from '@mui/icons-material/TableRows';
-import LoadingSpinner from '../../../components/LoadingSpinner';
 import { openModal, closeModal } from '../../../modal';
 import OpenChartModal from '../../dashboard/modals/OpenChartModal'
 import { authFetch } from '../../../auth';
+import Card from '../../../components/Card';
+import RunOnAlgorithmModal from '../modals/RunOnAlgorithmModal';
+import { getNameWithExtension } from '../../../utils/getFileLabel';
+import Run from './Run';
 
 const DatasetTabContent = (props) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const { file } = props;
-
-    const [items, setItems] = useState([
-        <Item
-            columns={6}
-            rows={4}
-            backgroundColor={colors.primary[400]}>
-            <TableCSV
-                sizePerPage={7}
-                totalSize={file.num_rows}
-                url={`datasets/data/${file.id}`} />
-        </Item>
-    ]);
+    const tableCard = {
+        type: "table",
+        props: {
+            sizePerPage: 7,
+            totalSize: file.num_rows,
+            url: `datasets/data/${file.id}`
+        }
+    }
+    const [items, setItems] = useState([tableCard])
 
     const Chart = ({ dataset, column }) => {
         const [resize, setResize] = useState(false)
         const [timer, setTimer] = useState(0)
         const [values, setValues] = useState([])
-        
+
         const triggerResize = useCallback(() => {
             if (timer) {
                 window.cancelAnimationFrame(timer);
@@ -71,23 +70,72 @@ const DatasetTabContent = (props) => {
             xAxis: "date",
             yAxis: [column],
             yNames: [column],
-            data: values.map((value, i) => ({[column]: value, date: i}))
+            data: values.map((value, i) => ({ [column]: value, date: i }))
         };
 
         return (
-            <Item rows={4} columns={6}>
-                <div>
-                    {config && <LineChart config={config} resize={resize} />}
-                </div>
-            </Item>
+            <Box>
+                {config && <LineChart config={config} resize={resize} />}
+            </Box>
         )
     }
+
+    const openChartCardHandler = (column) => {
+        const chartCard = {
+            type: 'chart',
+            props: {
+                dataset: file,
+                column: column
+            }
+        };
+        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(chartCard))) {
+            setItems([...items, chartCard]);
+        } else {
+            alert("Уже открыто")
+        }
+    }
+
+    const openRunCardHandler = (algorithm) => {
+        const runCard = {
+            type: 'run',
+            props: {
+                title: `Результат запуска ${getNameWithExtension(algorithm)}`,
+                algorithm_id: algorithm.id,
+                dataset_id: file.id
+            }
+        };
+        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(runCard))) {
+            setItems([...items, runCard]);
+        } else {
+            alert("Уже открыто")
+        }
+    }
+
+    const openTableCardHandler = () => {
+        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(tableCard))) {
+            setItems(() => {
+                let updated = Object.assign([], items);
+                updated.splice(0, 0, tableCard)
+                return updated
+            })
+        } else {
+            alert("Уже открыто")
+        }
+    }
+
+    const closeCardHandler = (i) => {
+        setItems(() => {
+            let updated = Object.assign([], items);
+            updated.splice(i, 1)
+            return updated
+        })
+    };
 
     return (
         <Box>
             {/* TOOLBAR */}
             <Box height='40px' width='100%'>
-                <IconButton>
+                <IconButton onClick={openTableCardHandler}>
                     <TableRowsIcon />
                 </IconButton>
                 <IconButton onClick={() => openModal(
@@ -95,11 +143,15 @@ const DatasetTabContent = (props) => {
                         dataset={file}
                         onSelect={(column) => {
                             closeModal()
-                            setItems([...items, <Chart dataset={file} column={column} />])
+                            openChartCardHandler(column)
                         }} />)}>
                     <AddchartIcon />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={() => openModal(
+                    <RunOnAlgorithmModal onSelect={(algorithm) => {
+                        closeModal()
+                        openRunCardHandler(algorithm)
+                    }} />)}>
                     <PlayArrowIcon />
                 </IconButton>
             </Box>
@@ -110,7 +162,28 @@ const DatasetTabContent = (props) => {
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="80px"
                 gap="20px">
-                {items}
+                {items.map((item, i) => {
+                    switch (item.type) {
+                        case 'table':
+                            return (
+                                <Card rows={4} columns={6} onClose={() => closeCardHandler(i)}>
+                                    <TableCSV {...item.props} />
+                                </Card>
+                            )
+                        case 'chart':
+                            return (
+                                <Card rows={4} columns={6} onClose={() => closeCardHandler(i)}>
+                                    <Chart {...item.props} />
+                                </Card>
+                            )
+                        case 'run':
+                            return (
+                                <Card rows={1} columns={6} onClose={() => closeCardHandler(i)}>
+                                    <Run {...item.props} />
+                                </Card>
+                            )
+                    }
+                })}
             </Box>
         </Box>
     )

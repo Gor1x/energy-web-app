@@ -11,7 +11,7 @@ from app.routes import running_ns, algorithm_ns, dataset_ns, auth_ns
 def create_app(config):
     app = Flask(__name__, static_url_path="/", static_folder="../client/build")
     app.config.from_object(config)
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 60 #10 
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 600 #10 
     CORS(app)
     db.init_app(app)
     Migrate(app, db)

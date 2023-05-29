@@ -1,4 +1,4 @@
-export const getFileLabel = (file) => {
+export const getNameWithExtension = (file) => {
     switch(file.type) {
         case 'algorithm':
             return `${file.name}.py`;

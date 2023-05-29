@@ -3,9 +3,11 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  const navigate = useNavigate()
 
   const handleFormSubmit = (values) => {
     if (values.password === values.confirmation) {
@@ -22,13 +24,27 @@ const Signup = () => {
         body: JSON.stringify(body)
       }
       fetch('/auth/signup', requestOptions)
-        .then(res => res.json())
+        .then(res => {
+          if (res.status == 201) {
+            return res.json()
+          } else {
+            throw new Error(res.status);
+          }
+        })
         .then(data => {
-          console.log(data.message)
+          navigate("/login")
+          alert("Регистрация прошла успешно")
+        })
+        .catch(error => {
+          if (error.message == 409) {
+            alert("Пользователь с таким логином уже зарегистрирован")
+          } else {
+            alert("Не удалось зарегистрировася")
+          }
         })
     }
     else {
-      console.log("passwords are not equal")
+      alert("Пароли не совпадают")
     }
   }
 

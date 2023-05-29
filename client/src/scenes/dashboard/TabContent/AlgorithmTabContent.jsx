@@ -1,60 +1,75 @@
-import { useEffect, useState } from 'react'
-import { Box, useTheme, IconButton, Typography } from "@mui/material";
+import { useState } from 'react'
+import { Box, useTheme, IconButton } from "@mui/material";
 import { tokens } from "../../../theme";
 import CodeEditor from "../../../components/CodeEditor";
-import Item from './Item';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import { openModal, closeModal } from '../../../modal';
 import RunOnDatasetModal from '../modals/RunOnDatasetModal';
-import { authFetch } from '../../../auth';
-import { getFileLabel } from '../../../utils/getFileLabel';
+import { getNameWithExtension } from '../../../utils/getFileLabel';
+import Card from '../../../components/Card';
+import Run from './Run';
 
 const AlgorithmTabContent = (props) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const { file } = props;
-    const [items, setItems] = useState([
-        <Item rows={6} columns={6}>
-            <CodeEditor file={file} />
-        </Item>
-    ]);
+    const codeCard = {
+        type: "code",
+        props: {
+            file: file
+        }
+    };
+    const [items, setItems] = useState([codeCard]);
 
-    const Run = ({title, algorithm_id, dataset_id}) => {
-        const [result, setResult] = useState('');
-
-        useEffect(() => {
-            authFetch('/run/?' + new URLSearchParams({
-                algorithm_id: algorithm_id,
-                dataset_id: dataset_id,
-            })).then(response => response.json())
-                .then(json => setResult(JSON.stringify(json)))
-        }, [])
-
-        return (
-            <Item rows={1} columns={6}>
-                <Typography id="run-title" variant="h6" component="h2">
-                    {title}
-                </Typography>
-                <Box p='20px'>
-                    {result}
-                </Box>
-            </Item>
-        )
+    const openRunCardHandler = (dataset) => {
+        const runCard = {
+            type: 'run',
+            props: {
+                title: `Результат запуска на ${getNameWithExtension(dataset)}`,
+                algorithm_id: file.id,
+                dataset_id: dataset.id
+            }
+        };
+        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(runCard))) {
+            setItems([...items, runCard]);
+        } else {
+            alert("Уже открыто")
+        }
     }
+
+    const openCodeCardHandler = () => {
+        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(codeCard))) {
+            setItems(() => {
+                let updated = Object.assign([], items);
+                updated.splice(0, 0, codeCard)
+                return updated
+            })
+        } else {
+            alert("Уже открыто")
+        }
+    }
+
+    const closeCardHandler = (i) => {
+        setItems(() => {
+            let updated = Object.assign([], items);
+            updated.splice(i, 1)
+            return updated
+        })
+    };
 
     return (
         <Box>
             {/* TOOLBAR */}
             <Box height='40px' width='100%'>
                 <IconButton>
-                    <TableRowsIcon />
+                    <TableRowsIcon onClick={openCodeCardHandler} />
                 </IconButton>
                 <IconButton onClick={() => openModal(
-                <RunOnDatasetModal onSelect={(dataset) => {
-                    closeModal()
-                    setItems([...items, <Run title={`Результат запуска на ${getFileLabel(dataset)}`} algorithm_id={file.id} dataset_id={dataset.id}/>])
-                }} />)}>
+                    <RunOnDatasetModal onSelect={(dataset) => {
+                        closeModal()
+                        openRunCardHandler(dataset)
+                    }} />)}>
                     <PlayArrowIcon />
                 </IconButton>
             </Box>
@@ -65,7 +80,22 @@ const AlgorithmTabContent = (props) => {
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="80px"
                 gap="20px">
-                {items}
+                {items.map((item, i) => {
+                    switch (item.type) {
+                        case 'code':
+                            return (
+                                <Card rows={6} columns={6} onClose={() => closeCardHandler(i)}>
+                                    <CodeEditor {...item.props} />
+                                </Card>
+                            )
+                        case 'run':
+                            return (
+                                <Card rows={1} columns={6} onClose={() => closeCardHandler(i)}>
+                                    <Run {...item.props} />
+                                </Card>
+                            )
+                    }
+                })}
             </Box>
         </Box>
     )

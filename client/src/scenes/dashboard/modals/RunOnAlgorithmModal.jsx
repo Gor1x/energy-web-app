@@ -1,33 +1,25 @@
+import { useEffect } from "react";
 import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
 import { tokens } from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { useEffect, useState } from "react";
-import { authFetch } from "../../../auth";
+import { useStoreon } from 'storeon/react';
 
-const OpenChartModal = ({ dataset, onSelect }) => {
+const RunOnAlgorithmModal = ({ onSelect }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-
-    const [columns, setColumns] = useState([])
+    const { dispatch, algorithms } = useStoreon('algorithms')
 
     useEffect(() => {
-        authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
-            from: 1,
-            to: 2,
-        })).then(response => response.json())
-            .then(data_ => {
-                const data = data_.map(line => line);
-                setColumns(Object.entries(data[0]).map(([key, _]) => key))
-            });
-    }, []);
+      dispatch('algorithms/load')
+    }, [])
 
-    const Item = ({ column }) => {
+    const Item = ({ title, file }) => {
         return (
-            <MenuItem onClick={() => onSelect(column)}>
+            <MenuItem onClick={() => onSelect(file)}>
                 <ListItemIcon sx={{ color: colors.grey[200] }}>
                     <FileOpenIcon />
                 </ListItemIcon>
-                <ListItemText sx={{ color: colors.grey[200] }}>{column}</ListItemText>
+                <ListItemText sx={{ color: colors.grey[200] }}>{title}</ListItemText>
             </MenuItem>
         );
     };
@@ -44,16 +36,16 @@ const OpenChartModal = ({ dataset, onSelect }) => {
             p: 4,
         }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-                Построить график по столбцу
+                Запустить алгоритм
             </Typography>
             <MenuList
                 style={{
                     "height": "100%"
                 }}></MenuList>
-            {columns.map((column, i) => <Item key={`modal-column-${i}`} column={column} />)}
+            {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
             <MenuList />
         </Box>
     )
 }
 
-export default OpenChartModal;
+export default RunOnAlgorithmModal;

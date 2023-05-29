@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Box, IconButton, useTheme, Tabs, Tab } from "@mui/material";
 import Sidebar from "./Sidebar";
 import AlgorithmTabContent from "./TabContent/AlgorithmTabContent";
@@ -6,7 +5,7 @@ import DatasetTabContent from "./TabContent/DatasetTabContent";
 import { tokens } from "../../theme";
 import useTabs from "./hooks/useTabs";
 import CloseIcon from '@mui/icons-material/Close';
-import { getFileLabel } from "../../utils/getFileLabel";
+import { getNameWithExtension } from "../../utils/getFileLabel";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,7 +66,7 @@ const Dashboard = () => {
                 aria-controls={`simple-tabpanel-${index}`}
                 label={
                   <span> 
-                      {getFileLabel(file)}
+                      {getNameWithExtension(file)}
                       <IconButton size="small" component="span" onClick={(e) => { 
                         e.stopPropagation()
                         closeTab(index) 

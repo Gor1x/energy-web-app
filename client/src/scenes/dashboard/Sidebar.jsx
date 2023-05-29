@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Box, IconButton, Typography, useTheme, ListItemButton, MenuList, MenuItem, ListItemText, ListItemIcon, ListItem } from "@mui/material";
+import { useEffect } from "react";
+import { Box, IconButton, Typography, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon } from "@mui/material";
 import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
@@ -7,9 +7,8 @@ import MapIcon from '@mui/icons-material/Map';
 import { tokens } from "../../theme";
 import MapModal from "./modals/MapModal";
 import LoadFileModal from "./modals/LoadFileModal";
-import useUserFiles from "../../hooks/useUserFiles";
 import { openModal, closeModal } from '../../modal';
-import { getFileLabel } from "../../utils/getFileLabel";
+import { getNameWithExtension } from "../../utils/getFileLabel";
 import { useStoreon } from 'storeon/react';
 
 const Sidebar = (props) => {
@@ -97,9 +96,9 @@ const Sidebar = (props) => {
           "background": colors.primary[600]
         }}>
         <ListTitle type="algorithm" />
-        {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getFileLabel(item)} file={item} />)}
+        {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getNameWithExtension(item)} file={item} />)}
         <ListTitle type="dataset" />
-        {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getFileLabel(item)} file={item} />)}
+        {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getNameWithExtension(item)} file={item} />)}
         <MenuItem onClick={() => 
             openModal(<MapModal onClick={(i) => {
               onSelect(datasets[0])
