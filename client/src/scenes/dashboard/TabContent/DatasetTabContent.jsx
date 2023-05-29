@@ -134,7 +134,7 @@ const DatasetTabContent = (props) => {
     };
 
     return (
-        <Box>
+        <Box height='100%'>
             {/* TOOLBAR */}
             <Box height='40px' width='100%'>
                 <IconButton onClick={openTableCardHandler}>
@@ -159,6 +159,9 @@ const DatasetTabContent = (props) => {
             </Box>
             {/* GRID & CHARTS */}
             <Box
+                sx={{ overflowY: 'scroll'}}
+                height="calc(100% - 40px)"
+                width="100%"
                 p='20px'
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"

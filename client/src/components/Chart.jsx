@@ -18,10 +18,12 @@ const Chart = ({ option, config, resize }) => {
         }
     }, [option, chartEl])
 
+    console.log(height)
+
     return (
-        <section className="chart" style={{ height, width }}>
+        <div className="chart" style={{ height, width }}>
             <div className="chart" ref={chart}></div>
-        </section>
+        </div>
     )
 }
 export default Chart;

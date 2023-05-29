@@ -30,60 +30,65 @@ const Dashboard = () => {
   const renderTab = (file) => {
     switch (file.type) {
       case 'algorithm':
-        return <AlgorithmTabContent file={file}/>
+        return <AlgorithmTabContent file={file} />
         break;
       case 'dataset':
-        return <DatasetTabContent file={file}/>
+        return <DatasetTabContent file={file} />
         break;
     }
   };
 
   return (
     <Box style={{
+      "width": "100%",
+      "height": "100%"
+    }}>
+      <Box style={{
+        "display": "flex",
         "width": "100%",
         "height": "100%"
       }}>
-      <Box style={{
-          "display": "flex",
-          "width": "100%",
-          "height": "100%"
-        }}>
-        <Sidebar height="100%"
-          width="15%"
-          onSelect={file => openTab(file)}
-          closeTabByFile={closeTabByFile}/>
-        <Box height="100%"
-          width="85%">
-          <Tabs
-            value={activeTab}
-            onChange={(_, i) => selectTab(i)}
-            variant="scrollable"
-            scrollButtons={false}
-            aria-label="scrollable prevent tabs example">
-            {tabs.map((file, index) => 
-              <Tab 
-                key={`tab-${index}`}
-                id={`simple-tab-${index}`}
-                aria-controls={`simple-tabpanel-${index}`}
-                label={
-                  <span> 
+        <Box sx={{width: '200px'}}>
+          <Sidebar height="100%"
+            width="100%"
+            onSelect={file => openTab(file)}
+            closeTabByFile={closeTabByFile} />
+        </Box>
+        <Box
+          height="100%"
+          width="calc(100% - 200px)">
+          <Box height='50px'>
+            <Tabs
+              value={activeTab}
+              onChange={(_, i) => selectTab(i)}
+              variant="scrollable"
+              scrollButtons={false}
+              aria-label="scrollable prevent tabs example">
+              {tabs.map((file, index) =>
+                <Tab
+                  key={`tab-${index}`}
+                  id={`simple-tab-${index}`}
+                  aria-controls={`simple-tabpanel-${index}`}
+                  label={
+                    <span>
                       {getNameWithExtension(file)}
-                      <IconButton size="small" component="span" onClick={(e) => { 
+                      <IconButton size="small" component="span" onClick={(e) => {
                         e.stopPropagation()
-                        closeTab(index) 
-                        }}>
-                          <CloseIcon fontSize="inherit"/>
+                        closeTab(index)
+                      }}>
+                        <CloseIcon fontSize="inherit" />
                       </IconButton>
-                  </span>
-                }
-              />
-            )}
-          </Tabs>
-          <Box>
+                    </span>
+                  }
+                />
+              )}
+            </Tabs>
+          </Box>
+          <Box height='calc(100% - 50px)'>
             {tabs.map((file, i) =>
-              (<TabPanel key={`tab-panel-${i}`} dir={theme.direction} value={activeTab} index={i}>
-                {renderTab(file)}
-              </TabPanel>)
+            (<TabPanel style={{ height: '100%'}} key={`tab-panel-${i}`} dir={theme.direction} value={activeTab} index={i}>
+              {renderTab(file)}
+            </TabPanel>)
             )}
           </Box>
         </Box>

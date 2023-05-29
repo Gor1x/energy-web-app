@@ -22,7 +22,7 @@ function App() {
         <div className="app">
           <Box
             sx={{
-              "height": "100%",
+              "height": "100vh",
               "width": "100%",
               "& .gutter": {
                 "cursor": "col-resize"
@@ -31,12 +31,16 @@ function App() {
           >
             <div className="content">
               {modal}
-              <Topbar />
-              <Routes>
-                <Route path="/" element={isLoggedIn ? <Dashboard /> : <div>Вы не вошли в аккаунт</div>} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-              </Routes>
+              <Box className='appTopbar'>
+                <Topbar/>
+              </Box>
+              <Box className='appBody'>
+                <Routes>
+                  <Route path="/" element={isLoggedIn ? <Dashboard /> : <div>Вы не вошли в аккаунт</div>} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                </Routes>
+              </Box>
             </div>
           </Box>
         </div>
