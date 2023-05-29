@@ -4,11 +4,12 @@ import { tokens } from "../../../theme";
 import CodeEditor from "../../../components/CodeEditor";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TableRowsIcon from '@mui/icons-material/TableRows';
-import { openModal, closeModal } from '../../../modal';
+//import { openModal, closeModal } from '../../../modal';
 import RunOnDatasetModal from '../modals/RunOnDatasetModal';
 import { getNameWithExtension } from '../../../utils/getFileLabel';
 import Card from '../../../components/Card';
 import Run from './Run';
+import { useStoreon } from 'storeon/react';
 
 const AlgorithmTabContent = (props) => {
     const theme = useTheme();
@@ -21,6 +22,7 @@ const AlgorithmTabContent = (props) => {
         }
     };
     const [items, setItems] = useState([codeCard]);
+    const { dispatch } = useStoreon('modal')
 
     const openRunCardHandler = (dataset) => {
         const runCard = {
@@ -62,12 +64,12 @@ const AlgorithmTabContent = (props) => {
         <Box>
             {/* TOOLBAR */}
             <Box height='40px' width='100%'>
-                <IconButton>
-                    <TableRowsIcon onClick={openCodeCardHandler} />
+                <IconButton onClick={openCodeCardHandler}>
+                    <TableRowsIcon />
                 </IconButton>
-                <IconButton onClick={() => openModal(
+                <IconButton onClick={() => dispatch('modal/open',
                     <RunOnDatasetModal onSelect={(dataset) => {
-                        closeModal()
+                        dispatch('modal/close')
                         openRunCardHandler(dataset)
                     }} />)}>
                     <PlayArrowIcon />
@@ -84,13 +86,13 @@ const AlgorithmTabContent = (props) => {
                     switch (item.type) {
                         case 'code':
                             return (
-                                <Card rows={6} columns={6} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={6} columns={6} onClose={() => closeCardHandler(i)}>
                                     <CodeEditor {...item.props} />
                                 </Card>
                             )
                         case 'run':
                             return (
-                                <Card rows={1} columns={6} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={1} columns={6} onClose={() => closeCardHandler(i)}>
                                     <Run {...item.props} />
                                 </Card>
                             )

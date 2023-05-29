@@ -6,13 +6,14 @@ import LineChart from "../../../components/LineChart/LineChart";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddchartIcon from '@mui/icons-material/Addchart';
 import TableRowsIcon from '@mui/icons-material/TableRows';
-import { openModal, closeModal } from '../../../modal';
+//import { openModal, closeModal } from '../../../modal';
 import OpenChartModal from '../../dashboard/modals/OpenChartModal'
 import { authFetch } from '../../../auth';
 import Card from '../../../components/Card';
 import RunOnAlgorithmModal from '../modals/RunOnAlgorithmModal';
 import { getNameWithExtension } from '../../../utils/getFileLabel';
 import Run from './Run';
+import { useStoreon } from 'storeon/react';
 
 const DatasetTabContent = (props) => {
     const theme = useTheme();
@@ -27,6 +28,7 @@ const DatasetTabContent = (props) => {
         }
     }
     const [items, setItems] = useState([tableCard])
+    const { dispatch } = useStoreon('modal')
 
     const Chart = ({ dataset, column }) => {
         const [resize, setResize] = useState(false)
@@ -138,18 +140,18 @@ const DatasetTabContent = (props) => {
                 <IconButton onClick={openTableCardHandler}>
                     <TableRowsIcon />
                 </IconButton>
-                <IconButton onClick={() => openModal(
+                <IconButton onClick={() => dispatch('modal/open',
                     <OpenChartModal
                         dataset={file}
                         onSelect={(column) => {
-                            closeModal()
+                            dispatch('modal/close')
                             openChartCardHandler(column)
                         }} />)}>
                     <AddchartIcon />
                 </IconButton>
-                <IconButton onClick={() => openModal(
+                <IconButton onClick={() => dispatch('modal/open',
                     <RunOnAlgorithmModal onSelect={(algorithm) => {
-                        closeModal()
+                        dispatch('modal/close')
                         openRunCardHandler(algorithm)
                     }} />)}>
                     <PlayArrowIcon />
@@ -166,19 +168,19 @@ const DatasetTabContent = (props) => {
                     switch (item.type) {
                         case 'table':
                             return (
-                                <Card rows={4} columns={6} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={4} columns={6} onClose={() => closeCardHandler(i)}>
                                     <TableCSV {...item.props} />
                                 </Card>
                             )
                         case 'chart':
                             return (
-                                <Card rows={4} columns={6} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={4} columns={6} onClose={() => closeCardHandler(i)}>
                                     <Chart {...item.props} />
                                 </Card>
                             )
                         case 'run':
                             return (
-                                <Card rows={1} columns={6} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={1} columns={6} onClose={() => closeCardHandler(i)}>
                                     <Run {...item.props} />
                                 </Card>
                             )

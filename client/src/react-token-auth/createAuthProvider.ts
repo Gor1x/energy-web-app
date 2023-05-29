@@ -63,7 +63,10 @@ export const createAuthProvider = <Session>({
 
         if (_session && tokenUpdater && accessToken) {
             let split = accessToken.split('.');
-            split[1] += "="
+            const padding = (4 - split[1].length % 4) % 4;
+            for(let i = 0; i < padding; i++) {
+                split[1] += "="
+            }
             accessToken = split.join('.')
             if (isTokenExpired(accessToken, expirationThresholdMillisec)) {
                 const updatedSession = await tokenUpdater.updateToken(_session);

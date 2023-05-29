@@ -62,6 +62,7 @@ const Dashboard = () => {
             aria-label="scrollable prevent tabs example">
             {tabs.map((file, index) => 
               <Tab 
+                key={`tab-${index}`}
                 id={`simple-tab-${index}`}
                 aria-controls={`simple-tabpanel-${index}`}
                 label={
@@ -79,8 +80,8 @@ const Dashboard = () => {
             )}
           </Tabs>
           <Box>
-            {tabs.map((file, index) =>
-              (<TabPanel dir={theme.direction} value={activeTab} index={index}>
+            {tabs.map((file, i) =>
+              (<TabPanel key={`tab-panel-${i}`} dir={theme.direction} value={activeTab} index={i}>
                 {renderTab(file)}
               </TabPanel>)
             )}

@@ -6,13 +6,14 @@ import { ColorModeContext, useMode } from "./theme";
 import Signup from "./scenes/signup";
 import Login from "./scenes/login";
 import './assets/scss/base.scss'
-import { useModal, openModal, closeModal } from './modal';
+//import { useModal } from './modal';
 import { useAuth } from "./auth";
+import { useStoreon } from "storeon/react";
 
 function App() {
   const [theme, colorMode] = useMode();
-  const {modal} = useModal();
   const [isLoggedIn] = useAuth();
+  const { modal } = useStoreon('modal')
 
   return (
     <ColorModeContext.Provider value={colorMode}>

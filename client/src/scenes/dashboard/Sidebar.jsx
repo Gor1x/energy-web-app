@@ -7,7 +7,7 @@ import MapIcon from '@mui/icons-material/Map';
 import { tokens } from "../../theme";
 import MapModal from "./modals/MapModal";
 import LoadFileModal from "./modals/LoadFileModal";
-import { openModal, closeModal } from '../../modal';
+//import { openModal, closeModal } from '../../modal';
 import { getNameWithExtension } from "../../utils/getFileLabel";
 import { useStoreon } from 'storeon/react';
 
@@ -50,7 +50,7 @@ const Sidebar = (props) => {
               dispatch(mapTypeToActions[file.type].delete, file);
             }}>
             <DeleteOutlineIcon />
-          </IconButton> : <div style={{height: '30px', width: '30px'}}/>
+          </IconButton> : <div style={{ height: '30px', width: '30px' }} />
         }
       </MenuItem>
     );
@@ -69,11 +69,11 @@ const Sidebar = (props) => {
       <IconButton
         size="small"
         sx={{ mr: "15px" }}
-        onClick={() => openModal(
+        onClick={() => dispatch('modal/open',
           <LoadFileModal
             type={type}
             handleUpload={handleUpload}
-            handleClose={closeModal} />)}>
+            handleClose={() => { dispatch('modal/close') }} />)}>
         <UploadFileOutlinedIcon
           sx={{
             color: colors.grey[800]
@@ -83,9 +83,9 @@ const Sidebar = (props) => {
     </Box>
 
   const handleUpload = (event, type) => {
-    let file = event.target.files[0];
-    dispatch(mapTypeToActions[type].add, file);
-    closeModal();
+    let file = event.target.files[0]
+    dispatch(mapTypeToActions[type].add, file)
+    dispatch('modal/close')
   }
 
   return (
@@ -99,17 +99,18 @@ const Sidebar = (props) => {
         {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getNameWithExtension(item)} file={item} />)}
         <ListTitle type="dataset" />
         {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getNameWithExtension(item)} file={item} />)}
-        <MenuItem onClick={() => 
-            openModal(<MapModal onClick={(i) => {
+        <MenuItem onClick={() =>
+          dispatch('modal/open',
+            <MapModal onClick={(i) => {
               onSelect(datasets[0])
-              closeModal()
-            }}/>)
-          }>
+              dispatch('modal/close')
+            }} />)
+        }>
           <ListItemIcon sx={{ color: colors.grey[900] }}>
             <MapIcon />
           </ListItemIcon>
           <ListItemText sx={{ color: colors.grey[900] }}>Выбрать на карте</ListItemText>
-          <div style={{height: '30px', width: '30px'}}/>
+          <div style={{ height: '30px', width: '30px' }} />
         </MenuItem>
       </MenuList>
     </Box>
