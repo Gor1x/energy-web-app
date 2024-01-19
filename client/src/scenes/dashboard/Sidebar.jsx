@@ -93,7 +93,7 @@ const Sidebar = (props) => {
       <MenuList
         style={{
           "height": "100%",
-          "background": colors.primary[600]
+          "background": colors.grey[100] //.blueAccent[500]
         }}>
         <ListTitle type="algorithm" />
         {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getNameWithExtension(item)} file={item} />)}

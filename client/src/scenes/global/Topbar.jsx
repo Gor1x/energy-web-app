@@ -43,7 +43,7 @@ const Topbar = () => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      style={{"background": colors.grey[900]}}>
+      style={{"background": colors.blueAccent[500]}}>
       {/* LOGO */}
       <img height="50" src="icsenergy-logo.png" style={{"marginLeft": "20px"}}/>
       {/* ICONS */}

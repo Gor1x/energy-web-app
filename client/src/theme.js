@@ -20,7 +20,7 @@ export const tokens = (mode) => ({
           100: "#d0d1d5",
           200: "#a1a4ab",
           300: "#727681",
-          400: "#1F2A40",
+          400: "#1F2A40",  //list background?
           500: "#141b2d",
           600: "#101624",
           700: "#0c101b",
@@ -54,8 +54,8 @@ export const tokens = (mode) => ({
           200: "#c3c6fd",
           300: "#a4a9fc",
           400: "#868dfb",
-          500: "#6870fa",
-          600: "#535ac8",
+          500: "#286090", //Sidebar background
+          600: "#1E97CB", //sidebar with select on
           700: "#3e4396",
           800: "#2a2d64",
           900: "#151632",
@@ -79,7 +79,7 @@ export const tokens = (mode) => ({
           300: "#0c101b",
           400: "#f2f0f0", // manually changed
           500: "#141b2d",
-          600: "#1F2A40",
+          600: "#1F2A40", //list background?
           700: "#727681",
           800: "#a1a4ab",
           900: "#d0d1d5",
@@ -111,8 +111,8 @@ export const tokens = (mode) => ({
           200: "#2a2d64",
           300: "#3e4396",
           400: "#535ac8",
-          500: "#6870fa",
-          600: "#868dfb",
+          500: "#286090", //Sidebar background
+          600: "#1E97CB", //sidebar with select on
           700: "#a4a9fc",
           800: "#c3c6fd",
           900: "#e1e2fe",
@@ -147,7 +147,7 @@ export const themeSettings = (mode) => {
         : {
             // palette values for light mode
             primary: {
-              main: colors.primary[100],
+              main: colors.blueAccent[500],
             },
             secondary: {
               main: colors.greenAccent[500],
@@ -157,7 +157,7 @@ export const themeSettings = (mode) => {
               main: colors.grey[500],
               light: colors.grey[100],
             },
-            background: {
+            background: { //all
               default: "#fcfcfc",
             },
           }),

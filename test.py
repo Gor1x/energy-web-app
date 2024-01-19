@@ -9,7 +9,7 @@ class APITestCase(unittest.TestCase):
     resources = Path(__file__).parent / "testdata"
 
     def setUp(self):
-        self.app = create_app(TestConfig)
+        self.app = create_app()
         self.client = self.app.test_client(self)
         with self.app.app_context():
             db.create_all()

@@ -1,14 +1,17 @@
 from flask import Flask
 from flask_cors import CORS
-from app.exts import db
-from flask_migrate import Migrate
-from app.models import User
-from flask_restx import Api, Resource
 from flask_jwt_extended import JWTManager
+from flask_migrate import Migrate
+from flask_restx import Api
+
+from app.config import DevConfig
+from app.exts import db
+from app.models import User
 from app.routes import running_ns, algorithm_ns, dataset_ns, auth_ns
 
 
-def create_app(config):
+def create_app():
+    config = DevConfig
     app = Flask(__name__, static_url_path="/", static_folder="../client/build")
     app.config.from_object(config)
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 60 #10 

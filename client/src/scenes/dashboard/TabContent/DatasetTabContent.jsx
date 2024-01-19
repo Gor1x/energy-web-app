@@ -22,7 +22,7 @@ const DatasetTabContent = (props) => {
     const tableCard = {
         type: "table",
         props: {
-            sizePerPage: 7,
+            sizePerPage: 20,
             totalSize: file.num_rows,
             url: `datasets/data/${file.id}`
         }
@@ -134,9 +134,9 @@ const DatasetTabContent = (props) => {
     };
 
     return (
-        <Box height='100%'>
+        <Box height='100%' width="min-content">
             {/* TOOLBAR */}
-            <Box height='40px' width='100%'>
+            <Box height='30px' width='100%'>
                 <IconButton onClick={openTableCardHandler}>
                     <TableRowsIcon />
                 </IconButton>
@@ -160,12 +160,13 @@ const DatasetTabContent = (props) => {
             {/* GRID & CHARTS */}
             <Box
                 sx={{ overflowY: 'scroll'}}
-                height="calc(100% - 40px)"
+                height="calc(100% - 30px)"
                 width="100%"
                 p='20px'
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="80px"
+                grid-auto-columns="4000px"
                 gap="20px">
                 {items.map((item, i) => {
                     switch (item.type) {
