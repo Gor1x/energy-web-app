@@ -47,7 +47,7 @@ const Dashboard = () => {
                 <Box sx={{width: '200px'}}>
                     <Sidebar height="100%"
                              width="100%"
-                             onSelect={file => openTab(file)}
+                             onSelect={openTab}
                              closeTabByFile={closeTabByFile}/>
                 </Box>
                 <Box
