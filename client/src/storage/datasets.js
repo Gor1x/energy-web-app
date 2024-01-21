@@ -15,7 +15,7 @@ export function datasets(store) {
                 method: 'POST',
                 body: data
             };
-            await authFetch("/datasets", requestOptions)
+            await authFetch("/datasets/", requestOptions)
                 .then(response => response.json())
                 .then(newItem => {
                     let entry = newItem[0];
