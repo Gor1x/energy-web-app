@@ -5,8 +5,10 @@ import DatasetTabContent from "./TabContent/DatasetTabContent";
 import useTabs from "./hooks/useTabs";
 import CloseIcon from '@mui/icons-material/Close';
 import {getNameWithExtension} from "../../utils/getFileLabel";
+import * as React from 'react'
+import {FileObject} from "../../types/FileObject";
 
-function TabPanel(props) {
+function TabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
     const {children, value, index, ...other} = props;
 
     return (
@@ -25,7 +27,7 @@ const Dashboard = () => {
     const theme = useTheme();
     const {tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab} = useTabs();
 
-    const renderTab = (file) => {
+    const renderTab = (file: FileObject) => {
         switch (file.type) {
             case 'algorithm':
                 return <AlgorithmTabContent file={file}/>

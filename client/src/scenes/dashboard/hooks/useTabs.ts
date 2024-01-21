@@ -1,11 +1,12 @@
 import {useState} from "react";
+import {FileObject} from "../../../types/FileObject";
 
 
 const useTabs = () => {
     const [activeTab, setActiveTab] = useState(-1);
-    const [tabs, setTabs] = useState<string[]>([]);
+    const [tabs, setTabs] = useState<FileObject[]>([]);
 
-    const openTab = (file: string) => {
+    const openTab = (file: FileObject) => {
         const id = tabs.indexOf(file)
         if (id == -1) {
             setTabs([...tabs, file])
@@ -21,7 +22,7 @@ const useTabs = () => {
         setActiveTab(Math.min(activeTab, tabs.length - 1))
     };
 
-    const closeTabByFile = (file: string) => {
+    const closeTabByFile = (file: FileObject) => {
         const tab = tabs.indexOf(file)
         if (tab !== -1) {
             closeTab(tab)
