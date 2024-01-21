@@ -8,6 +8,7 @@ import {getNameWithExtension} from '../../../utils/getFileLabel';
 import Run from './Run';
 import {useStoreon} from 'storeon/react';
 import {DatasetTabHeader} from "./DatasetTabHeader";
+import {DatasetChart} from "./DatasetChart";
 
 const DatasetTabContent = (props) => {
     const {file} = props;
@@ -21,58 +22,6 @@ const DatasetTabContent = (props) => {
     }
     const [items, setItems] = useState([tableCard])
     const {dispatch} = useStoreon('modal')
-
-    const Chart = ({dataset, column}) => {
-        const [resize, setResize] = useState(false)
-        const [timer, setTimer] = useState(0)
-        const [values, setValues] = useState([])
-
-        const triggerResize = useCallback(() => {
-            if (timer) {
-                window.cancelAnimationFrame(timer);
-            }
-            setTimer(window.requestAnimationFrame(function () {
-                setResize(true)
-                setTimeout(() => {
-                    setResize(false)
-                }, 0)
-            }));
-
-        }, [setResize, timer])
-
-        useEffect(() => {
-            authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
-                from: 0,
-                to: 200,
-            })).then(response => response.json())
-                .then(data_ => {
-                    const data = data_.map(line => line);
-                    setValues(data.map(row => row[column]))
-                });
-        }, [])
-
-        useEffect(() => {
-            window.addEventListener('resize', triggerResize, {passive: true})
-            return () => window.removeEventListener('resize', triggerResize, {passive: true})
-        }, [])
-
-        const config = {
-            title: column,
-            type: "Line",
-            height: "400px",
-            width: "100vw",
-            xAxis: "date",
-            yAxis: [column],
-            yNames: [column],
-            data: values.map((value, i) => ({[column]: value, date: i}))
-        };
-
-        return (
-            <Box>
-                {config && <LineChart config={config} resize={resize}/>}
-            </Box>
-        )
-    }
 
     const openChartCardHandler = (column) => {
         const chartCard = {
@@ -155,7 +104,7 @@ const DatasetTabContent = (props) => {
                         case 'chart':
                             return (
                                 <Card key={`card-${i}`} rows={4} columns={6} onClose={() => closeCardHandler(i)}>
-                                    <Chart {...item.props} />
+                                    <DatasetChart {...item.props} />
                                 </Card>
                             )
                         case 'run':
