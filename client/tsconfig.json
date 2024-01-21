@@ -9,7 +9,9 @@
     "lib": [
       "dom",
       "es6"
-    ]
+    ],
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src"

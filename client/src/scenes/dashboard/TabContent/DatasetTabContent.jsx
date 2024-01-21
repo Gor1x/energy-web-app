@@ -1,17 +1,13 @@
 import {useCallback, useEffect, useState} from 'react'
-import {Box, IconButton} from "@mui/material";
+import {Box} from "@mui/material";
 import TableCSV from '../../../components/TableCSV';
 import LineChart from "../../../components/LineChart/LineChart";
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import AddchartIcon from '@mui/icons-material/Addchart';
-import TableRowsIcon from '@mui/icons-material/TableRows';
-import OpenChartModal from '../../dashboard/modals/OpenChartModal'
 import {authFetch} from '../../../auth';
 import Card from '../../../components/Card';
-import RunOnAlgorithmModal from '../modals/RunOnAlgorithmModal';
 import {getNameWithExtension} from '../../../utils/getFileLabel';
 import Run from './Run';
 import {useStoreon} from 'storeon/react';
+import {DatasetTabHeader} from "./DatasetTabHeader";
 
 const DatasetTabContent = (props) => {
     const {file} = props;
@@ -130,32 +126,18 @@ const DatasetTabContent = (props) => {
     };
 
     return (
-        <Box height='100%' width='100vw'>
+        <Box height='100%' width='100%'>
             {/* TOOLBAR */}
-            <Box height='30px' width='100%'>
-                <IconButton onClick={openTableCardHandler}>
-                    <TableRowsIcon/>
-                </IconButton>
-                <IconButton onClick={() => dispatch('modal/open',
-                    <OpenChartModal
-                        dataset={file}
-                        onSelect={(column) => {
-                            dispatch('modal/close')
-                            openChartCardHandler(column)
-                        }}/>)}>
-                    <AddchartIcon/>
-                </IconButton>
-                <IconButton onClick={() => dispatch('modal/open',
-                    <RunOnAlgorithmModal onSelect={(algorithm) => {
-                        dispatch('modal/close')
-                        openRunCardHandler(algorithm)
-                    }}/>)}>
-                    <PlayArrowIcon/>
-                </IconButton>
-            </Box>
+            <DatasetTabHeader openChartCardHandler={openChartCardHandler}
+                              file={file} modalCloseDispatch={() => {
+                dispatch('modal/close')
+            }
+            } modalOpenDispatch={(modal) => {
+                dispatch('modal/open', modal)
+            }} openRunCardHandler={openRunCardHandler} openTableCardHandler={openTableCardHandler}/>
             {/* GRID & CHARTS */}
             <Box
-                sx={{overflowY: 'scroll'}}
+                sx={{overflowY: 'scroll' }}
                 height="100%"
                 width="100%"
                 paddingLeft="20px"
