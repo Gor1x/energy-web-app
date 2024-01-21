@@ -72,6 +72,10 @@ instance/
 # Scrapy stuff:
 .scrapy
 
+# React built files
+client/build
+client/lib
+
 # Sphinx documentation
 docs/_build/
 
