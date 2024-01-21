@@ -15,7 +15,7 @@ export function algorithms(store) {
                 method: 'POST',
                 body: data
             };
-            await authFetch("/algorithms", requestOptions)
+            await authFetch("/algorithms/", requestOptions)
                 .then(response => response.json())
                 .then(newItem => {
                     let entry = newItem[0];
@@ -45,5 +45,6 @@ export function algorithms(store) {
         let algorithms = await authFetch(`/algorithms/`)
             .then(response => response.json())
             .then(values => store.dispatch('algorithms/set', values.map(entry => ({...entry, type: 'algorithm'}))))
+        //store.dispatch('algorithms/set', algorithms)
     })
 }

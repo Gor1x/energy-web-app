@@ -24,7 +24,7 @@ const DatasetTabContent = (props: { file: FileObject }) => { //type for file?
     const [items, setItems] = useState(itemsState)
     const {dispatch} = useStoreon('modal')
 
-    const openChartCardHandler = (column: any) => {
+    const openChartCardHandler = (column: number) => {
         const chartCard: ChartCard = {
             type: "ChartCard",
             props: {
@@ -39,13 +39,13 @@ const DatasetTabContent = (props: { file: FileObject }) => { //type for file?
         }
     }
 
-    const openRunCardHandler = (algorithm: { id: string; }) => {
+    const openRunCardHandler = (algorithm: { id: number; }) => {
         const runCard: RunCard = {
             type: "RunCard",
             props: {
                 title: `Результат запуска ${getNameWithExtension(algorithm)}`,
                 algorithm_id: algorithm.id,
-                dataset_id: file.id.toString()
+                dataset_id: file.id
             }
         };
         if (!items.find((item) => JSON.stringify(item) === JSON.stringify(runCard))) {
@@ -79,7 +79,7 @@ const DatasetTabContent = (props: { file: FileObject }) => { //type for file?
         <Box height='100%' width='100%'>
             {/* TOOLBAR */}
             <DatasetTabHeader openChartCardHandler={openChartCardHandler}
-                              file={file.file_path} modalCloseDispatch={() => {
+                              file={file} modalCloseDispatch={() => {
                 dispatch('modal/close')
             }
             } modalOpenDispatch={(modal) => {

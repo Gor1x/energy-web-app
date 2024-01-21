@@ -9,26 +9,29 @@ import {getNameWithExtension} from '../../../utils/getFileLabel';
 import Card from '../../../components/Card';
 import Run from './Run';
 import {useStoreon} from 'storeon/react';
+import {CodeCard, RunCard} from "../../../types/CardsType";
+import {FileObject} from "../../../types/FileObject";
+import React from 'react';
 
-const AlgorithmTabContent = (props) => {
+const AlgorithmTabContent = (props: { file: FileObject }) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode);
-    const {file} = props;
-    const codeCard = {
-        type: "code",
+    const codeCard: CodeCard = {
+        type: "CodeCard",
         props: {
-            file: file
+            file: props.file
         }
     };
-    const [items, setItems] = useState([codeCard]);
+    let itemsState: (RunCard | CodeCard)[] = [codeCard]
+    const [items, setItems] = useState(itemsState);
     const {dispatch} = useStoreon('modal')
 
-    const openRunCardHandler = (dataset) => {
-        const runCard = {
-            type: 'run',
+    const openRunCardHandler = (dataset :FileObject) => {
+        const runCard: RunCard = {
+            type: 'RunCard',
             props: {
                 title: `Результат запуска на ${getNameWithExtension(dataset)}`,
-                algorithm_id: file.id,
+                algorithm_id: props.file.id,
                 dataset_id: dataset.id
             }
         };
@@ -51,7 +54,7 @@ const AlgorithmTabContent = (props) => {
         }
     }
 
-    const closeCardHandler = (i) => {
+    const closeCardHandler = (i: number) => {
         setItems(() => {
             let updated = Object.assign([], items);
             updated.splice(i, 1)
@@ -67,7 +70,7 @@ const AlgorithmTabContent = (props) => {
                     <TableRowsIcon/>
                 </IconButton>
                 <IconButton onClick={() => dispatch('modal/open',
-                    <RunOnDatasetModal onSelect={(dataset) => {
+                    <RunOnDatasetModal onSelect={(dataset: FileObject) => {
                         dispatch('modal/close')
                         openRunCardHandler(dataset)
                     }}/>)}>
@@ -86,23 +89,34 @@ const AlgorithmTabContent = (props) => {
                 gap="20px">
                 {items.map((item, i) => {
                     switch (item.type) {
-                        case 'code':
+                        case 'CodeCard':
                             return (
                                 <Card key={`card-${i}`} rows={6} columns={6} onClose={() => closeCardHandler(i)}>
                                     <CodeEditor {...item.props} />
                                 </Card>
                             )
-                        case 'run':
+                        case 'RunCard':
+                             let runCard: RunCard = {
+                                type: item.type,
+                                props: {
+                                    // @ts-ignore
+                                    title: item.props?.title,
+                                    // @ts-ignore
+                                    algorithm_id: item.props?.algorithm_id,
+                                    // @ts-ignore
+                                    dataset_id: item.props?.dataset_id
+                                }
+                            }
                             return (
                                 <Card key={`card-${i}`} rows={1} columns={6} onClose={() => closeCardHandler(i)}>
-                                    <Run {...item.props} />
+                                    <Run {...runCard} />
                                 </Card>
                             )
                     }
                 })}
             </Box>
         </Box>
-    )
+    );
 }
 
 export default AlgorithmTabContent;

@@ -3,24 +3,27 @@ import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import {useEffect, useState} from "react";
 import {authFetch} from "../../../auth";
+import React from "react";
+import {FileObject} from "../../../types/FileObject";
 
-const OpenChartModal = ({dataset, onSelect}) => {
+const OpenChartModal = ({dataset, onSelect} : {dataset: FileObject, onSelect: any}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
-    const [columns, setColumns] = useState([])
+    let initState: string[] = []
+    const [columns, setColumns] = useState(initState)
 
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
-            from: 1,
-            to: 2,
+            from: "1",
+            to: "2",
         })).then(response => response.json())
             .then(data_ => {
-                const data = data_.map(line => line);
+                const data = data_.map((line: string) => line);
                 setColumns(Object.entries(data[0]).map(([key, _]) => key))
             });
     }, []);
 
-    const Item = ({column}) => {
+    const Item = ({column} : {column: string}) => {
         return (
             <MenuItem onClick={() => onSelect(column)}>
                 <ListItemIcon sx={{color: colors.primary.main}}>

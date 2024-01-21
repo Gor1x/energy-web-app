@@ -9,8 +9,8 @@ const Run = (card: RunCard) => {
 
     useEffect(() => {
         authFetch('/run/?' + new URLSearchParams({
-            algorithm_id: card.props.algorithm_id,
-            dataset_id: card.props.dataset_id,
+            algorithm_id: card.props.algorithm_id.toString(),
+            dataset_id: card.props.dataset_id.toString(),
         })).then(response => response.json())
             .then(json => setResult(JSON.stringify(json)))
     }, [])

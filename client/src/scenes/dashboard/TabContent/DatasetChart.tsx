@@ -31,7 +31,7 @@ export function DatasetChart(datasetChartProps: ChartCard) {
         })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: unknown) => line);
-                setValues(data.map((row: unknown[]) => row[column]))
+                setValues(data.map((row: string[]) => row[column]))
             });
     }, [])
 

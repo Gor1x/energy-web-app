@@ -10,7 +10,6 @@ const Card = ({children, columns, rows, onClose}) => {
                  backgroundColor={colors.primary.white}
                  gridColumn={`span ${columns}`}
                  gridRow={`span ${rows}`}
-                 width='1300px'
     >
         <Box>
             <Box sx={{float: "right"}}>
