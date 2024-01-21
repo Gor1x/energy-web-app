@@ -1,13 +1,12 @@
 import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
-import { tokens } from "../../../theme";
+import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { useEffect, useState } from "react";
 import { authFetch } from "../../../auth";
 
 const OpenChartModal = ({ dataset, onSelect }) => {
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-
+    const colors = themeSettings(theme.palette.mode).palette;
     const [columns, setColumns] = useState([])
 
     useEffect(() => {
@@ -24,10 +23,10 @@ const OpenChartModal = ({ dataset, onSelect }) => {
     const Item = ({ column }) => {
         return (
             <MenuItem onClick={() => onSelect(column)}>
-                <ListItemIcon sx={{ color: colors.grey[200] }}>
+                <ListItemIcon sx={{ color: colors.primary.main }}>
                     <FileOpenIcon />
                 </ListItemIcon>
-                <ListItemText sx={{ color: colors.grey[200] }}>{column}</ListItemText>
+                <ListItemText sx={{ color: colors.primary.main }}>{column}</ListItemText>
             </MenuItem>
         );
     };

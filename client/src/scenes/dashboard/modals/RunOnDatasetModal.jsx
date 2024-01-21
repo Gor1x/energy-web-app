@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
-import { tokens } from "../../../theme";
+import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import { useStoreon } from 'storeon/react';
 
 const RunOnDatasetModal = ({ onSelect }) => {
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+    const colors = themeSettings(theme.palette.mode).palette;
     const { dispatch, datasets } = useStoreon('datasets')
 
     useEffect(() => {
@@ -16,10 +16,10 @@ const RunOnDatasetModal = ({ onSelect }) => {
     const Item = ({ title, file }) => {
         return (
             <MenuItem onClick={() => onSelect(file)}>
-                <ListItemIcon sx={{ color: colors.grey[200] }}>
+                <ListItemIcon sx={{ color: colors.primary.main }}>
                     <FileOpenIcon />
                 </ListItemIcon>
-                <ListItemText sx={{ color: colors.grey[200] }}>{title}</ListItemText>
+                <ListItemText sx={{ color: colors.primary.main }}>{title}</ListItemText>
             </MenuItem>
         );
     };

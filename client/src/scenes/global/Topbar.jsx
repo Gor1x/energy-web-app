@@ -7,26 +7,25 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth, logout } from "../../auth"
-import { ColorModeContext, tokens } from "../../theme";
+import {ColorModeContext, themeSettings, tokens} from "../../theme";
 
 
 const Item = ({ title, icon, to }) => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const colors = themeSettings(theme.palette.mode).palette;
   return (
     <MenuItem
       component={Link}
       to={to}>
-      <ListItemIcon sx={{ color: colors.grey[600] }}>{icon}</ListItemIcon>
-      <ListItemText sx={{ color: colors.grey[600] }}>{title}</ListItemText>
+      <ListItemIcon sx={{ color: colors.neutral.main }}>{icon}</ListItemIcon>
+      <ListItemText sx={{ color: colors.neutral.main }}>{title}</ListItemText>
     </MenuItem>
   );
 };
 
 const Topbar = () => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
+  const colors = themeSettings(theme.palette.mode).palette;
   const [logged] = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -43,7 +42,7 @@ const Topbar = () => {
       display="flex"
       justifyContent="space-between"
       alignItems="center"
-      style={{"background": colors.blueAccent[500]}}>
+      style={{"background": colors.background.topbar}}>
       {/* LOGO */}
       <img height="50" src="icsenergy-logo.png" style={{"marginLeft": "20px"}}/>
       {/* ICONS */}
@@ -63,8 +62,9 @@ const Topbar = () => {
           aria-controls={open ? 'demo-positioned-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}>
-          <PersonOutlinedIcon />
+          onClick={handleClick}
+        >
+          <PersonOutlinedIcon sx={{ color: colors.primary.white }}/>
         </IconButton>
         <Menu
           id="demo-positioned-menu"
@@ -79,8 +79,8 @@ const Topbar = () => {
                 handleClose()
                 logout()
               }}>
-              <ListItemIcon sx={{ color: colors.grey[600] }}><LogoutIcon /></ListItemIcon>
-              <ListItemText sx={{ color: colors.grey[600] }}>Выйти</ListItemText>
+              <ListItemIcon sx={{ color: colors.neutral.main }}><LogoutIcon/></ListItemIcon>
+              <ListItemText sx={{ color: colors.neutral.main }}>Выйти</ListItemText>
             </MenuItem>) :
             ([<Item
               key="login"

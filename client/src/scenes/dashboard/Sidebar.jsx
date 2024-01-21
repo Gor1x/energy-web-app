@@ -4,7 +4,7 @@ import FileOpenOutlinedIcon from '@mui/icons-material/FileOpenOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import MapIcon from '@mui/icons-material/Map';
-import { tokens } from "../../theme";
+import {themeSettings} from "../../theme";
 import MapModal from "./modals/MapModal";
 import LoadFileModal from "./modals/LoadFileModal";
 //import { openModal, closeModal } from '../../modal';
@@ -13,7 +13,7 @@ import { useStoreon } from 'storeon/react';
 
 const Sidebar = (props) => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  const colors = themeSettings(theme.palette.mode).palette;
   const { dispatch, algorithms, datasets } = useStoreon('algorithms', 'datasets')
 
   useEffect(() => {
@@ -38,12 +38,12 @@ const Sidebar = (props) => {
     return (
       <MenuItem
         onClick={() => onSelect(file)}>
-        <ListItemIcon sx={{ color: colors.grey[900] }}>
+        <ListItemIcon sx={{ color: colors.text.menuDefault }}>
           <FileOpenOutlinedIcon />
         </ListItemIcon>
-        <ListItemText sx={{ color: colors.grey[900] }}>{title}</ListItemText>
+        <ListItemText sx={{ color: colors.text.menuDefault }}>{title}</ListItemText>
         {file.user_id != -1 ?
-          <IconButton size="small" sx={{ color: colors.grey[900] }}
+          <IconButton size="small" sx={{ color: colors.text.menuDefault }}
             onClick={(e) => {
               e.stopPropagation();
               closeTabByFile(file);
@@ -59,10 +59,13 @@ const Sidebar = (props) => {
   const ListTitle = ({ type }) =>
     <Box display="flex"
       alignItems="center"
-      justifyContent="space-between">
+      justifyContent="space-between"
+      height="40px"
+      backgroundColor={colors.background.sidebarHeader}
+    >
       <Typography
         variant="h6"
-        color={colors.grey[800]}
+        color={colors.text.default}
         ml={2}>
         {type == "algorithm" ? "Алгоритмы" : "Датасеты"}
       </Typography>
@@ -76,7 +79,7 @@ const Sidebar = (props) => {
             handleClose={() => { dispatch('modal/close') }} />)}>
         <UploadFileOutlinedIcon
           sx={{
-            color: colors.grey[800]
+            color: colors.text.menuDefault
           }}
         />
       </IconButton>
@@ -93,7 +96,9 @@ const Sidebar = (props) => {
       <MenuList
         style={{
           "height": "100%",
-          "background": colors.grey[100] //.blueAccent[500]
+          margin: "0px",
+          padding: "0px",
+          "background": colors.background.sidebar
         }}>
         <ListTitle type="algorithm" />
         {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getNameWithExtension(item)} file={item} />)}
@@ -106,10 +111,10 @@ const Sidebar = (props) => {
               dispatch('modal/close')
             }} />)
         }>
-          <ListItemIcon sx={{ color: colors.grey[900] }}>
+          <ListItemIcon sx={{ color: colors.text.menuDefault }}>
             <MapIcon />
           </ListItemIcon>
-          <ListItemText sx={{ color: colors.grey[900] }}>Выбрать на карте</ListItemText>
+          <ListItemText sx={{ color: colors.text.menuDefault }}>Выбрать на карте</ListItemText>
           <div style={{ height: '30px', width: '30px' }} />
         </MenuItem>
       </MenuList>
