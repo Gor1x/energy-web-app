@@ -1,10 +1,10 @@
-import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
+import {Box, ListItemIcon, ListItemText, MenuItem, MenuList, Typography, useTheme} from "@mui/material";
 import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { useEffect, useState } from "react";
-import { authFetch } from "../../../auth";
+import {useEffect, useState} from "react";
+import {authFetch} from "../../../auth";
 
-const OpenChartModal = ({ dataset, onSelect }) => {
+const OpenChartModal = ({dataset, onSelect}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     const [columns, setColumns] = useState([])
@@ -20,13 +20,13 @@ const OpenChartModal = ({ dataset, onSelect }) => {
             });
     }, []);
 
-    const Item = ({ column }) => {
+    const Item = ({column}) => {
         return (
             <MenuItem onClick={() => onSelect(column)}>
-                <ListItemIcon sx={{ color: colors.primary.main }}>
-                    <FileOpenIcon />
+                <ListItemIcon sx={{color: colors.primary.main}}>
+                    <FileOpenIcon/>
                 </ListItemIcon>
-                <ListItemText sx={{ color: colors.primary.main }}>{column}</ListItemText>
+                <ListItemText sx={{color: colors.primary.main}}>{column}</ListItemText>
             </MenuItem>
         );
     };
@@ -49,8 +49,8 @@ const OpenChartModal = ({ dataset, onSelect }) => {
                 style={{
                     "height": "100%"
                 }}></MenuList>
-            {columns.map((column, i) => <Item key={`modal-column-${i}`} column={column} />)}
-            <MenuList />
+            {columns.map((column, i) => <Item key={`modal-column-${i}`} column={column}/>)}
+            <MenuList/>
         </Box>
     )
 }

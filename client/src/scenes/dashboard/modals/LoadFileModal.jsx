@@ -1,6 +1,6 @@
-import { Box, Typography, Button} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
 
-const LoadFileModal = ({type, handleUpload, handleClose}) => { 
+const LoadFileModal = ({type, handleUpload, handleClose}) => {
     const mapTypeToTitle = {
         algorithm: "Загрузить алгоритм",
         dataset: "Загрузить датасет"
@@ -19,8 +19,8 @@ const LoadFileModal = ({type, handleUpload, handleClose}) => {
             {mapTypeToTitle[type]}
         </Typography>
         <input type="file"
-            name="myFile"
-            onChange={(event) => handleUpload(event, type)} />
+               name="myFile"
+               onChange={(event) => handleUpload(event, type)}/>
         <Button variant="secondary" onClick={handleClose}>
             Отмена
         </Button>

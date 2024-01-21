@@ -1,4 +1,4 @@
-import { createTokenUpdater } from '../tokenUpdater';
+import {createTokenUpdater} from '../tokenUpdater';
 
 describe('tokenUpdater', () => {
     it('onUpdateToken function should be called', async () => {

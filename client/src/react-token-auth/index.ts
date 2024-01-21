@@ -1,5 +1,5 @@
-import { createAuthProvider, IAuthProvider, IAuthProviderConfig } from './createAuthProvider';
-import { createAsyncAuthProvider, IAsyncAuthProviderConfig, IAsyncAuthProvider } from './createAsyncAuthProvider';
+import {createAuthProvider, IAuthProvider, IAuthProviderConfig} from './createAuthProvider';
+import {createAsyncAuthProvider, IAsyncAuthProvider, IAsyncAuthProviderConfig} from './createAsyncAuthProvider';
 
 export {
     IAuthProvider,

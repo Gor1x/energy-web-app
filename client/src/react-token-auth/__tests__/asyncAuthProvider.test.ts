@@ -1,7 +1,7 @@
 import Mock = jest.Mock;
-import { createAsyncAuthProvider } from '../index';
-import { getExpiredJWTToken } from '../test-utils/jwt';
-import { createAsyncTestStorage } from '../test-utils/storage';
+import {createAsyncAuthProvider} from '../index';
+import {getExpiredJWTToken} from '../test-utils/jwt';
+import {createAsyncTestStorage} from '../test-utils/storage';
 
 interface TokensSession {
     accessToken: string;
@@ -17,7 +17,7 @@ describe('asyncAuthProvider', () => {
 
     it('session should be empty after creating', () => {
         const storage = createAsyncTestStorage();
-        const provider = createAsyncAuthProvider<TokensSession>({ storage, fetchFunction });
+        const provider = createAsyncAuthProvider<TokensSession>({storage, fetchFunction});
 
         const session = provider.getSessionState();
 
@@ -26,9 +26,9 @@ describe('asyncAuthProvider', () => {
 
     it('session should be taken from storage', async () => {
         const storageKey = 'test-key';
-        const session: TokensSession = { accessToken: 'test-access-token', refreshToken: 'test-refresh-token' };
-        const storage = createAsyncTestStorage({ [storageKey]: JSON.stringify(session) });
-        const provider = createAsyncAuthProvider<TokensSession>({ storage, fetchFunction, storageKey });
+        const session: TokensSession = {accessToken: 'test-access-token', refreshToken: 'test-refresh-token'};
+        const storage = createAsyncTestStorage({[storageKey]: JSON.stringify(session)});
+        const provider = createAsyncAuthProvider<TokensSession>({storage, fetchFunction, storageKey});
 
         await provider.waitInit();
         const actualSession = provider.getSessionState();
@@ -38,8 +38,8 @@ describe('asyncAuthProvider', () => {
 
     it('authFetch uses access token from session', async () => {
         const storageKey = 'test-key';
-        const session: TokensSession = { accessToken: 'test-access-token', refreshToken: 'test-refresh-token' };
-        const storage = createAsyncTestStorage({ [storageKey]: JSON.stringify(session) });
+        const session: TokensSession = {accessToken: 'test-access-token', refreshToken: 'test-refresh-token'};
+        const storage = createAsyncTestStorage({[storageKey]: JSON.stringify(session)});
         const provider = createAsyncAuthProvider<TokensSession>({
             storage,
             fetchFunction,
@@ -65,11 +65,11 @@ describe('asyncAuthProvider', () => {
     it('authFetch updates token if it is expired', async () => {
         const storageKey = 'test-key';
         const accessToken = getExpiredJWTToken();
-        const session: TokensSession = { accessToken, refreshToken: 'test-refresh-token' };
-        const storage = createAsyncTestStorage({ [storageKey]: JSON.stringify(session) });
+        const session: TokensSession = {accessToken, refreshToken: 'test-refresh-token'};
+        const storage = createAsyncTestStorage({[storageKey]: JSON.stringify(session)});
         const onUpdateToken = jest.fn(
             (): Promise<TokensSession> =>
-                Promise.resolve({ accessToken: 'updated-access-token', refreshToken: 'updated-refresh-token' }),
+                Promise.resolve({accessToken: 'updated-access-token', refreshToken: 'updated-refresh-token'}),
         );
         const provider = createAsyncAuthProvider<TokensSession>({
             storage,
@@ -99,11 +99,11 @@ describe('asyncAuthProvider', () => {
         const accessToken =
             'header.eyJlbWFpbCI6IlRlc3RAZ21haWwuY29tMiIsInN1YiI6IjEzIiwiaWF0IjoxNjM3NzQ3OTg3LCJleHAiOjE2Mzc3NDgwNDd9.sign';
         const storageKey = 'test-key';
-        const session: TokensSession = { accessToken, refreshToken: 'test-refresh-token' };
-        const storage = createAsyncTestStorage({ [storageKey]: JSON.stringify(session) });
+        const session: TokensSession = {accessToken, refreshToken: 'test-refresh-token'};
+        const storage = createAsyncTestStorage({[storageKey]: JSON.stringify(session)});
         const onUpdateToken = jest.fn(
             (): Promise<TokensSession> =>
-                Promise.resolve({ accessToken: 'updated-access-token', refreshToken: 'updated-refresh-token' }),
+                Promise.resolve({accessToken: 'updated-access-token', refreshToken: 'updated-refresh-token'}),
         );
         const provider = createAsyncAuthProvider<TokensSession>({
             storage,

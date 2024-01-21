@@ -63,7 +63,7 @@ var Base64 = {
             chr1 = (enc1 << 2) | (enc2 >> 4);
             chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
             chr3 = ((enc3 & 3) << 6) | enc4;
-            
+
             output = output + String.fromCharCode(chr1);
 
             if (enc3 != 64) {
@@ -128,4 +128,4 @@ var Base64 = {
     },
 };
 
-module.exports = { Base64 };
+module.exports = {Base64};

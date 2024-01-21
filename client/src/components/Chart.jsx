@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {init} from 'echarts'
 
-const Chart = ({ option, config, resize }) => {
-    const { height, width } =  { ...config }
+const Chart = ({option, config, resize}) => {
+    const {height, width} = {...config}
     let chart = useRef(null)
     let [chartEl, setChartEl] = useState(chart)
 
@@ -12,8 +12,7 @@ const Chart = ({ option, config, resize }) => {
         }
         if (!chartEl.current) {
             chartEl.setOption(option)
-        }
-        else {
+        } else {
             setChartEl(init(chart.current))
         }
     }, [option, chartEl])
@@ -21,7 +20,7 @@ const Chart = ({ option, config, resize }) => {
     console.log(height)
 
     return (
-        <div className="chart" style={{ height, width }}>
+        <div className="chart" style={{height, width}}>
             <div className="chart" ref={chart}></div>
         </div>
     )

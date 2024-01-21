@@ -1,4 +1,4 @@
-import { Maybe } from '../types';
+import {Maybe} from '../types';
 
 export type StoreData = { [key in string]: Maybe<string> };
 
@@ -19,7 +19,7 @@ export const createTestStore = (initData: StoreData = {}) => {
         delete data[key];
     };
 
-    return { getItem, setItem, removeItem, getData };
+    return {getItem, setItem, removeItem, getData};
 };
 
 export const createAsyncTestStorage = (initData = {}) => {
@@ -39,5 +39,5 @@ export const createAsyncTestStorage = (initData = {}) => {
         delete data[key];
     };
 
-    return { getItem, setItem, removeItem, getData };
+    return {getItem, setItem, removeItem, getData};
 };

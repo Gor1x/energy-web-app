@@ -13,4 +13,8 @@ mock.onGet('/api/data/device_percentage').reply(200, require('../fixtures/device
 mock.onGet('/api/dashboard/repo_dash_config').reply(200, require('../fixtures/repo_dash_config.json'))
 
 // dashboard list endpoint
-mock.onGet('/api/dashboard-list').reply(200, [{ path: 'repo_dash_config', title: 'Org Repository Insights', description: 'The org repository insights dashboard contains data about the organization\'s current branch hierarchy, a stacked line graph comparison of open-source vs enterprise repositories, and a radial line graph comparing total devices to enterprise managed devices that contain codebase from the organization.'}])
+mock.onGet('/api/dashboard-list').reply(200, [{
+    path: 'repo_dash_config',
+    title: 'Org Repository Insights',
+    description: 'The org repository insights dashboard contains data about the organization\'s current branch hierarchy, a stacked line graph comparison of open-source vs enterprise repositories, and a radial line graph comparing total devices to enterprise managed devices that contain codebase from the organization.'
+}])

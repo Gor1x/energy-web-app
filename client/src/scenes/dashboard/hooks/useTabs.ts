@@ -1,16 +1,11 @@
-import { useState, useEffect } from "react";
-import { authFetch } from '../../../auth';
+import {useState} from "react";
 
 
 const useTabs = () => {
     const [activeTab, setActiveTab] = useState(-1);
-    const [tabs, setTabs] = useState([]);
+    const [tabs, setTabs] = useState<string[]>([]);
 
-    const selectTab = (tab) => {
-        setActiveTab(tab)
-    };
-
-    const openTab = (file) => {
+    const openTab = (file: string) => {
         const id = tabs.indexOf(file)
         if (id == -1) {
             setTabs([...tabs, file])
@@ -20,19 +15,19 @@ const useTabs = () => {
         }
     };
 
-    const closeTab = (tab) => {
+    const closeTab = (tab: number) => {
         tabs.splice(tab, 1)
         setTabs([...tabs])
         setActiveTab(Math.min(activeTab, tabs.length - 1))
     };
 
-    const closeTabByFile = (file) => {
+    const closeTabByFile = (file: string) => {
         const tab = tabs.indexOf(file)
-        if (tab != -1) {
+        if (tab !== -1) {
             closeTab(tab)
         }
     };
 
-    return { tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab };
+    return {tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab: setActiveTab};
 }
 export default useTabs;

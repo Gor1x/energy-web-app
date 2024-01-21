@@ -1,4 +1,4 @@
-import { AsyncSetter, IAsyncAuthStorage, IAuthStorage, Maybe, Setter } from './types';
+import {AsyncSetter, IAsyncAuthStorage, IAuthStorage, Maybe, Setter} from './types';
 
 export interface ITokenProviderConfig<T> {
     storageKey: string;
@@ -10,7 +10,7 @@ export interface ITokenProvider<T> {
     setToken: (token: Maybe<T>) => void;
 }
 
-export const createTokenProvider = <T>({ storageKey, storage }: ITokenProviderConfig<T>): ITokenProvider<T> => {
+export const createTokenProvider = <T>({storageKey, storage}: ITokenProviderConfig<T>): ITokenProvider<T> => {
     const parseToken = (data: Maybe<string>) => (data && JSON.parse(data)) || null;
     const decodeToken = (token: T) => JSON.stringify(token);
 
@@ -39,9 +39,9 @@ export interface IAsyncTokenProvider<T> {
 }
 
 export const createAsyncTokenProvider = <T>({
-    storageKey,
-    storage,
-}: IAsyncTokenProviderConfig<T>): IAsyncTokenProvider<T> => {
+                                                storageKey,
+                                                storage,
+                                            }: IAsyncTokenProviderConfig<T>): IAsyncTokenProvider<T> => {
     const parseToken = (data: Maybe<string>) => (data && JSON.parse(data)) || null;
     const decodeToken = (token: T) => JSON.stringify(token);
 

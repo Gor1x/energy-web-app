@@ -1,20 +1,20 @@
-import { Box, useTheme, IconButton } from "@mui/material";
-import { tokens } from "../theme";
+import {Box, IconButton, useTheme} from "@mui/material";
+import {themeSettings} from "../theme";
 import CloseIcon from '@mui/icons-material/Close';
 
-const Card = ({ children, columns, rows, onClose }) => {
+const Card = ({children, columns, rows, onClose}) => {
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+    const colors = themeSettings(theme.palette.mode).palette;
 
     return (
-        <Box sx={{ boxShadow: 4 }}
-            backgroundColor={colors.primary[400]}
-            gridColumn={`span ${columns}`}
-            gridRow={`span ${rows}`}>
+        <Box sx={{boxShadow: 4}}
+             backgroundColor={colors.primary.main}
+             gridColumn={`span ${columns}`}
+             gridRow={`span ${rows}`}>
             <Box>
-                <Box sx={{ float: "right" }}>
+                <Box sx={{float: "right"}}>
                     <IconButton size="small" onClick={onClose}>
-                        <CloseIcon fontSize="inherit" />
+                        <CloseIcon fontSize="inherit"/>
                     </IconButton>
                 </Box>
             </Box>

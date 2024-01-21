@@ -1,4 +1,4 @@
-import { Maybe, TokenString } from '../types';
+import {Maybe, TokenString} from '../types';
 
 export const extractAccessToken = <Session>(
     session: Maybe<Session>,

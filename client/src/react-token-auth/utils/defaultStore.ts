@@ -1,4 +1,4 @@
-import { IAsyncAuthStorage, IAuthStorage } from '../types';
+import {IAsyncAuthStorage, IAuthStorage} from '../types';
 
 export const createDefaultStore = (initData = {}): IAuthStorage => {
     const data: any = initData;
@@ -17,7 +17,7 @@ export const createDefaultStore = (initData = {}): IAuthStorage => {
         localStorage.removeItem(key);
     };
 
-    return { getItem, setItem, removeItem };
+    return {getItem, setItem, removeItem};
 };
 
 export const createDefaultAsyncStore = (initData = {}): IAsyncAuthStorage => {
@@ -37,5 +37,5 @@ export const createDefaultAsyncStore = (initData = {}): IAsyncAuthStorage => {
         localStorage.removeItem(key);
     };
 
-    return { getItem, setItem, removeItem };
+    return {getItem, setItem, removeItem};
 };

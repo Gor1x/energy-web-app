@@ -1,13 +1,13 @@
-import { createListenersContainer } from './createListenersContainer';
-import { createAsyncTokenProvider } from './createTokenProvider';
-import { isTokenExpired } from './isTokenExpired';
-import { createLogger } from './logger';
-import { createTokenUpdater } from './tokenUpdater';
-import { Getter, IAsyncAuthStorage, Maybe, TokenString } from './types';
-import { createUseAuth } from './useAuth';
-import { createAuthFetch } from './utils/createAuthFetch';
-import { createDefaultAsyncStore } from './utils/defaultStore';
-import { extractAccessToken } from './utils/extractAccessToken';
+import {createListenersContainer} from './createListenersContainer';
+import {createAsyncTokenProvider} from './createTokenProvider';
+import {isTokenExpired} from './isTokenExpired';
+import {createLogger} from './logger';
+import {createTokenUpdater} from './tokenUpdater';
+import {Getter, IAsyncAuthStorage, Maybe, TokenString} from './types';
+import {createUseAuth} from './useAuth';
+import {createAuthFetch} from './utils/createAuthFetch';
+import {createDefaultAsyncStore} from './utils/defaultStore';
+import {extractAccessToken} from './utils/extractAccessToken';
 
 export interface IAsyncAuthProviderConfig<Session> {
     getAccessToken?: (session: Session) => TokenString;
@@ -31,15 +31,15 @@ export interface IAsyncAuthProvider<Session> {
 }
 
 export const createAsyncAuthProvider = <Session>({
-    storageKey = 'REACT_TOKEN_AUTH_KEY',
-    onUpdateToken,
-    onHydratation,
-    storage = createDefaultAsyncStore({ [storageKey]: localStorage.getItem(storageKey) }),
-    fetchFunction = fetch,
-    getAccessToken,
-    expirationThresholdMillisec = 5000,
-    debug = false,
-}: IAsyncAuthProviderConfig<Session>): IAsyncAuthProvider<Session> => {
+                                                     storageKey = 'REACT_TOKEN_AUTH_KEY',
+                                                     onUpdateToken,
+                                                     onHydratation,
+                                                     storage = createDefaultAsyncStore({[storageKey]: localStorage.getItem(storageKey)}),
+                                                     fetchFunction = fetch,
+                                                     getAccessToken,
+                                                     expirationThresholdMillisec = 5000,
+                                                     debug = false,
+                                                 }: IAsyncAuthProviderConfig<Session>): IAsyncAuthProvider<Session> => {
     const logger = createLogger(debug);
     const listenersContainer = createListenersContainer();
 

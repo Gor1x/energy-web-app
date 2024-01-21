@@ -1,4 +1,4 @@
-import { graphic } from 'echarts'
+import {graphic} from 'echarts'
 
 let colors = ['#BF5AF2', '#FFD60A', '#2d8cf0', '#FF443A', '#FF9F0C', '#31D158']
 

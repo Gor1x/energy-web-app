@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
-import { authFetch } from '../../../auth';
+import {useEffect, useState} from "react";
+import {Box, Typography} from "@mui/material";
+import {authFetch} from '../../../auth';
 
-const Run = ({ title, algorithm_id, dataset_id }) => {
+const Run = ({title, algorithm_id, dataset_id}) => {
     const [result, setResult] = useState('');
 
     useEffect(() => {

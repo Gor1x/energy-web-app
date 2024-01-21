@@ -1,25 +1,25 @@
-import { useEffect } from "react";
-import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
+import {useEffect} from "react";
+import {Box, ListItemIcon, ListItemText, MenuItem, MenuList, Typography, useTheme} from "@mui/material";
 import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { useStoreon } from 'storeon/react';
+import {useStoreon} from 'storeon/react';
 
-const RunOnAlgorithmModal = ({ onSelect }) => {
+const RunOnAlgorithmModal = ({onSelect}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
-    const { dispatch, algorithms } = useStoreon('algorithms')
+    const {dispatch, algorithms} = useStoreon('algorithms')
 
     useEffect(() => {
-      dispatch('algorithms/load')
+        dispatch('algorithms/load')
     }, [])
 
-    const Item = ({ title, file }) => {
+    const Item = ({title, file}) => {
         return (
             <MenuItem onClick={() => onSelect(file)}>
-                <ListItemIcon sx={{ color: colors.primary.main }}>
-                    <FileOpenIcon />
+                <ListItemIcon sx={{color: colors.primary.main}}>
+                    <FileOpenIcon/>
                 </ListItemIcon>
-                <ListItemText sx={{ color: colors.primary.main }}>{title}</ListItemText>
+                <ListItemText sx={{color: colors.primary.main}}>{title}</ListItemText>
             </MenuItem>
         );
     };
@@ -42,8 +42,8 @@ const RunOnAlgorithmModal = ({ onSelect }) => {
                 style={{
                     "height": "100%"
                 }}></MenuList>
-            {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item} />)}
-            <MenuList />
+            {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item}/>)}
+            <MenuList/>
         </Box>
     )
 }

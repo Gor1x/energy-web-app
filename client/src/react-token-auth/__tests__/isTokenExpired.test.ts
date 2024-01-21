@@ -1,5 +1,5 @@
-import { isTokenExpired } from '../isTokenExpired';
-import { createJWTTokenWithExp, getExpiredJWTToken, getNonExpiredJWTToken } from '../test-utils/jwt';
+import {isTokenExpired} from '../isTokenExpired';
+import {createJWTTokenWithExp, getExpiredJWTToken, getNonExpiredJWTToken} from '../test-utils/jwt';
 
 describe('isTokenExpired', () => {
     it('expired token', () => {

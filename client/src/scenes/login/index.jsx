@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Box, Button, TextField } from "@mui/material";
-import { useNavigate } from 'react-router-dom'
-import { Formik } from "formik";
+import {useState} from "react";
+import {Box, Button, TextField} from "@mui/material";
+import {useNavigate} from 'react-router-dom'
+import {Formik} from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
-import { login } from '../../auth'
+import {login} from '../../auth'
 
 const Login = () => {
     const [errorMessage, setErrorMessage] = useState("");
@@ -28,7 +28,7 @@ const Login = () => {
         fetch('/auth/login', requestOptions)
             .then(
                 res => {
-                    if(res.status==401) {
+                    if (res.status == 401) {
                         throw new Error("Некорректный логин или пароль");
                     } else {
                         return res.json()
@@ -39,8 +39,8 @@ const Login = () => {
                 login(data.data)
                 navigate("/");
             }).catch(e => {
-                setErrorMessage(e.message);
-            })
+            setErrorMessage(e.message);
+        })
     }
 
     return (
@@ -50,28 +50,28 @@ const Login = () => {
             display="flex"
             justifyContent="center">
             <Box width="50%"
-                mt={10}>
-                <Header title="Вход" />
+                 mt={10}>
+                <Header title="Вход"/>
                 <Formik
                     onSubmit={handleFormSubmit}
                     initialValues={initialValues}
                     validationSchema={checkoutSchema}
                 >
                     {({
-                        values,
-                        errors,
-                        touched,
-                        handleBlur,
-                        handleChange,
-                        handleSubmit,
-                    }) => (
+                          values,
+                          errors,
+                          touched,
+                          handleBlur,
+                          handleChange,
+                          handleSubmit,
+                      }) => (
                         <form onSubmit={handleSubmit}>
                             <Box
                                 display="grid"
                                 gap="30px"
                                 gridTemplateColumns="repeat(4, minmax(0, 1fr))"
                                 sx={{
-                                    "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
+                                    "& > div": {gridColumn: isNonMobile ? undefined : "span 4"},
                                 }}
                             >
                                 <TextField
@@ -85,7 +85,7 @@ const Login = () => {
                                     name="login"
                                     error={!!touched.login && !!errors.login}
                                     helperText={touched.login && errors.login}
-                                    sx={{ gridColumn: "span 4" }}
+                                    sx={{gridColumn: "span 4"}}
                                 />
                                 <TextField
                                     fullWidth
@@ -98,7 +98,7 @@ const Login = () => {
                                     name="password"
                                     error={!!touched.password && !!errors.password}
                                     helperText={touched.password && errors.password}
-                                    sx={{ gridColumn: "span 4" }}
+                                    sx={{gridColumn: "span 4"}}
                                 />
                             </Box>
                             <Box display="flex" justifyContent="end" mt="20px">

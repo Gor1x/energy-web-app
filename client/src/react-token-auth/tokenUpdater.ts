@@ -1,4 +1,4 @@
-import { Maybe } from './types';
+import {Maybe} from './types';
 
 export const createTokenUpdater = <Session>(onUpdateToken: (session: Session) => Promise<Maybe<Session>>) => {
     let updatingPromise: Maybe<Promise<Maybe<Session>>> = null;
@@ -14,5 +14,5 @@ export const createTokenUpdater = <Session>(onUpdateToken: (session: Session) =>
         return updatingPromise;
     };
 
-    return { updateToken };
+    return {updateToken};
 };

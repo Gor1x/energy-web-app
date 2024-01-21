@@ -1,6 +1,6 @@
-import { SimpleLogger } from './logger';
-import { Maybe, TokenString } from './types';
-import { Base64 } from './utils/base64';
+import {SimpleLogger} from './logger';
+import {Maybe, TokenString} from './types';
+import {Base64} from './utils/base64';
 
 export const isTokenExpired = (token: TokenString, thresholdMillisec?: number, logger?: SimpleLogger) =>
     isTimestampExpired(jwtExp(token, logger), thresholdMillisec, logger);

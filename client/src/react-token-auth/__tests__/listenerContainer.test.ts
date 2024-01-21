@@ -1,4 +1,4 @@
-import { createListenersContainer } from '../createListenersContainer';
+import {createListenersContainer} from '../createListenersContainer';
 
 describe('listenerContainer', () => {
     it('test subscribe', () => {

@@ -1,20 +1,19 @@
-import { useState } from 'react'
-import { Box, useTheme, IconButton } from "@mui/material";
-import { tokens } from "../../../theme";
+import {useState} from 'react'
+import {Box, IconButton, useTheme} from "@mui/material";
+import {themeSettings} from "../../../theme";
 import CodeEditor from "../../../components/CodeEditor";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TableRowsIcon from '@mui/icons-material/TableRows';
-//import { openModal, closeModal } from '../../../modal';
 import RunOnDatasetModal from '../modals/RunOnDatasetModal';
-import { getNameWithExtension } from '../../../utils/getFileLabel';
+import {getNameWithExtension} from '../../../utils/getFileLabel';
 import Card from '../../../components/Card';
 import Run from './Run';
-import { useStoreon } from 'storeon/react';
+import {useStoreon} from 'storeon/react';
 
 const AlgorithmTabContent = (props) => {
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
-    const { file } = props;
+    const colors = themeSettings(theme.palette.mode);
+    const {file} = props;
     const codeCard = {
         type: "code",
         props: {
@@ -22,7 +21,7 @@ const AlgorithmTabContent = (props) => {
         }
     };
     const [items, setItems] = useState([codeCard]);
-    const { dispatch } = useStoreon('modal')
+    const {dispatch} = useStoreon('modal')
 
     const openRunCardHandler = (dataset) => {
         const runCard = {
@@ -65,19 +64,19 @@ const AlgorithmTabContent = (props) => {
             {/* TOOLBAR */}
             <Box height='40px' width='100%'>
                 <IconButton onClick={openCodeCardHandler}>
-                    <TableRowsIcon />
+                    <TableRowsIcon/>
                 </IconButton>
                 <IconButton onClick={() => dispatch('modal/open',
                     <RunOnDatasetModal onSelect={(dataset) => {
                         dispatch('modal/close')
                         openRunCardHandler(dataset)
-                    }} />)}>
-                    <PlayArrowIcon />
+                    }}/>)}>
+                    <PlayArrowIcon/>
                 </IconButton>
             </Box>
             {/* GRID & CHARTS */}
             <Box
-                sx={{ overflowY: 'scroll'}}
+                sx={{overflowY: 'scroll'}}
                 height="calc(100% - 40px)"
                 width="100%"
                 p='20px'

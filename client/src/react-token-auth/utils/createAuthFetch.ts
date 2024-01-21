@@ -1,4 +1,4 @@
-import { Maybe } from '../types';
+import {Maybe} from '../types';
 
 export const createAuthFetch = (getAccessToken: () => Promise<Maybe<string>>, fetchFunction: typeof fetch) => {
     return async (input: RequestInfo | URL, init?: RequestInit | undefined): Promise<Response> => {

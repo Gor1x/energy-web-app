@@ -1,22 +1,20 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Box, useTheme, IconButton } from "@mui/material";
-import {themeSettings, tokens} from "../../../theme";
+import {useCallback, useEffect, useState} from 'react'
+import {Box, IconButton} from "@mui/material";
 import TableCSV from '../../../components/TableCSV';
 import LineChart from "../../../components/LineChart/LineChart";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AddchartIcon from '@mui/icons-material/Addchart';
 import TableRowsIcon from '@mui/icons-material/TableRows';
-//import { openModal, closeModal } from '../../../modal';
 import OpenChartModal from '../../dashboard/modals/OpenChartModal'
-import { authFetch } from '../../../auth';
+import {authFetch} from '../../../auth';
 import Card from '../../../components/Card';
 import RunOnAlgorithmModal from '../modals/RunOnAlgorithmModal';
-import { getNameWithExtension } from '../../../utils/getFileLabel';
+import {getNameWithExtension} from '../../../utils/getFileLabel';
 import Run from './Run';
-import { useStoreon } from 'storeon/react';
+import {useStoreon} from 'storeon/react';
 
 const DatasetTabContent = (props) => {
-    const { file } = props;
+    const {file} = props;
     const tableCard = {
         type: "table",
         props: {
@@ -26,9 +24,9 @@ const DatasetTabContent = (props) => {
         }
     }
     const [items, setItems] = useState([tableCard])
-    const { dispatch } = useStoreon('modal')
+    const {dispatch} = useStoreon('modal')
 
-    const Chart = ({ dataset, column }) => {
+    const Chart = ({dataset, column}) => {
         const [resize, setResize] = useState(false)
         const [timer, setTimer] = useState(0)
         const [values, setValues] = useState([])
@@ -58,8 +56,8 @@ const DatasetTabContent = (props) => {
         }, [])
 
         useEffect(() => {
-            window.addEventListener('resize', triggerResize, { passive: true })
-            return () => window.removeEventListener('resize', triggerResize, { passive: true })
+            window.addEventListener('resize', triggerResize, {passive: true})
+            return () => window.removeEventListener('resize', triggerResize, {passive: true})
         }, [])
 
         const config = {
@@ -70,12 +68,12 @@ const DatasetTabContent = (props) => {
             xAxis: "date",
             yAxis: [column],
             yNames: [column],
-            data: values.map((value, i) => ({ [column]: value, date: i }))
+            data: values.map((value, i) => ({[column]: value, date: i}))
         };
 
         return (
             <Box>
-                {config && <LineChart config={config} resize={resize} />}
+                {config && <LineChart config={config} resize={resize}/>}
             </Box>
         )
     }
@@ -136,7 +134,7 @@ const DatasetTabContent = (props) => {
             {/* TOOLBAR */}
             <Box height='30px' width='100%'>
                 <IconButton onClick={openTableCardHandler}>
-                    <TableRowsIcon />
+                    <TableRowsIcon/>
                 </IconButton>
                 <IconButton onClick={() => dispatch('modal/open',
                     <OpenChartModal
@@ -144,20 +142,20 @@ const DatasetTabContent = (props) => {
                         onSelect={(column) => {
                             dispatch('modal/close')
                             openChartCardHandler(column)
-                        }} />)}>
-                    <AddchartIcon />
+                        }}/>)}>
+                    <AddchartIcon/>
                 </IconButton>
                 <IconButton onClick={() => dispatch('modal/open',
                     <RunOnAlgorithmModal onSelect={(algorithm) => {
                         dispatch('modal/close')
                         openRunCardHandler(algorithm)
-                    }} />)}>
-                    <PlayArrowIcon />
+                    }}/>)}>
+                    <PlayArrowIcon/>
                 </IconButton>
             </Box>
             {/* GRID & CHARTS */}
             <Box
-                sx={{ overflowY: 'scroll'}}
+                sx={{overflowY: 'scroll'}}
                 height="100%"
                 width="100%"
                 paddingLeft="20px"

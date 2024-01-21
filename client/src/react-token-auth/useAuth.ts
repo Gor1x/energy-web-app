@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import { IListenerContainer } from './createListenersContainer';
-import { Getter, Maybe } from './types';
+import {useCallback, useEffect, useState} from 'react';
+import {IListenerContainer} from './createListenersContainer';
+import {Getter, Maybe} from './types';
 
 export const createUseAuth = <Session>({
-    getSessionState,
-    onHydratation,
-    listenersContainer,
-}: {
+                                           getSessionState,
+                                           onHydratation,
+                                           listenersContainer,
+                                       }: {
     getSessionState: Getter<Maybe<Session>>;
     listenersContainer: IListenerContainer;
     onHydratation?: (session: Maybe<Session>) => void;

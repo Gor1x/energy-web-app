@@ -1,25 +1,25 @@
-import { useEffect } from "react";
-import { Box, useTheme, MenuList, MenuItem, ListItemText, ListItemIcon, Typography } from "@mui/material";
+import {useEffect} from "react";
+import {Box, ListItemIcon, ListItemText, MenuItem, MenuList, Typography, useTheme} from "@mui/material";
 import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
-import { useStoreon } from 'storeon/react';
+import {useStoreon} from 'storeon/react';
 
-const RunOnDatasetModal = ({ onSelect }) => {
+const RunOnDatasetModal = ({onSelect}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
-    const { dispatch, datasets } = useStoreon('datasets')
+    const {dispatch, datasets} = useStoreon('datasets')
 
     useEffect(() => {
-      dispatch('datasets/load')
+        dispatch('datasets/load')
     }, [])
 
-    const Item = ({ title, file }) => {
+    const Item = ({title, file}) => {
         return (
             <MenuItem onClick={() => onSelect(file)}>
-                <ListItemIcon sx={{ color: colors.primary.main }}>
-                    <FileOpenIcon />
+                <ListItemIcon sx={{color: colors.primary.main}}>
+                    <FileOpenIcon/>
                 </ListItemIcon>
-                <ListItemText sx={{ color: colors.primary.main }}>{title}</ListItemText>
+                <ListItemText sx={{color: colors.primary.main}}>{title}</ListItemText>
             </MenuItem>
         );
     };
@@ -42,8 +42,8 @@ const RunOnDatasetModal = ({ onSelect }) => {
                 style={{
                     "height": "100%"
                 }}></MenuList>
-            {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item} />)}
-            <MenuList />
+            {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item}/>)}
+            <MenuList/>
         </Box>
     )
 }

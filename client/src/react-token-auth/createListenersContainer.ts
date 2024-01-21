@@ -21,5 +21,5 @@ export const createListenersContainer = (): IListenerContainer => {
         listeners.forEach((l) => l());
     };
 
-    return { subscribe, unsubscribe, notify };
+    return {subscribe, unsubscribe, notify};
 };

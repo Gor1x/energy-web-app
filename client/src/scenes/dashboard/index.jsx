@@ -1,100 +1,97 @@
-import { Box, IconButton, useTheme, Tabs, Tab } from "@mui/material";
+import {Box, IconButton, Tab, Tabs, useTheme} from "@mui/material";
 import Sidebar from "./Sidebar";
 import AlgorithmTabContent from "./TabContent/AlgorithmTabContent";
 import DatasetTabContent from "./TabContent/DatasetTabContent";
-import { tokens } from "../../theme";
 import useTabs from "./hooks/useTabs";
 import CloseIcon from '@mui/icons-material/Close';
-import { getNameWithExtension } from "../../utils/getFileLabel";
+import {getNameWithExtension} from "../../utils/getFileLabel";
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+    const {children, value, index, ...other} = props;
 
-  return (
-    <div
-      hidden={value !== index}
-      role="tabpanel"
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}>
-      {children}
-    </div>
-  );
+    return (
+        <div
+            hidden={value !== index}
+            role="tabpanel"
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}>
+            {children}
+        </div>
+    );
 }
 
 const Dashboard = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const { tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab } = useTabs();
+    const theme = useTheme();
+    const {tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab} = useTabs();
 
-  const renderTab = (file) => {
-    switch (file.type) {
-      case 'algorithm':
-        return <AlgorithmTabContent file={file} />
-        break;
-      case 'dataset':
-        return <DatasetTabContent file={file} />
-        break;
-    }
-  };
+    const renderTab = (file) => {
+        switch (file.type) {
+            case 'algorithm':
+                return <AlgorithmTabContent file={file}/>
+            case 'dataset':
+                return <DatasetTabContent file={file}/>
+        }
+    };
 
-  return (
-    <Box style={{
-      "width": "100%",
-      "height": "100%"
-    }}>
-      <Box style={{
-        "display": "flex",
-        "width": "100%",
-        "height": "100%"
-      }}>
-        <Box sx={{width: '200px'}}>
-          <Sidebar height="100%"
-            width="100%"
-            onSelect={file => openTab(file)}
-            closeTabByFile={closeTabByFile} />
-        </Box>
-        <Box
-          height="100%"
-          width="calc(100% - 200px)">
-          <Box height='50px'>
-            <Tabs
-              value={activeTab}
-              onChange={(_, i) => selectTab(i)}
-              variant="scrollable"
-              scrollButtons={false}
-              aria-label="scrollable prevent tabs example">
-              {tabs.map((file, index) =>
-                <Tab
-                  key={`tab-${index}`}
-                  id={`simple-tab-${index}`}
-                  aria-controls={`simple-tabpanel-${index}`}
-                  label={
-                    <span>
+    return (
+        <Box style={{
+            "width": "100%",
+            "height": "100%"
+        }}>
+            <Box style={{
+                "display": "flex",
+                "width": "100%",
+                "height": "100%"
+            }}>
+                <Box sx={{width: '200px'}}>
+                    <Sidebar height="100%"
+                             width="100%"
+                             onSelect={file => openTab(file)}
+                             closeTabByFile={closeTabByFile}/>
+                </Box>
+                <Box
+                    height="100%"
+                    width="calc(100% - 200px)">
+                    <Box height='50px'>
+                        <Tabs
+                            value={activeTab}
+                            onChange={(_, i) => selectTab(i)}
+                            variant="scrollable"
+                            scrollButtons={false}
+                            aria-label="scrollable prevent tabs example">
+                            {tabs.map((file, index) =>
+                                    <Tab
+                                        key={`tab-${index}`}
+                                        id={`simple-tab-${index}`}
+                                        aria-controls={`simple-tabpanel-${index}`}
+                                        label={
+                                            <span>
                       {getNameWithExtension(file)}
-                      <IconButton size="small" component="span" onClick={(e) => {
-                        e.stopPropagation()
-                        closeTab(index)
-                      }}>
-                        <CloseIcon fontSize="inherit" />
+                                                <IconButton size="small" component="span" onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    closeTab(index)
+                                                }}>
+                        <CloseIcon fontSize="inherit"/>
                       </IconButton>
                     </span>
-                  }
-                />
-              )}
-            </Tabs>
-          </Box>
-          <Box height='calc(100% - 50px)'>
-            {tabs.map((file, i) =>
-            (<TabPanel style={{ height: '100%'}} key={`tab-panel-${i}`} dir={theme.direction} value={activeTab} index={i}>
-              {renderTab(file)}
-            </TabPanel>)
-            )}
-          </Box>
+                                        }
+                                    />
+                            )}
+                        </Tabs>
+                    </Box>
+                    <Box height='calc(100% - 50px)'>
+                        {tabs.map((file, i) =>
+                            (<TabPanel style={{height: '100%'}} key={`tab-panel-${i}`} dir={theme.direction}
+                                       value={activeTab} index={i}>
+                                {renderTab(file)}
+                            </TabPanel>)
+                        )}
+                    </Box>
+                </Box>
+            </Box>
         </Box>
-      </Box>
-    </Box>
-  );
+    );
 };
 
 export default Dashboard;

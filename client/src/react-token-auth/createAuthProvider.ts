@@ -1,13 +1,12 @@
-import { createListenersContainer } from './createListenersContainer';
-import { createTokenProvider } from './createTokenProvider';
-import { isTokenExpired } from './isTokenExpired';
-import { createLogger } from './logger';
-import { createTokenUpdater } from './tokenUpdater';
-import { Getter, IAuthStorage, Maybe, TokenString } from './types';
-import { createUseAuth } from './useAuth';
-import { createAuthFetch } from './utils/createAuthFetch';
-import { createDefaultStore } from './utils/defaultStore';
-import { extractAccessToken } from './utils/extractAccessToken';
+import {createListenersContainer} from './createListenersContainer';
+import {createTokenProvider} from './createTokenProvider';
+import {isTokenExpired} from './isTokenExpired';
+import {createTokenUpdater} from './tokenUpdater';
+import {Getter, IAuthStorage, Maybe, TokenString} from './types';
+import {createUseAuth} from './useAuth';
+import {createAuthFetch} from './utils/createAuthFetch';
+import {createDefaultStore} from './utils/defaultStore';
+import {extractAccessToken} from './utils/extractAccessToken';
 
 export interface IAuthProviderConfig<Session> {
     getAccessToken?: (session: Session) => TokenString;
@@ -29,14 +28,14 @@ export interface IAuthProvider<Session> {
 }
 
 export const createAuthProvider = <Session>({
-    storageKey = 'REACT_TOKEN_AUTH_KEY',
-    onUpdateToken,
-    onHydratation,
-    storage = createDefaultStore({ [storageKey]: localStorage.getItem(storageKey) }),
-    fetchFunction = fetch,
-    getAccessToken,
-    expirationThresholdMillisec = 5000,
-}: IAuthProviderConfig<Session>): IAuthProvider<Session> => {
+                                                storageKey = 'REACT_TOKEN_AUTH_KEY',
+                                                onUpdateToken,
+                                                onHydratation,
+                                                storage = createDefaultStore({[storageKey]: localStorage.getItem(storageKey)}),
+                                                fetchFunction = fetch,
+                                                getAccessToken,
+                                                expirationThresholdMillisec = 5000,
+                                            }: IAuthProviderConfig<Session>): IAuthProvider<Session> => {
     const listenersContainer = createListenersContainer();
     const tokenProvider = createTokenProvider<Session>({
         storageKey,
@@ -64,7 +63,7 @@ export const createAuthProvider = <Session>({
         if (_session && tokenUpdater && accessToken) {
             let split = accessToken.split('.');
             const padding = (4 - split[1].length % 4) % 4;
-            for(let i = 0; i < padding; i++) {
+            for (let i = 0; i < padding; i++) {
                 split[1] += "="
             }
             accessToken = split.join('.')

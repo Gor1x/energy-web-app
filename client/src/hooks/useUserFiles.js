@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { authFetch } from '../auth';
+import {useEffect, useState} from "react";
+import {authFetch} from '../auth';
 
 
 const useUserFiles = () => {
@@ -16,8 +16,8 @@ const useUserFiles = () => {
                 .then(response => response.json()),
         ]).then((values) =>
             setUserFiles({
-                algorithms: values[0].map(entry => ({ ...entry, type: "algorithm" })),
-                datasets: values[1].map(entry => ({ ...entry, type: "dataset" }))
+                algorithms: values[0].map(entry => ({...entry, type: "algorithm"})),
+                datasets: values[1].map(entry => ({...entry, type: "dataset"}))
             })
         )
     }, []);
@@ -37,7 +37,7 @@ const useUserFiles = () => {
                         .then(response => response.json())
                         .then(newItem => {
                             let entry = newItem[0]
-                            it['algorithms'] = [...it['algorithms'], { ...entry, type: "algorithm" }]
+                            it['algorithms'] = [...it['algorithms'], {...entry, type: "algorithm"}]
                             setUserFiles(it)
                         });
                     break;
@@ -46,7 +46,7 @@ const useUserFiles = () => {
                         .then(response => response.json())
                         .then(newItem => {
                             let entry = newItem[0]
-                            it['datasets'] = [...it['datasets'], { ...entry, type: "dataset" }]
+                            it['datasets'] = [...it['datasets'], {...entry, type: "dataset"}]
                             setUserFiles(it)
                         });
                     break;
@@ -79,6 +79,6 @@ const useUserFiles = () => {
         }
     };
 
-    return { userFiles, uploadFile, deleteFile };
+    return {userFiles, uploadFile, deleteFile};
 }
 export default useUserFiles;
