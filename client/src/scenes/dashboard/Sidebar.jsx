@@ -42,7 +42,7 @@ const Sidebar = (props) => {
                     <FileOpenOutlinedIcon/>
                 </ListItemIcon>
                 <ListItemText sx={{color: colors.text.menuDefault}}>{title}</ListItemText>
-                {file.user_id != -1 ?
+                {file.user_id !== -1 ?
                     <IconButton size="small" sx={{color: colors.text.menuDefault}}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -67,7 +67,7 @@ const Sidebar = (props) => {
                 variant="h6"
                 color={colors.text.default}
                 ml={2}>
-                {type == "algorithm" ? "Алгоритмы" : "Датасеты"}
+                {type === "algorithm" ? "Алгоритмы" : "Датасеты"}
             </Typography>
             <IconButton
                 size="small"

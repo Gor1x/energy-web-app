@@ -32,7 +32,7 @@ export function datasets(store) {
         };
         await authFetch(`/datasets/${dataset.id}`, requestOptions)
             .then(response => {
-                if (response.status == 200) {
+                if (response.status === 200) {
                     datasets.splice(datasets.indexOf(dataset), 1);
                     return store.dispatch('datasets/set', datasets)
                 } else {

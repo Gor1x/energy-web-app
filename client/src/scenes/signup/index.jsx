@@ -25,7 +25,7 @@ const Signup = () => {
             }
             fetch('/auth/signup', requestOptions)
                 .then(res => {
-                    if (res.status == 201) {
+                    if (res.status === 201) {
                         return res.json()
                     } else {
                         throw new Error(res.status);
@@ -36,7 +36,7 @@ const Signup = () => {
                     alert("Регистрация прошла успешно")
                 })
                 .catch(error => {
-                    if (error.message == 409) {
+                    if (error.message === 409) {
                         alert("Пользователь с таким логином уже зарегистрирован")
                     } else {
                         alert("Не удалось зарегистрировася")

@@ -1,8 +1,6 @@
-import {useCallback, useEffect, useState} from 'react'
+import {useState} from 'react'
 import {Box} from "@mui/material";
 import TableCSV from '../../../components/TableCSV';
-import LineChart from "../../../components/LineChart/LineChart";
-import {authFetch} from '../../../auth';
 import Card from '../../../components/Card';
 import {getNameWithExtension} from '../../../utils/getFileLabel';
 import Run from './Run';
@@ -31,7 +29,7 @@ const DatasetTabContent = (props) => {
                 column: column
             }
         };
-        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(chartCard))) {
+        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(chartCard))) {
             setItems([...items, chartCard]);
         } else {
             alert("Уже открыто")
@@ -47,7 +45,7 @@ const DatasetTabContent = (props) => {
                 dataset_id: file.id
             }
         };
-        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(runCard))) {
+        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(runCard))) {
             setItems([...items, runCard]);
         } else {
             alert("Уже открыто")
@@ -55,7 +53,7 @@ const DatasetTabContent = (props) => {
     }
 
     const openTableCardHandler = () => {
-        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(tableCard))) {
+        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(tableCard))) {
             setItems(() => {
                 let updated = Object.assign([], items);
                 updated.splice(0, 0, tableCard)

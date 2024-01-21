@@ -32,7 +32,7 @@ const AlgorithmTabContent = (props) => {
                 dataset_id: dataset.id
             }
         };
-        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(runCard))) {
+        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(runCard))) {
             setItems([...items, runCard]);
         } else {
             alert("Уже открыто")
@@ -40,7 +40,7 @@ const AlgorithmTabContent = (props) => {
     }
 
     const openCodeCardHandler = () => {
-        if (!items.find((item) => JSON.stringify(item) == JSON.stringify(codeCard))) {
+        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(codeCard))) {
             setItems(() => {
                 let updated = Object.assign([], items);
                 updated.splice(0, 0, codeCard)

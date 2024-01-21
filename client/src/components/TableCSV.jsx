@@ -67,7 +67,7 @@ const TableCSV = (props) => {
     return (
         isLoading
             ? <LoadingSpinner/>
-            : table.data.length != 0 &&
+            : table.data.length !== 0 &&
             <BootstrapTable
                 bootstrap4
                 keyField='Unnamed: 0'

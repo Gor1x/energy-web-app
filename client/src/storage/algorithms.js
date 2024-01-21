@@ -32,7 +32,7 @@ export function algorithms(store) {
         };
         await authFetch(`/algorithms/${algorithm.id}`, requestOptions)
             .then(response => {
-                if (response.status == 200) {
+                if (response.status === 200) {
                     algorithms.splice(algorithms.indexOf(algorithm), 1);
                     return store.dispatch('algorithms/set', algorithms)
                 } else {

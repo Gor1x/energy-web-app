@@ -8,7 +8,7 @@ const useTabs = () => {
 
     const openTab = (file: FileObject) => {
         const id = tabs.indexOf(file)
-        if (id == -1) {
+        if (id === -1) {
             setTabs([...tabs, file])
             setActiveTab(tabs.length)
         } else {
