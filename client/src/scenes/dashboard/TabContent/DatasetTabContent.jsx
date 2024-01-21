@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Box, useTheme, IconButton } from "@mui/material";
-import { tokens } from "../../../theme";
+import {themeSettings, tokens} from "../../../theme";
 import TableCSV from '../../../components/TableCSV';
 import LineChart from "../../../components/LineChart/LineChart";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -16,13 +16,11 @@ import Run from './Run';
 import { useStoreon } from 'storeon/react';
 
 const DatasetTabContent = (props) => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
     const { file } = props;
     const tableCard = {
         type: "table",
         props: {
-            sizePerPage: 20,
+            sizePerPage: 15,
             totalSize: file.num_rows,
             url: `datasets/data/${file.id}`
         }
@@ -68,7 +66,7 @@ const DatasetTabContent = (props) => {
             title: column,
             type: "Line",
             height: "400px",
-            width: "100%",
+            width: "100vw",
             xAxis: "date",
             yAxis: [column],
             yNames: [column],
@@ -134,7 +132,7 @@ const DatasetTabContent = (props) => {
     };
 
     return (
-        <Box height='100%' width="min-content">
+        <Box height='100%' width='100vw'>
             {/* TOOLBAR */}
             <Box height='30px' width='100%'>
                 <IconButton onClick={openTableCardHandler}>
@@ -160,13 +158,11 @@ const DatasetTabContent = (props) => {
             {/* GRID & CHARTS */}
             <Box
                 sx={{ overflowY: 'scroll'}}
-                height="calc(100% - 30px)"
+                height="100%"
                 width="100%"
-                p='20px'
+                paddingLeft="20px"
                 display="grid"
                 gridTemplateColumns="repeat(12, 1fr)"
-                gridAutoRows="80px"
-                grid-auto-columns="4000px"
                 gap="20px">
                 {items.map((item, i) => {
                     switch (item.type) {

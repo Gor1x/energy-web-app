@@ -22,7 +22,7 @@ function App() {
         <div className="app">
           <Box
             sx={{
-              "height": "100vh",
+              "height": "100%",
               "width": "100%",
               "& .gutter": {
                 "cursor": "col-resize"

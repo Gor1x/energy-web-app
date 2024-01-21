@@ -15,11 +15,11 @@ body,
 }
 
 .appTopbar {
-  height: 70px;
+  height: 65px;
 }
 
 .appBody {
-  height: calc(100% - 70px);
+  height: calc(100% - 65px);
 }
 
 .app {
