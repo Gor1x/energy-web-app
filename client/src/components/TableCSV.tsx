@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {SetStateAction, useEffect, useState} from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {authFetch} from '../auth';
@@ -8,41 +8,35 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import LoadingSpinner from './LoadingSpinner';
+import React from 'react';
+import {TableCard} from "../types/CardsType";
+import {ColumnsType, Table} from "../types/Table";
 
-const TableCSV = (props) => {
+const TableCSV = (card: TableCard) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [page, setPage] = useState(null)
-    const [table, setTable] = useState({
-        data: [],
-        columns: []
-    })
-
-    const updatePage = (page) => {
+    const [page, setPage] = useState(0)
+    let t :Table = {data: [], columns: []}
+    const [table, setTable] = useState(t)
+    const updatePage = (page: number) => {
         setIsLoading(true);
         setPage(page)
-
-        const from = (page - 1) * props.sizePerPage + 1;
-        let to = from + props.sizePerPage;
-        if (to >= props.totalSize) {
-            to = props.totalSize
+        const from = (page - 1) * card.props.sizePerPage + 1;
+        let to = from + card.props.sizePerPage;
+        if (to >= card.props.totalSize) {
+            to = card.props.totalSize
         }
-        authFetch(`/${props.url}?` + new URLSearchParams({
-            from: from,
-            to: to,
-        })).then(response => response.json())
+        authFetch(`/${card.props.url}?` + new URLSearchParams({from: from.toString(), to: to.toString()})).then(response => response.json())
             .then(data_ => {
-                const data = data_.map(line => line);
-                const columns = []
+                const data = data_.map((line: string) => line);
+                const column: ColumnsType[] = []
                 for (const [key, _] of Object.entries(data[0])) {
-                    columns.push({
+                    column.push({
                         dataField: key,
                         text: key
                     })
                 }
-                setTable({
-                    data: data,
-                    columns: columns
-                })
+                let t :Table = {data: data, columns: column}
+                setTable(t)
                 setIsLoading(false);
             });
 
@@ -55,32 +49,30 @@ const TableCSV = (props) => {
     const pagination = paginationFactory({
         pageStartIndex: 1,
         page: page,
-        sizePerPage: props.sizePerPage,
-        totalSize: props.totalSize,
+        sizePerPage: card.props.sizePerPage,
+        totalSize: card.props.totalSize,
         sizePerPageList: [],
         nextPageText: '>',
         prePageText: '<',
         alwaysShowAllBtns: true,
         withFirstAndLast: false,
-        onPageChange: (page, _) => updatePage(page)
+        onPageChange: (page: number, _: any) => updatePage(page)
     });
     return (
-        isLoading
-            ? <LoadingSpinner/>
-            : table.data.length !== 0 &&
-            <BootstrapTable
+        isLoading  ? <LoadingSpinner/>
+            :  <BootstrapTable
                 bootstrap4
                 keyField='Unnamed: 0'
                 data={table.data}
                 columns={table.columns}
                 pagination={pagination}
                 remote
-                onTableChange={() => {
-                }}
+                onTableChange={() => {}}
                 striped
                 bordered
                 hover
-                responsive/>
+                //responsive
+            />
     );
 }
 

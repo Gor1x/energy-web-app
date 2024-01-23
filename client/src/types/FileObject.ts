@@ -4,4 +4,5 @@ export type FileObject = {
     user_id: number
     file_path: string
     type: string
+    num_rows: number
 }

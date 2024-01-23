@@ -12,7 +12,7 @@ type DatasetTabHeaderProps = {
     openChartCardHandler: (card: number) => void;
     modalOpenDispatch: (modal: any) => void;
     modalCloseDispatch: () => void;
-    openRunCardHandler: (algorithm: string) => void;
+    openRunCardHandler: (algorithm: { id: string; }) => void;
 }
 
 export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
@@ -38,7 +38,7 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
             <AddchartIcon/>
         </IconButton>
         <IconButton onClick={() => modalOpenDispatch(
-            <RunOnAlgorithmModal onSelect={(algorithm: string) => {
+            <RunOnAlgorithmModal onSelect={(algorithm: { id: string; }) => {
                 modalCloseDispatch()
                 openRunCardHandler(algorithm)
             }}/>)}>

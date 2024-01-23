@@ -3,14 +3,10 @@ import {authFetch} from "../../../auth";
 import {Box} from "@mui/material";
 import LineChart from "../../../components/LineChart/LineChart";
 import * as React from 'react';
+import {ChartCard} from "../../../types/CardsType";
 
-type DatasetChartProps = {
-    dataset: any
-    column: number
-}
-
-export function DatasetChart(datasetChartProps: DatasetChartProps) {
-    const {dataset, column} = datasetChartProps
+export function DatasetChart(datasetChartProps: ChartCard) {
+    const {dataset, column} = datasetChartProps.props
     const [resize, setResize] = useState(false)
     const [timer, setTimer] = useState(0)
     const [values, setValues] = useState([])
