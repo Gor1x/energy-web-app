@@ -29,13 +29,13 @@ function App() {
                             },
                         }}
                     >
-                        <div className="content">
+                        <div className="content" width='available'>
                             {modal}
                             <Box className='appTopbar'>
                                 <Topbar/>
                             </Box>
-                            <Box className='appBody'>
-                                <Routes>
+                            <Box className='appBody' width='available'>
+                                <Routes width='available'>
                                     <Route path="/"
                                            element={isLoggedIn ? <Dashboard/> : <div>Вы не вошли в аккаунт</div>}/>
                                     <Route path="/login" element={<Login/>}/>

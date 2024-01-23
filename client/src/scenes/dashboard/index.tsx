@@ -82,9 +82,9 @@ const Dashboard = () => {
                             )}
                         </Tabs>
                     </Box>
-                    <Box height='calc(100% - 50px)'>
+                    <Box height='calc(100% - 50px)' width="available">
                         {tabs.map((file, i) =>
-                            (<TabPanel style={{height: '100%'}} key={`tab-panel-${i}`} dir={theme.direction}
+                            (<TabPanel style={{height: '100%', width:"available"}} key={`tab-panel-${i}`} dir={theme.direction}
                                        value={activeTab} index={i}>
                                 {renderTab(file)}
                             </TabPanel>)

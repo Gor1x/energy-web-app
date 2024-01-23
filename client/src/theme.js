@@ -79,7 +79,8 @@ export const themeSettings = (mode) => {
                     },
                     text: {
                         default: colors.grey[100],
-
+                        menuDefault: colors.grey[100],
+                        h2: colors.grey[200],
                     },
                     shadow: {
                         default: colors.grey[800],
@@ -90,7 +91,7 @@ export const themeSettings = (mode) => {
                     // palette values for light mode
                     primary: {
                         white: colors.white[100],
-                        main: colors.grey[500],
+                        main: colors.grey[200],
                         dark: colors.grey[900]
                     },
                     secondary: {
@@ -109,7 +110,8 @@ export const themeSettings = (mode) => {
                     },
                     text: {
                         default: colors.grey[900],
-                        menuDefault: colors.grey[800]
+                        menuDefault: colors.grey[800],
+                        h2: colors.grey[500],
                     },
                     shadow: {
                         default: colors.grey[800],

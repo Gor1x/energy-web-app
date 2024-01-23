@@ -1,8 +1,6 @@
 from app.exts import db
 from sqlalchemy import text
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.event import listen
-from sqlalchemy import event, DDL
+from sqlalchemy import event
 
 class User(db.Model):
     id=db.Column(db.Integer(), primary_key=True)

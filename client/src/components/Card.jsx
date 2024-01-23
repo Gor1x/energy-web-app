@@ -6,21 +6,21 @@ const Card = ({children, columns, rows, onClose}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
 
-    return (
-        <Box sx={{boxShadow: 4}}
-             backgroundColor={colors.primary.main}
-             gridColumn={`span ${columns}`}
-             gridRow={`span ${rows}`}>
-            <Box>
-                <Box sx={{float: "right"}}>
-                    <IconButton size="small" onClick={onClose}>
-                        <CloseIcon fontSize="inherit"/>
-                    </IconButton>
-                </Box>
+    return (<Box sx={{boxShadow: 4}}
+                 backgroundColor={colors.primary.white}
+                 gridColumn={`span ${columns}`}
+                 gridRow={`span ${rows}`}
+                 width='1300px'
+    >
+        <Box>
+            <Box sx={{float: "right"}}>
+                <IconButton size="small" onClick={onClose}>
+                    <CloseIcon fontSize="inherit"/>
+                </IconButton>
             </Box>
-            {children}
         </Box>
-    )
+        {children}
+    </Box>)
 }
 
 export default Card;
