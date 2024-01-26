@@ -1,10 +1,12 @@
 import {Box, Button, Typography} from "@mui/material";
+import React from "react";
 
-const LoadFileModal = ({type, handleUpload, handleClose}) => {
-    const mapTypeToTitle = {
-        algorithm: "Загрузить алгоритм",
-        dataset: "Загрузить датасет"
-    };
+const LoadFileModal = ({type, handleUpload, handleClose} : {type: string, handleUpload: (event: any, type:string) => {}, handleClose: () => {}}) => {
+    const mapTypeToTitle: Record<string, string> = {
+        "algorithm": "Загрузить алгоритм",
+        "dataset": "Загрузить датасет"
+    }
+
     return (<Box sx={{
         position: 'absolute',
         top: '50%',
@@ -21,7 +23,7 @@ const LoadFileModal = ({type, handleUpload, handleClose}) => {
         <input type="file"
                name="myFile"
                onChange={(event) => handleUpload(event, type)}/>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button  onClick={handleClose}>
             Отмена
         </Button>
     </Box>)
