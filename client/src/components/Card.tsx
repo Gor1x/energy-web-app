@@ -1,13 +1,19 @@
 import {Box, IconButton, useTheme} from "@mui/material";
 import {themeSettings} from "../theme";
 import CloseIcon from '@mui/icons-material/Close';
+import React, {ReactNode} from "react";
 
-const Card = ({children, columns, rows, onClose}) => {
+const Card: ({children, columns, rows, onClose}: {
+    children: ReactNode;
+    columns: string;
+    rows: string;
+    onClose: any
+}) => React.JSX.Element = ({children, columns, rows, onClose}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
 
     return (<Box sx={{boxShadow: 4}}
-                 backgroundColor={colors.primary.white}
+                 bgcolor={colors.primary.white}
                  gridColumn={`span ${columns}`}
                  gridRow={`span ${rows}`}
     >

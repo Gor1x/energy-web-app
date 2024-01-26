@@ -4,12 +4,14 @@ import {Box} from "@mui/material";
 import LineChart from "../../../components/LineChart/LineChart";
 import * as React from 'react';
 import {ChartCard} from "../../../types/CardsType";
+import {LineChartConfigType} from "../../../types/LineChartConfigType";
 
 export function DatasetChart(datasetChartProps: ChartCard) {
     const {dataset, column} = datasetChartProps.props
     const [resize, setResize] = useState(false)
     const [timer, setTimer] = useState(0)
-    const [values, setValues] = useState([])
+    let valuesInitState: string[] = []
+    const [values, setValues] = useState(valuesInitState)
 
     const triggerResize = useCallback(() => {
         if (timer) {
@@ -40,7 +42,7 @@ export function DatasetChart(datasetChartProps: ChartCard) {
         return () => window.removeEventListener('resize', triggerResize)
     }, [])
 
-    const config = {
+    const config: LineChartConfigType = {
         title: column,
         type: "Line",
         height: "400px",

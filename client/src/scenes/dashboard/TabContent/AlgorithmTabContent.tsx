@@ -15,7 +15,6 @@ import React from 'react';
 
 const AlgorithmTabContent = (props: { file: FileObject }) => {
     const theme = useTheme();
-    const colors = themeSettings(theme.palette.mode);
     const codeCard: CodeCard = {
         type: "CodeCard",
         props: {
@@ -91,7 +90,7 @@ const AlgorithmTabContent = (props: { file: FileObject }) => {
                     switch (item.type) {
                         case 'CodeCard':
                             return (
-                                <Card key={`card-${i}`} rows={6} columns={6} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={'6'} columns={'6'} onClose={() => closeCardHandler(i)}>
                                     <CodeEditor {...item.props} />
                                 </Card>
                             )
@@ -108,7 +107,7 @@ const AlgorithmTabContent = (props: { file: FileObject }) => {
                                 }
                             }
                             return (
-                                <Card key={`card-${i}`} rows={1} columns={6} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={'1'} columns={'6'} onClose={() => closeCardHandler(i)}>
                                     <Run {...runCard} />
                                 </Card>
                             )
