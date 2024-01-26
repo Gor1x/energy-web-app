@@ -10,8 +10,10 @@ import LoadFileModal from "./modals/LoadFileModal";
 //import { openModal, closeModal } from '../../modal';
 import {getNameWithExtension} from "../../utils/getFileLabel";
 import {useStoreon} from 'storeon/react';
+import React from "react";
+import {FileObject} from "../../types/FileObject";
 
-const Sidebar = (props) => {
+const Sidebar = (props: { [x: string]: any; onSelect: any; closeTabByFile: any; }) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     const {dispatch, algorithms, datasets} = useStoreon('algorithms', 'datasets')
@@ -21,12 +23,12 @@ const Sidebar = (props) => {
         dispatch('datasets/load')
     }, [])
 
-    const mapTypeToActions = {
-        algorithm: {
+    const mapTypeToActions: Record<string, { add: string, delete: string }> = {
+        "algorithm": {
             add: 'algorithms/add',
             delete: 'algorithms/delete'
         },
-        dataset: {
+        "dataset": {
             add: 'datasets/add',
             delete: 'datasets/delete'
         }
@@ -34,7 +36,7 @@ const Sidebar = (props) => {
 
     const {onSelect, closeTabByFile, ...other} = props;
 
-    const Item = ({title, file}) => {
+    const Item = ({title, file}: {title: string, file: FileObject}) => {
         return (
             <MenuItem
                 onClick={() => onSelect(file)}>
@@ -56,12 +58,12 @@ const Sidebar = (props) => {
         );
     };
 
-    const ListTitle = ({type}) =>
+    const ListTitle = ({type}: {type: string}) =>
         <Box display="flex"
              alignItems="center"
              justifyContent="space-between"
              height="40px"
-             backgroundColor={colors.background.sidebarHeader}
+             bgcolor={colors.background.sidebarHeader}
         >
             <Typography
                 variant="h6"
@@ -87,7 +89,7 @@ const Sidebar = (props) => {
             </IconButton>
         </Box>
 
-    const handleUpload = (event, type) => {
+    const handleUpload = (event: any, type:string) => {
         let file = event.target.files[0]
         dispatch(mapTypeToActions[type].add, file)
         dispatch('modal/close')
@@ -103,14 +105,14 @@ const Sidebar = (props) => {
                     "background": colors.background.sidebar
                 }}>
                 <ListTitle type="algorithm"/>
-                {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={getNameWithExtension(item)}
+                {algorithms.map((item: FileObject, i: string) => <Item key={`sidebar-algorithm-${i}`} title={`${item.name}.py`}
                                                    file={item}/>)}
                 <ListTitle type="dataset"/>
-                {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={getNameWithExtension(item)}
+                {datasets.map((item: FileObject, i: string) => <Item key={`sidebar-dataset-${i}`} title={`${item.name}.csv`}
                                                  file={item}/>)}
                 <MenuItem onClick={() =>
                     dispatch('modal/open',
-                        <MapModal onClick={(i) => {
+                        <MapModal onClick={() => {
                             onSelect(datasets[0])
                             dispatch('modal/close')
                         }}/>)

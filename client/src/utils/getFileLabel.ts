@@ -1,4 +1,6 @@
-export const getNameWithExtension = (file) => {
+import {FileObject} from "../types/FileObject";
+
+export const getNameWithExtension = (file: FileObject) => {
     switch (file.type) {
         case 'algorithm':
             return `${file.name}.py`;

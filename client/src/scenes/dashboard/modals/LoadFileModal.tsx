@@ -1,7 +1,7 @@
 import {Box, Button, Typography} from "@mui/material";
 import React from "react";
 
-const LoadFileModal = ({type, handleUpload, handleClose} : {type: string, handleUpload: (event: any, type:string) => {}, handleClose: () => {}}) => {
+const LoadFileModal = ({type, handleUpload, handleClose} : {type: string, handleUpload: (event: any, type:string) => void, handleClose: () => void}) => {
     const mapTypeToTitle: Record<string, string> = {
         "algorithm": "Загрузить алгоритм",
         "dataset": "Загрузить датасет"

@@ -7,6 +7,7 @@ import RunOnAlgorithmModal from '../modals/RunOnAlgorithmModal';
 import * as React from 'react';
 import {FileObject} from "../../../types/FileObject";
 import {ChartCard} from "../../../types/CardsType";
+import {File} from "node:buffer";
 
 type DatasetTabHeaderProps = {
     file: FileObject;
@@ -14,7 +15,7 @@ type DatasetTabHeaderProps = {
     openChartCardHandler: (card: number) => void;
     modalOpenDispatch: (modal: any) => void;
     modalCloseDispatch: () => void;
-    openRunCardHandler: (algorithm: { id: number; }) => void;
+    openRunCardHandler: (algorithm: FileObject) => void;
 }
 
 export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
@@ -40,7 +41,7 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
             <AddchartIcon/>
         </IconButton>
         <IconButton onClick={() => modalOpenDispatch(
-            <RunOnAlgorithmModal onSelect={(algorithm: { id: number; }) => {
+            <RunOnAlgorithmModal onSelect={(algorithm: FileObject) => {
                 modalCloseDispatch()
                 openRunCardHandler(algorithm)
             }}/>)}>

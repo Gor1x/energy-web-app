@@ -6,7 +6,7 @@ import {useStoreon} from 'storeon/react';
 import React from "react";
 import {FileObject} from "../../../types/FileObject";
 
-const RunOnAlgorithmModal = ({onSelect}: {onSelect:(algorithm: { id: number; }) => void}) => {
+const RunOnAlgorithmModal = ({onSelect}: {onSelect:(algorithm: FileObject) => void}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     const {dispatch, algorithms} = useStoreon('algorithms')

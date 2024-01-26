@@ -39,7 +39,7 @@ const DatasetTabContent = (props: { file: FileObject }) => { //type for file?
         }
     }
 
-    const openRunCardHandler = (algorithm: { id: number; }) => {
+    const openRunCardHandler = (algorithm: FileObject) => {
         const runCard: RunCard = {
             type: "RunCard",
             props: {
