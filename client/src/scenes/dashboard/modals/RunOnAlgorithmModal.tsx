@@ -3,8 +3,10 @@ import {Box, ListItemIcon, ListItemText, MenuItem, MenuList, Typography, useThem
 import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import {useStoreon} from 'storeon/react';
+import React from "react";
+import {FileObject} from "../../../types/FileObject";
 
-const RunOnAlgorithmModal = ({onSelect}) => {
+const RunOnAlgorithmModal = ({onSelect}: {onSelect:(algorithm: { id: number; }) => void}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     const {dispatch, algorithms} = useStoreon('algorithms')
@@ -13,7 +15,7 @@ const RunOnAlgorithmModal = ({onSelect}) => {
         dispatch('algorithms/load')
     }, [])
 
-    const Item = ({title, file}) => {
+    const Item = ({title, file} : {title:string, file: FileObject}) => {
         return (
             <MenuItem onClick={() => onSelect(file)}>
                 <ListItemIcon sx={{color: colors.primary.main}}>
@@ -42,7 +44,7 @@ const RunOnAlgorithmModal = ({onSelect}) => {
                 style={{
                     "height": "100%"
                 }}></MenuList>
-            {algorithms.map((item, i) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item}/>)}
+            {algorithms.map((item: FileObject, i: number) => <Item key={`sidebar-algorithm-${i}`} title={item.name} file={item}/>)}
             <MenuList/>
         </Box>
     )

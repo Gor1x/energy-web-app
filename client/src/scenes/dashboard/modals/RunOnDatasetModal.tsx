@@ -3,8 +3,10 @@ import {Box, ListItemIcon, ListItemText, MenuItem, MenuList, Typography, useThem
 import {themeSettings} from "../../../theme";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 import {useStoreon} from 'storeon/react';
+import {FileObject} from "../../../types/FileObject";
+import React from "react";
 
-const RunOnDatasetModal = ({onSelect}) => {
+const RunOnDatasetModal = ({onSelect}:{onSelect:(dataset: FileObject) => void}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     const {dispatch, datasets} = useStoreon('datasets')
@@ -13,7 +15,7 @@ const RunOnDatasetModal = ({onSelect}) => {
         dispatch('datasets/load')
     }, [])
 
-    const Item = ({title, file}) => {
+    const Item = ({title, file}: {title: string, file: FileObject}) => {
         return (
             <MenuItem onClick={() => onSelect(file)}>
                 <ListItemIcon sx={{color: colors.primary.main}}>
@@ -42,7 +44,7 @@ const RunOnDatasetModal = ({onSelect}) => {
                 style={{
                     "height": "100%"
                 }}></MenuList>
-            {datasets.map((item, i) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item}/>)}
+            {datasets.map((item: FileObject, i: number) => <Item key={`sidebar-dataset-${i}`} title={item.name} file={item}/>)}
             <MenuList/>
         </Box>
     )
