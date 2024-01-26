@@ -11,7 +11,10 @@
       "es6"
     ],
     "jsx": "react",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "react": [ "./node_modules/@types/react" ]
+    }
   },
   "include": [
     "src"

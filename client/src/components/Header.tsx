@@ -1,7 +1,8 @@
 import {Box, Typography, useTheme} from "@mui/material";
+import React from "react";
 import {themeSettings} from "../theme";
 
-const Header = ({title, subtitle}) => {
+const Header = ({title}: {title: string}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     return (
