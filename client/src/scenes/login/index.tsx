@@ -1,50 +1,47 @@
+import {useState} from "react";
 import {Box, Button, TextField} from "@mui/material";
+import {useNavigate} from 'react-router-dom'
 import {Formik} from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
-import {useNavigate} from "react-router-dom";
+import {login} from '../../auth'
+import React from "react";
 
-const Signup = () => {
+const Login = () => {
+    const [errorMessage, setErrorMessage] = useState("");
+
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const navigate = useNavigate()
 
-    const handleFormSubmit = (values) => {
-        if (values.password === values.confirmation) {
-            const body = {
-                username: values.login,
-                email: values.email,
-                password: values.password
-            }
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            }
-            fetch('/auth/signup', requestOptions)
-                .then(res => {
-                    if (res.status === 201) {
-                        return res.json()
-                    } else {
-                        throw new Error(res.status);
-                    }
-                })
-                .then(data => {
-                    navigate("/login")
-                    alert("Регистрация прошла успешно")
-                })
-                .catch(error => {
-                    if (error.message === 409) {
-                        alert("Пользователь с таким логином уже зарегистрирован")
-                    } else {
-                        alert("Не удалось зарегистрировася")
-                    }
-                })
-        } else {
-            alert("Пароли не совпадают")
+    const handleFormSubmit = (values: { login: string; password: string; }) => {
+        const body = {
+            username: values.login,
+            password: values.password
         }
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }
+        fetch('/auth/login', requestOptions)
+            .then(
+                res => {
+                    if (res.status === 401) {
+                        throw new Error("Некорректный логин или пароль");
+                    } else {
+                        return res.json()
+                    }
+                }
+            )
+            .then(data => {
+                login(data.data)
+                navigate("/");
+            }).catch(e => {
+            setErrorMessage(e.message);
+        })
     }
 
     return (
@@ -55,7 +52,7 @@ const Signup = () => {
             justifyContent="center">
             <Box width="50%"
                  mt={10}>
-                <Header title="Новый пользователь"/>
+                <Header title="Вход"/>
                 <Formik
                     onSubmit={handleFormSubmit}
                     initialValues={initialValues}
@@ -94,19 +91,6 @@ const Signup = () => {
                                 <TextField
                                     fullWidth
                                     variant="filled"
-                                    type="text"
-                                    label="Email"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.email}
-                                    name="email"
-                                    error={!!touched.email && !!errors.email}
-                                    helperText={touched.email && errors.email}
-                                    sx={{gridColumn: "span 4"}}
-                                />
-                                <TextField
-                                    fullWidth
-                                    variant="filled"
                                     type="password"
                                     label="Пароль"
                                     onBlur={handleBlur}
@@ -117,25 +101,13 @@ const Signup = () => {
                                     helperText={touched.password && errors.password}
                                     sx={{gridColumn: "span 4"}}
                                 />
-                                <TextField
-                                    fullWidth
-                                    variant="filled"
-                                    type="password"
-                                    label="Подтвердите пароль"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.confirmation}
-                                    name="confirmation"
-                                    error={!!touched.confirmation && !!errors.confirmation}
-                                    helperText={touched.confirmation && errors.confirmation}
-                                    sx={{gridColumn: "span 4"}}
-                                />
                             </Box>
                             <Box display="flex" justifyContent="end" mt="20px">
                                 <Button type="submit" color="secondary" variant="contained">
-                                    Зарегистрироваться
+                                    Войти
                                 </Button>
                             </Box>
+                            {errorMessage && <div className="error">{errorMessage}</div>}
                         </form>
                     )}
                 </Formik>
@@ -146,15 +118,11 @@ const Signup = () => {
 
 const checkoutSchema = yup.object().shape({
     login: yup.string().required("required"),
-    email: yup.string().email("invalid email").required("required"),
-    password: yup.string().required("required"),
-    confirmation: yup.string().required("required"),
+    password: yup.string().required("required")
 });
 const initialValues = {
     login: "",
-    email: "",
-    password: "",
-    confirmation: "",
+    password: ""
 };
 
-export default Signup;
+export default Login;

@@ -7,9 +7,10 @@ import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {logout, useAuth} from "../../auth"
 import {themeSettings} from "../../theme";
+import React from "react";
 
 
-const Item = ({title, icon, to}) => {
+const Item = ({title, icon, to}: {title: string, icon: React.JSX.Element, to: string}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     return (
@@ -28,7 +29,7 @@ const Topbar = () => {
     const [logged] = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const handleClick = (event: { currentTarget: any; }) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {

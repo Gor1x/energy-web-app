@@ -1,7 +1,8 @@
 import {Box} from "@mui/material";
+import React from "react";
 import Map from "../../../components/Map";
 
-const MapModal = (props) =>
+const MapModal = (props: { onClick: {() : void}; }) =>
     <Box sx={{
         position: 'absolute',
         top: '50%',

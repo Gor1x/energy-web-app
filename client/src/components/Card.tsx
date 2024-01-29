@@ -7,7 +7,7 @@ const Card: ({children, columns, rows, onClose}: {
     children: ReactNode;
     columns: string;
     rows: string;
-    onClose: any
+    onClose: {() : void}
 }) => React.JSX.Element = ({children, columns, rows, onClose}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;

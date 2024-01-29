@@ -13,7 +13,7 @@ import {useStoreon} from 'storeon/react';
 import React from "react";
 import {FileObject} from "../../types/FileObject";
 
-const Sidebar = (props: { [x: string]: any; onSelect: any; closeTabByFile: any; }) => {
+const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void}; closeTabByFile: {(file: FileObject) : void}}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
     const {dispatch, algorithms, datasets} = useStoreon('algorithms', 'datasets')
