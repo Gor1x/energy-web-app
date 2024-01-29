@@ -7,4 +7,5 @@ export const getNameWithExtension = (file: FileObject) => {
         case 'dataset':
             return `${file.name}.csv`;
     }
+    return `${file.name}`;
 }

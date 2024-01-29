@@ -105,10 +105,10 @@ const Sidebar = (props: { [x: string]: any; onSelect: any; closeTabByFile: any; 
                     "background": colors.background.sidebar
                 }}>
                 <ListTitle type="algorithm"/>
-                {algorithms.map((item: FileObject, i: string) => <Item key={`sidebar-algorithm-${i}`} title={`${item.name}.py`}
+                {algorithms.map((item: FileObject, i: string) => <Item key={`sidebar-algorithm-${i}`} title={getNameWithExtension(item)}
                                                    file={item}/>)}
                 <ListTitle type="dataset"/>
-                {datasets.map((item: FileObject, i: string) => <Item key={`sidebar-dataset-${i}`} title={`${item.name}.csv`}
+                {datasets.map((item: FileObject, i: string) => <Item key={`sidebar-dataset-${i}`} title={getNameWithExtension(item)}
                                                  file={item}/>)}
                 <MenuItem onClick={() =>
                     dispatch('modal/open',
