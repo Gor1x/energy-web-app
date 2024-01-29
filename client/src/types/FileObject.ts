@@ -5,4 +5,5 @@ export type FileObject = {
     file_path: string
     type: string
     num_rows: number
+    selectColumn: number | null
 }

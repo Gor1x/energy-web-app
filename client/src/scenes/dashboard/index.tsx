@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {getNameWithExtension} from "../../utils/getFileLabel";
 import * as React from 'react'
 import {FileObject} from "../../types/FileObject";
+import ChartTabContent from "./TabContent/ChartTabContent";
 
 function TabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
     const {children, value, index, ...other} = props;
@@ -33,6 +34,8 @@ const Dashboard = () => {
                 return <AlgorithmTabContent file={file}/>
             case 'dataset':
                 return <DatasetTabContent file={file}/>
+            case 'chart' :
+                return <ChartTabContent file={file}/>
         }
     };
 

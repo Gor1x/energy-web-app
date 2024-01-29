@@ -8,23 +8,24 @@ import * as React from 'react';
 import {FileObject} from "../../../types/FileObject";
 import {ChartCard} from "../../../types/CardsType";
 import {File} from "node:buffer";
+import ChartTabContent from "./ChartTabContent";
+import useTabs from "../hooks/useTabs";
 
 type DatasetTabHeaderProps = {
     file: FileObject;
     openTableCardHandler: () => void;
-    openChartCardHandler: (card: number) => void;
     modalOpenDispatch: (modal: any) => void;
     modalCloseDispatch: () => void;
     openRunCardHandler: (algorithm: FileObject) => void;
 }
 
 export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
+    const {tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab} = useTabs();
     const {
         file,
         modalCloseDispatch,
         openRunCardHandler,
         openTableCardHandler,
-        openChartCardHandler,
         modalOpenDispatch,
     } = datasetTabHeaderProps
     return <Box height='30px' width='100%'>
@@ -36,7 +37,11 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
                 dataset={file}
                 onSelect={(column: number) => {
                     modalCloseDispatch()
-                    openChartCardHandler(column)
+                    const chartFile = file
+                    chartFile.id = file.id
+                    chartFile.type = "chart"
+                    chartFile.selectColumn = column
+                    openTab(file)
                 }}/>)}>
             <AddchartIcon/>
         </IconButton>
