@@ -10,7 +10,7 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     const {dataset, column} = datasetChartProps.props
     const [resize, setResize] = useState(false)
     const [timer, setTimer] = useState(0)
-    let valuesInitState: string[] = []
+    let valuesInitState: number[] = []
     const [values, setValues] = useState(valuesInitState)
 
     const triggerResize = useCallback(() => {
@@ -26,6 +26,9 @@ export function DatasetChart(datasetChartProps: ChartCard) {
 
     }, [setResize, timer])
 
+    type StringToNumber = {
+        [key: string]: number
+    }
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
             from: "0",
@@ -33,9 +36,9 @@ export function DatasetChart(datasetChartProps: ChartCard) {
         })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: unknown) => line);
-                setValues(data.map((row: string[]) => row[column]))
+                setValues(data.map((row : StringToNumber) => row[column]))
             });
-    }, [])
+    }, [column, dataset.id])
 
     useEffect(() => {
         window.addEventListener('resize', triggerResize)
@@ -43,13 +46,13 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     }, [])
 
     const config: LineChartConfigType = {
-        title: column,
+        title: column.toString(),
         type: "Line",
         height: "400px",
         width: "100vw",
-        xAxis: "date",
+        xAxis: values.length,
         yAxis: [column],
-        yNames: [column],
+        yNames: [column.toString()],
         data: values.map((value, i) => ({[column]: value, date: i}))
     };
 

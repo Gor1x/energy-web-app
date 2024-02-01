@@ -6,10 +6,10 @@ import {authFetch} from "../../../auth";
 import React from "react";
 import {FileObject} from "../../../types/FileObject";
 
-const OpenChartModal = ({dataset, onSelect} : {dataset: FileObject, onSelect: any}) => {
+const OpenChartModal = ({dataset, onSelect} : {dataset: FileObject, onSelect: {(column: number) : void}}) => {
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
-    let initState: string[] = []
+    let initState: number[] = []
     const [columns, setColumns] = useState(initState)
 
     useEffect(() => {
@@ -19,11 +19,12 @@ const OpenChartModal = ({dataset, onSelect} : {dataset: FileObject, onSelect: an
         })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: string) => line);
+                // @ts-ignore
                 setColumns(Object.entries(data[0]).map(([key, _]) => key))
             });
     }, []);
 
-    const Item = ({column} : {column: string}) => {
+    const Item = ({column} : {column: number}) => {
         return (
             <MenuItem onClick={() => onSelect(column)}>
                 <ListItemIcon sx={{color: colors.primary.main}}>

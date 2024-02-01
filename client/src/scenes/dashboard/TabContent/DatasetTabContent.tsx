@@ -29,7 +29,7 @@ const DatasetTabContent = (props: { file: FileObject }) => { //type for file?
             type: "ChartCard",
             props: {
                 dataset: file,
-                column: column
+                column: column.toString()
             }
         };
         if (!items.find((item) => JSON.stringify(item) === JSON.stringify(chartCard))) {

@@ -1,8 +1,9 @@
 import React from 'react'
 import Chart from '../Chart'
-import {LineChartOption} from './option'
+import {lineChartOption} from './option'
+import {LineChartConfigType} from "../../types/LineChartConfigType";
 
-const LineChart = ({config, resize}) => {
+const LineChart = ({config, resize} : {config: LineChartConfigType, resize: boolean}) => {
     const {data} = config
 
     let {xAxis, yAxis} = data.reduce((accum, iter) => {
@@ -10,12 +11,14 @@ const LineChart = ({config, resize}) => {
         config.yAxis.forEach((lineName, index) => {
             if (!accum.yAxis[index]) {
                 accum.yAxis.push([iter[config.yAxis[index]]])
-            } else accum.yAxis[index].push(iter[config.yAxis[index]])
+            } else {
+                accum.yAxis[index].push(iter[config.yAxis[index]])
+            }
         })
         return accum
-    }, {xAxis: [], yAxis: []})
+    }, {xAxis: [] as number[], yAxis: [] as number[][]})
 
-    let option = LineChartOption(xAxis, yAxis, config)
+    let option = lineChartOption(xAxis, yAxis, config)
 
     return (
         <div>

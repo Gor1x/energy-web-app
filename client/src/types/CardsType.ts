@@ -4,7 +4,7 @@ export type ChartCard =  {
     type: string
     props: {
         dataset: FileObject
-        column: number
+        column: string
     }
 }
 
