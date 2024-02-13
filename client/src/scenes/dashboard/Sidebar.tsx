@@ -7,7 +7,6 @@ import MapIcon from '@mui/icons-material/Map';
 import {themeSettings} from "../../theme";
 import MapModal from "./modals/MapModal";
 import LoadFileModal from "./modals/LoadFileModal";
-//import { openModal, closeModal } from '../../modal';
 import {getNameWithExtension} from "../../utils/getFileLabel";
 import {useStoreon} from 'storeon/react';
 import React from "react";
