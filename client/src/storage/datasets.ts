@@ -1,13 +1,14 @@
 import {authFetch} from "../auth"
+import {StorageTypes} from "../types/StorageTypes";
 
-export function datasets(store) {
+export function datasets(store: Storage) {
     store.on('@init', () => ({datasets: []}))
 
-    store.on('datasets/set', (_, datasets) => {
+    store.on('datasets/set', (_: any, datasets: StorageTypes[]) => {
         return {datasets: datasets}
     })
 
-    store.on('datasets/add', async ({datasets}, file) => {
+    store.on('datasets/add', async ({datasets} : {datasets: StorageTypes[]}, file: string) => {
         if (file) {
             let data = new FormData();
             data.append('file', file);
@@ -26,7 +27,7 @@ export function datasets(store) {
         }
     })
 
-    store.on('datasets/delete', async ({datasets}, dataset) => {
+    store.on('datasets/delete', async ({datasets}: {datasets: StorageTypes[]}, dataset: StorageTypes) => {
         const requestOptions = {
             method: 'DELETE'
         };
@@ -41,10 +42,10 @@ export function datasets(store) {
             })
     })
 
-    store.on('datasets/load', async (_) => {
+    store.on('datasets/load', async (_: any) => {
         let datasets = await authFetch(`/datasets/`)
             .then(response => response.json())
-            .then(values => values.map(entry => ({...entry, type: 'dataset'})));
+            .then(values => values.map((entry: any) => ({...entry, type: 'dataset'})));
         store.dispatch('datasets/set', datasets)
     })
 }
