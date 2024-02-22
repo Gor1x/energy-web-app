@@ -15,13 +15,15 @@ const RunOnAlgorithmModal = ({onSelect}: {onSelect:(algorithm: FileObject) => vo
         dispatch('algorithms/load')
     }, [])
 
+    //@ts-ignore
+    const mainColor = colors?.primary?.main
     const Item = ({title, file} : {title:string, file: FileObject}) => {
         return (
             <MenuItem onClick={() => onSelect(file)}>
-                <ListItemIcon sx={{color: colors.primary.main}}>
+                <ListItemIcon sx={{color: mainColor}}>
                     <FileOpenIcon/>
                 </ListItemIcon>
-                <ListItemText sx={{color: colors.primary.main}}>{title}</ListItemText>
+                <ListItemText sx={{color: mainColor}}>{title}</ListItemText>
             </MenuItem>
         );
     };

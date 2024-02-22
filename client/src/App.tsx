@@ -6,17 +6,17 @@ import {ColorModeContext, useMode} from "./theme";
 import Signup from "./scenes/signup";
 import Login from "./scenes/login";
 import './assets/scss/base.scss'
-//import { useModal } from './modal';
 import {useAuth} from "./auth";
 import {useStoreon} from "storeon/react";
+import React from "react";
 
 function App() {
-    const [theme, colorMode] = useMode();
+    const {theme, mode, toggleMode} = useMode();
     const [isLoggedIn] = useAuth();
     const {modal} = useStoreon('modal')
 
     return (
-        <ColorModeContext.Provider value={colorMode}>
+        <ColorModeContext.Provider value={{ toggleColorMode: toggleMode }}>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
                 <div className="app">
@@ -29,13 +29,13 @@ function App() {
                             },
                         }}
                     >
-                        <div className="content" width='available'>
+                        <div className="content">
                             {modal}
                             <Box className='appTopbar'>
                                 <Topbar/>
                             </Box>
                             <Box className='appBody' width='available'>
-                                <Routes width='available'>
+                                <Routes>
                                     <Route path="/"
                                            element={isLoggedIn ? <Dashboard/> : <div>Вы не вошли в аккаунт</div>}/>
                                     <Route path="/login" element={<Login/>}/>

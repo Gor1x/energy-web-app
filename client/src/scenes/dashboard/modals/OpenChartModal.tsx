@@ -5,10 +5,13 @@ import {useEffect, useState} from "react";
 import {authFetch} from "../../../auth";
 import React from "react";
 import {FileObject} from "../../../types/FileObject";
+import {PaletteColorOptions} from "@mui/material/styles/createPalette";
 
 const OpenChartModal = ({dataset, onSelect} : {dataset: FileObject, onSelect: {(column: number) : void}}) => {
     const theme = useTheme();
-    const colors = themeSettings(theme.palette.mode).palette;
+    const primary: PaletteColorOptions | undefined = themeSettings(theme.palette.mode).palette?.primary;
+    // @ts-ignore
+    const mainColor = primary?.main
     let initState: number[] = []
     const [columns, setColumns] = useState(initState)
 
@@ -27,10 +30,10 @@ const OpenChartModal = ({dataset, onSelect} : {dataset: FileObject, onSelect: {(
     const Item = ({column} : {column: number}) => {
         return (
             <MenuItem onClick={() => onSelect(column)}>
-                <ListItemIcon sx={{color: colors.primary.main}}>
+                <ListItemIcon sx={{color: mainColor}}>
                     <FileOpenIcon/>
                 </ListItemIcon>
-                <ListItemText sx={{color: colors.primary.main}}>{column}</ListItemText>
+                <ListItemText sx={{color: mainColor}}>{column}</ListItemText>
             </MenuItem>
         );
     };

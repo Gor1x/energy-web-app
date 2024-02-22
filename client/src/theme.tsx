@@ -1,8 +1,11 @@
 import {createContext, useMemo, useState} from "react";
 import {createTheme} from "@mui/material/styles";
+import {Theme} from "@emotion/react";
+import {ThemeOptions} from "@mui/material/styles/createTheme";
+import {PaletteMode} from "@mui/material";
 
 // color design tokens export
-export const colors = {
+export const colors  = {
     white: {
         100: "#fcfcfc",
     },
@@ -53,7 +56,7 @@ export const colors = {
 };
 
 // mui theme settings
-export const themeSettings = (mode) => {
+export const themeSettings = (mode: PaletteMode): ThemeOptions => {
     return {
         palette: {
             mode: mode,
@@ -61,61 +64,53 @@ export const themeSettings = (mode) => {
                 ? {
                     // palette values for dark mode
                     primary: {
-                        white: colors.grey[100],
-                        main: colors.grey[800],
-                        backgroundTopbar: colors.blueAccent[600],
-                        dark: colors.grey[900]
+                        light: colors.grey[100],
+                        main: colors.blueAccent[600],
+                        dark: colors.grey[900],
+                        contrastText: colors.blueAccent[500]
                     },
                     secondary: {
                         main: colors.blueAccent[600],
+                        light: colors.grey[400],
+                        dark: colors.grey[800]
                     },
-                    neutral: {
+                    info: {
                         dark: colors.grey[900],
                         main: colors.grey[800],
                         light: colors.grey[900],
                     },
                     background: { //all
-                        default: colors.grey[800],
+                        paper: colors.grey[500],
                     },
                     text: {
-                        default: colors.grey[100],
-                        menuDefault: colors.grey[100],
-                        h2: colors.grey[200],
-                    },
-                    shadow: {
-                        default: colors.grey[800],
-                        light: colors.grey[400],
-                    },
+                        primary: colors.grey[100],
+                        secondary: colors.grey[200],
+                    }
                 }
                 : {
                     // palette values for light mode
                     primary: {
-                        white: colors.white[100],
+                        light: colors.white[100],
                         main: colors.grey[200],
-                        dark: colors.grey[900]
+                        dark: colors.grey[900],
+                        contrastText: colors.blueAccent[500]
                     },
                     secondary: {
                         main: colors.blueAccent[300],
+                        light: colors.grey[400],
+                        dark: colors.blueAccent[200]
                     },
-                    neutral: {
+                    info: {
                         dark: colors.grey[700],
                         main: colors.grey[500],
                         light: colors.grey[200],
                     },
-                    background: { //all
-                        default: colors.white[100],
-                        topbar: colors.blueAccent[500],
-                        sidebar: colors.grey[100],
-                        sidebarHeader: colors.blueAccent[200]
+                    background: {
+                        paper: colors.grey[100],
                     },
                     text: {
-                        default: colors.grey[900],
-                        menuDefault: colors.grey[800],
-                        h2: colors.grey[500],
-                    },
-                    shadow: {
-                        default: colors.grey[800],
-                        light: colors.grey[400],
+                        primary: colors.grey[900],
+                        secondary: colors.grey[800]
                     }
                 }),
         },
@@ -156,9 +151,13 @@ export const ColorModeContext = createContext({
     },
 });
 
-export const useMode = () => {
-    const [mode, setMode] = useState("light");
+export const useMode = (): { theme: Theme; mode: PaletteMode; toggleMode: () => void } => {
+    const [mode, setMode] = useState<PaletteMode>("light");
+    const toggleMode = () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+    };
 
-    const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-    return [theme, mode];
+    const theme: Theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+
+    return { theme, mode, toggleMode };
 };

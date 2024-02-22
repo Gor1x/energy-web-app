@@ -11,14 +11,17 @@ import React from "react";
 
 
 const Item = ({title, icon, to}: {title: string, icon: React.JSX.Element, to: string}) => {
+
     const theme = useTheme();
     const colors = themeSettings(theme.palette.mode).palette;
+    //@ts-ignore
+    const mainColor = colors?.info?.main
     return (
         <MenuItem
             component={Link}
             to={to}>
-            <ListItemIcon sx={{color: colors.neutral.main}}>{icon}</ListItemIcon>
-            <ListItemText sx={{color: colors.neutral.main}}>{title}</ListItemText>
+            <ListItemIcon sx={{color: mainColor}}>{icon}</ListItemIcon>
+            <ListItemText sx={{color: mainColor}}>{title}</ListItemText>
         </MenuItem>
     );
 };
@@ -36,13 +39,20 @@ const Topbar = () => {
         setAnchorEl(null);
     };
 
+    //@ts-ignore
+    const colorBackground = colors?.primary?.contrastText
+    //@ts-ignore
+    const colorText = colors?.info?.main
+    //@ts-ignore
+    const colorPrimary = colors?.primary?.light
+
     return (
         <Box
             height="100%"
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            style={{"background": colors.background.topbar}}>
+            style={{"background": colorBackground}}>
             {/* LOGO */}
             <img height="50" src="icsenergy-logo.png" style={{"marginLeft": "20px"}}/>
             {/* ICONS */}
@@ -64,7 +74,7 @@ const Topbar = () => {
                     aria-expanded={open ? 'true' : undefined}
                     onClick={handleClick}
                 >
-                    <PersonOutlinedIcon sx={{color: colors.primary.white}}/>
+                    <PersonOutlinedIcon sx={{color: colorPrimary}}/>
                 </IconButton>
                 <Menu
                     id="demo-positioned-menu"
@@ -79,8 +89,8 @@ const Topbar = () => {
                                     handleClose()
                                     logout()
                                 }}>
-                                <ListItemIcon sx={{color: colors.neutral.main}}><LogoutIcon/></ListItemIcon>
-                                <ListItemText sx={{color: colors.neutral.main}}>Выйти</ListItemText>
+                                <ListItemIcon sx={{color: colorText}}><LogoutIcon/></ListItemIcon>
+                                <ListItemText sx={{color: colorText}}>Выйти</ListItemText>
                             </MenuItem>) :
                         ([<Item
                             key="login"

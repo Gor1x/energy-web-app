@@ -4,12 +4,12 @@ import {themeSettings} from "../theme";
 
 const Header = ({title}: {title: string}) => {
     const theme = useTheme();
-    const colors = themeSettings(theme.palette.mode).palette;
+    const color = themeSettings(theme.palette.mode).palette?.text?.primary;
     return (
         <Box mb="30px">
             <Typography
                 variant="h2"
-                color={colors.text.default}
+                color={color}
                 fontWeight="bold"
                 sx={{m: "0 0 5px 0"}}
             >

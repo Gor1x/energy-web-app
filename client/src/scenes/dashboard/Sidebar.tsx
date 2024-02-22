@@ -35,16 +35,18 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
 
     const {onSelect, closeTabByFile, ...other} = props;
 
+    // @ts-ignore
+    const itemTextColor = colors.text?.secondary
     const Item = ({title, file}: {title: string, file: FileObject}) => {
         return (
             <MenuItem
                 onClick={() => onSelect(file)}>
-                <ListItemIcon sx={{color: colors.text.menuDefault}}>
+                <ListItemIcon sx={{color: itemTextColor}}>
                     <FileOpenOutlinedIcon/>
                 </ListItemIcon>
-                <ListItemText sx={{color: colors.text.menuDefault}}>{title}</ListItemText>
+                <ListItemText sx={{color: itemTextColor}}>{title}</ListItemText>
                 {file.user_id !== -1 ?
-                    <IconButton size="small" sx={{color: colors.text.menuDefault}}
+                    <IconButton size="small" sx={{color: itemTextColor}}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     closeTabByFile(file);
@@ -57,16 +59,20 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
         );
     };
 
+    // @ts-ignore
+    const bgColor = colors?.secondary.dark
+    // @ts-ignore
+    const textColor = colors.text.primary
     const ListTitle = ({type}: {type: string}) =>
         <Box display="flex"
              alignItems="center"
              justifyContent="space-between"
              height="40px"
-             bgcolor={colors.background.sidebarHeader}
+             bgcolor={bgColor}
         >
             <Typography
                 variant="h6"
-                color={colors.text.default}
+                color={textColor}
                 ml={2}>
                 {type === "algorithm" ? "Алгоритмы" : "Датасеты"}
             </Typography>
@@ -82,7 +88,7 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
                         }}/>)}>
                 <UploadFileOutlinedIcon
                     sx={{
-                        color: colors.text.menuDefault
+                        color: itemTextColor
                     }}
                 />
             </IconButton>
@@ -93,7 +99,8 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
         dispatch(mapTypeToActions[type].add, file)
         dispatch('modal/close')
     }
-
+    //@ts-ignore
+    const bgColorSidebar = colors?.background?.paper
     return (
         <Box {...other}>
             <MenuList
@@ -101,7 +108,7 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
                     "height": "100%",
                     margin: "0px",
                     padding: "0px",
-                    "background": colors.background.sidebar
+                    "background": bgColorSidebar
                 }}>
                 <ListTitle type="algorithm"/>
                 {algorithms.map((item: FileObject, i: string) => <Item key={`sidebar-algorithm-${i}`} title={getNameWithExtension(item)}
@@ -116,10 +123,10 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
                             dispatch('modal/close')
                         }}/>)
                 }>
-                    <ListItemIcon sx={{color: colors.text.menuDefault}}>
+                    <ListItemIcon sx={{color:textColor}}>
                         <MapIcon/>
                     </ListItemIcon>
-                    <ListItemText sx={{color: colors.text.menuDefault}}>Выбрать на карте</ListItemText>
+                    <ListItemText sx={{color: textColor}}>Выбрать на карте</ListItemText>
                     <div style={{height: '30px', width: '30px'}}/>
                 </MenuItem>
             </MenuList>
