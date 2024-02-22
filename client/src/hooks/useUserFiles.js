@@ -1,15 +1,11 @@
 import {useEffect, useState} from "react";
 import {authFetch} from '../auth';
-import {FileObject} from "../types/FileObject";
 
 
 const useUserFiles = () => {
-    let initStateAlgorithms: FileObject[] = []
-    let initStateDatasets: FileObject[] = []
-
     const [userFiles, setUserFiles] = useState({
-        algorithms: initStateAlgorithms,
-        datasets: initStateDatasets
+        algorithms: [],
+        datasets: []
     })
 
     useEffect(() => {
@@ -20,13 +16,13 @@ const useUserFiles = () => {
                 .then(response => response.json()),
         ]).then((values) =>
             setUserFiles({
-                algorithms: values[0].map((entry: FileObject) => ({...entry, type: "algorithm"})),
-                datasets: values[1].map((entry: FileObject) => ({...entry, type: "dataset"}))
+                algorithms: values[0].map(entry => ({...entry, type: "algorithm"})),
+                datasets: values[1].map(entry => ({...entry, type: "dataset"}))
             })
         )
     }, []);
 
-    const uploadFile = (file: string, type: string) => {
+    const uploadFile = (file, type) => {
         if (file) {
             let data = new FormData();
             data.append('file', file);
@@ -58,7 +54,7 @@ const useUserFiles = () => {
         }
     };
 
-    const deleteFile = (file: FileObject) => {
+    const deleteFile = (file) => {
         let it = Object.assign({}, userFiles)
         const requestOptions = {
             method: 'DELETE'

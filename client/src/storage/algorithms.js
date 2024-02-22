@@ -1,14 +1,13 @@
 import {authFetch} from "../auth"
-import {StorageTypes} from "../types/StorageTypes";
 
-export function algorithms(store : Storage) {
+export function algorithms(store) {
     store.on('@init', () => ({algorithms: []}))
 
-    store.on('algorithms/set', (_: any, algorithms: StorageTypes[]) => {
+    store.on('algorithms/set', (_, algorithms) => {
         return {algorithms: algorithms}
     })
 
-    store.on('algorithms/add', async ({algorithms} :{algorithms : StorageTypes[]}, file: string) => {
+    store.on('algorithms/add', async ({algorithms}, file) => {
         if (file) {
             let data = new FormData();
             data.append('file', file);
@@ -27,7 +26,7 @@ export function algorithms(store : Storage) {
         }
     })
 
-    store.on('algorithms/delete', async ({algorithms} : {algorithms: StorageTypes[]}, algorithm: StorageTypes) => {
+    store.on('algorithms/delete', async ({algorithms}, algorithm) => {
         const requestOptions = {
             method: 'DELETE'
         };
@@ -42,9 +41,10 @@ export function algorithms(store : Storage) {
             })
     })
 
-    store.on('algorithms/load', async (_: any) => {
+    store.on('algorithms/load', async (_) => {
         let algorithms = await authFetch(`/algorithms/`)
             .then(response => response.json())
-            .then(values => store.dispatch('algorithms/set', values.map((entry: any) => ({...entry, type: 'algorithm'}))))
+            .then(values => store.dispatch('algorithms/set', values.map(entry => ({...entry, type: 'algorithm'}))))
+        //store.dispatch('algorithms/set', algorithms)
     })
 }
