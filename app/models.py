@@ -66,4 +66,5 @@ def insert_default_algorithms(*args, **kwargs):
     db.session.add(Algorithm(user_id=-1, name='affinity', file_path='app\\default_algorithms\\b52dd258-c1c5-4bd7-92c2-b9195d6e86fb.py'))
     db.session.add(Algorithm(user_id=-1, name='agglomerative', file_path='app\\default_algorithms\\e0bd02a8-e3a5-4cbc-ab37-aa795b416071.py'))
     db.session.add(Algorithm(user_id=-1, name='dbscan', file_path='app\\default_algorithms\\fefd6f44-5355-43aa-ae72-d2de0a56972f.py'))
+    db.session.add(Algorithm(user_id=-1, name='linear-regression', file_path='app\\default_algorithms\\1848e792-ed35-4b03-9f0f-3e0674a8b5f5.py'))
     db.session.commit()
