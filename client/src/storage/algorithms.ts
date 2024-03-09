@@ -1,14 +1,13 @@
 import {authFetch} from "../auth"
-import {StorageTypes} from "../types/StorageTypes";
-
+import {FileObject} from "../types/FileObject";
 export function algorithms(store : Storage) {
     store.on('@init', () => ({algorithms: []}))
 
-    store.on('algorithms/set', (_: any, algorithms: StorageTypes[]) => {
+    store.on('algorithms/set', (_: any, algorithms: FileObject[]) => {
         return {algorithms: algorithms}
     })
 
-    store.on('algorithms/add', async ({algorithms} :{algorithms : StorageTypes[]}, file: string) => {
+    store.on('algorithms/add', async ({algorithms} :{algorithms : FileObject[]}, file: File) => {
         if (file) {
             let data = new FormData();
             data.append('file', file);
@@ -27,7 +26,7 @@ export function algorithms(store : Storage) {
         }
     })
 
-    store.on('algorithms/delete', async ({algorithms} : {algorithms: StorageTypes[]}, algorithm: StorageTypes) => {
+    store.on('algorithms/delete', async ({algorithms} : {algorithms: FileObject[]}, algorithm: FileObject) => {
         const requestOptions = {
             method: 'DELETE'
         };

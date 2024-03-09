@@ -1,23 +1,23 @@
 import {authFetch} from "../auth"
-import {StorageTypes} from "../types/StorageTypes";
+import {FileObject} from "../types/FileObject";
 
 export function datasets(store: Storage) {
     store.on('@init', () => ({datasets: []}))
 
-    store.on('datasets/set', (_: any, datasets: StorageTypes[]) => {
+    store.on('datasets/set', (_: any, datasets: FileObject[]) => {
         return {datasets: datasets}
     })
 
-    store.on('datasets/add', async ({datasets} : {datasets: StorageTypes[]}, file: string) => {
+    store.on('datasets/add', async ({datasets} : {datasets: FileObject[]}, file: File) => {
         if (file) {
             let data = new FormData();
-            data.append('file', file);
+            data.append('file', file, file.name);
             const requestOptions = {
                 method: 'POST',
                 body: data
             };
             await authFetch("/datasets/", requestOptions)
-                .then(response => response.json())
+                .then(response => response.json()) //file.name -> dataset
                 .then(newItem => {
                     let entry = newItem[0];
                     return store.dispatch('datasets/set', [...datasets, {...entry, type: "dataset"}])
@@ -27,7 +27,7 @@ export function datasets(store: Storage) {
         }
     })
 
-    store.on('datasets/delete', async ({datasets}: {datasets: StorageTypes[]}, dataset: StorageTypes) => {
+    store.on('datasets/delete', async ({datasets}: {datasets: FileObject[]}, dataset: FileObject) => {
         const requestOptions = {
             method: 'DELETE'
         };
