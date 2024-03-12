@@ -83,14 +83,14 @@ const AlgorithmTabContent = (props: { file: FileObject }) => {
                 width="100%"
                 p='20px'
                 display="grid"
-                gridTemplateColumns="repeat(12, 1fr)"
+                gridTemplateColumns="repeat(12)"
                 gridAutoRows="80px"
                 gap="20px">
                 {items.map((item, i) => {
                     switch (item.type) {
                         case 'CodeCard':
                             return (
-                                <Card key={`card-${i}`} rows={'6'} columns={'6'} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={'4'} columns={'6'} onClose={() => closeCardHandler(i)}>
                                     <CodeEditor {...item.props} />
                                 </Card>
                             )

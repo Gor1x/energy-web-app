@@ -12,7 +12,7 @@ import React from 'react';
 import {TableCard} from "../types/CardsType";
 import {ColumnsType, Table} from "../types/Table";
 
-const TableCSV = (card: TableCard) => {
+export const TableCSV = (card: TableCard) => {
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(0)
     let t :Table = {data: [], columns: []}

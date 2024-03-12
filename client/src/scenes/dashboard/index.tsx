@@ -1,6 +1,7 @@
 import {Box, IconButton, Tab, Tabs, useTheme} from "@mui/material";
 import Sidebar from "./Sidebar";
 import AlgorithmTabContent from "./TabContent/AlgorithmTabContent";
+import ChartTabContent from "./TabContent/ChartTabContent";
 import DatasetTabContent from "./TabContent/DatasetTabContent";
 import useTabs from "./hooks/useTabs";
 import CloseIcon from '@mui/icons-material/Close';
@@ -29,6 +30,8 @@ const Dashboard = () => {
 
     const renderTab = (file: FileObject) => {
         switch (file.type) {
+            case 'chart' :
+                return <ChartTabContent file={file}/>
             case 'algorithm':
                 return <AlgorithmTabContent file={file}/>
             case 'dataset':

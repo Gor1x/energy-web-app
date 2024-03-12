@@ -1,30 +1,43 @@
-import React, {useState} from 'react'
-import {Box} from "@mui/material";
+import React, { useState } from 'react';
+import { Box } from "@mui/material";
 import TableCSV from '../../../components/TableCSV';
 import Card from '../../../components/Card';
-import {getNameWithExtension} from '../../../utils/getFileLabel';
+import { getNameWithExtension } from '../../../utils/getFileLabel';
 import Run from './Run';
-import {useStoreon} from 'storeon/react';
-import {DatasetTabHeader} from "./DatasetTabHeader";
-import {DatasetChart} from "./DatasetChart";
-import {FileObject} from "../../../types/FileObject";
-import {ChartCard, RunCard, TableCard} from "../../../types/CardsType";
+import { useStoreon } from 'storeon/react';
+import { DatasetTabHeader } from "./DatasetTabHeader";
+import { DatasetChart } from "./DatasetChart";
+import { FileObject } from "../../../types/FileObject";
+import { ChartCard, RunCard, TableCard } from "../../../types/CardsType";
 
-const DatasetTabContent = (props: { file: FileObject }) => { //type for file?
-    const {file} = props;
+const DatasetTabContent = (props: { file: FileObject }) => {
+    const { file } = props;
+    const [entries, setEntries] = useState<number>(10); // Состояние для количества записей
     const tableCard: RunCard | ChartCard | TableCard = {
         type: "TableCard",
         props: {
-            sizePerPage: 15,
+            sizePerPage: entries,
             totalSize: file.num_rows,
             url: `datasets/data/${file.id}`
         }
-    }
+    };
     let itemsState: (RunCard | ChartCard | TableCard)[] = [tableCard]
     const [items, setItems] = useState(itemsState)
-    const {dispatch} = useStoreon('modal')
+    const { dispatch } = useStoreon('modal');
 
-    const openChartCardHandler = (column: number) => {
+    const handleEntriesChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedEntries = parseInt(event.target.value, 10);
+        setEntries(selectedEntries);
+        closeCardHandler(0)
+        if (tableCard) {
+            if (tableCard.props) {
+                tableCard.props.sizePerPage = selectedEntries;
+            }
+        }
+        openTableCardHandler()
+    };
+
+       const openChartCardHandler = (column: number) => {
         const chartCard: ChartCard = {
             type: "ChartCard",
             props: {
@@ -74,17 +87,28 @@ const DatasetTabContent = (props: { file: FileObject }) => { //type for file?
             return updated
         })
     };
-
     return (
         <Box height='100%' width='100%'>
             {/* TOOLBAR */}
-            <DatasetTabHeader openChartCardHandler={openChartCardHandler}
-                              file={file} modalCloseDispatch={() => {
-                dispatch('modal/close')
-            }
-            } modalOpenDispatch={(modal) => {
-                dispatch('modal/open', modal)
-            }} openRunCardHandler={openRunCardHandler} openTableCardHandler={openTableCardHandler}/>
+            <DatasetTabHeader
+                openChartCardHandler={openChartCardHandler}
+                file={file}
+                modalCloseDispatch={() => {
+                    dispatch('modal/close')
+                }}
+                modalOpenDispatch={(modal) => {
+                    dispatch('modal/open', modal)
+                }}
+                openRunCardHandler={openRunCardHandler}
+                openTableCardHandler={openTableCardHandler}
+            />
+            <label>Show</label>
+            <select name="length" id="length-select" value={entries} onChange={handleEntriesChange}>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+            <label> entries</label>
             {/* GRID & CHARTS */}
             <Box
                 sx={{overflowY: 'scroll'}}

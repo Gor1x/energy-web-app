@@ -21,6 +21,7 @@ const Card: ({children, columns, rows, onClose}: {
                  gridColumn={`span ${columns}`}
                  gridRow={`span ${rows}`}
                  width='1300px'
+                 height={'100%'}
     >
         <Box>
             <Box sx={{float: "right"}}>
