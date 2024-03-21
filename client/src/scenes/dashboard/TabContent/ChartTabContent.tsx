@@ -8,23 +8,16 @@ import {DatasetChart} from "./DatasetChart";
 import useTabs from "../hooks/useTabs";
 
 const ChartTabContent = (props: { file: FileObject }) => {
-
-    const {tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab} = useTabs();
     const {file} = props;
     const chartCard: ChartCard = {
         type: "ChartCard",
         props: {
             dataset: file,
-            column: '0'
+            column: file.selectColumn
         }
     }
     const [items, setItems] = useState([chartCard])
-     const openChartTabHandler = (file: FileObject, column: number) => {
-        let chartFile = file
-         chartFile.selectColumn = column
-         chartFile.id = chartFile.id + column
-        openTab(chartFile)
-    }
+
     const closeCardHandler = (i: number) => {
         setItems(() => {
             let updated = Object.assign([], items);

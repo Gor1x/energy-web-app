@@ -37,7 +37,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
         openTableCardHandler()
     };
 
-       const openChartCardHandler = (column: number) => {
+/*       const openChartCardHandler = (column: number) => {
         const chartCard: ChartCard = {
             type: "ChartCard",
             props: {
@@ -51,7 +51,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
             alert("Уже открыто")
         }
     }
-
+*/
     const openRunCardHandler = (algorithm: FileObject) => {
         const runCard: RunCard = {
             type: "RunCard",
@@ -91,8 +91,8 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
         <Box height='100%' width='100%'>
             {/* TOOLBAR */}
             <DatasetTabHeader
-                openChartCardHandler={openChartCardHandler}
-                openSelestChartTab={props.onSelectChart}
+  //              openChartCardHandler={openChartCardHandler}
+                openSelectChartTab={props.onSelectChart}
                 file={file}
                 modalCloseDispatch={() => {
                     dispatch('modal/close')
@@ -139,7 +139,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
                                 </Card>
                             )
                         }
-                        case 'ChartCard':
+                       /* case 'ChartCard':
                             let chardCard : ChartCard = {
                                 type: item.type,
                                 props: {
@@ -154,6 +154,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
                                     <DatasetChart {...chardCard} />
                                 </Card>
                             )
+                        */
                         case 'RunCard':
                             let runCard: RunCard = {
                                 type: item.type,

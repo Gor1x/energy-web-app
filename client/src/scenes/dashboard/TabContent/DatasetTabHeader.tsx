@@ -13,8 +13,8 @@ import useTabs from "../hooks/useTabs";
 type DatasetTabHeaderProps = {
     file: FileObject;
     openTableCardHandler: () => void;
-    openChartCardHandler: (card: number) => void;
-    openSelestChartTab: (file: FileObject) => void
+    //openChartCardHandler: (card: number) => void;
+    openSelectChartTab: (file: FileObject) => void
     modalOpenDispatch: (modal: any) => void;
     modalCloseDispatch: () => void;
     openRunCardHandler: (algorithm: FileObject) => void;
@@ -26,8 +26,8 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
         modalCloseDispatch,
         openRunCardHandler,
         openTableCardHandler,
-        openChartCardHandler,
-        openSelestChartTab,
+        //openChartCardHandler,
+        openSelectChartTab,
         modalOpenDispatch,
     } = datasetTabHeaderProps
     return <Box height='30px' width='100%'>
@@ -39,7 +39,7 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
                 dataset={file}
                 onSelect={(column: number) => {
                     modalCloseDispatch()
-                    openChartCardHandler(column)
+                   // openChartCardHandler(column)
                     const chartFile: FileObject = {
                         id: file.id + column,
                         type: "chart",
@@ -47,9 +47,9 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
                         user_id: file.user_id,
                         file_path: file.file_path,
                         num_rows: file.num_rows,
-                        selectColumn: column
+                        selectColumn: column.toString()
                     }
-                    openSelestChartTab(chartFile)
+                    openSelectChartTab(chartFile)
                 }}/>)}>
             <AddchartIcon/>
         </IconButton>
