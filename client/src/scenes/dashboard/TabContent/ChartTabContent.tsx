@@ -1,33 +1,29 @@
 import {useState} from 'react'
 import {Box, IconButton, useTheme} from "@mui/material";
 import Card from '../../../components/Card';
-import {useStoreon} from 'storeon/react';
 import {ChartCard, CodeCard, RunCard, TableCard} from "../../../types/CardsType";
 import {FileObject} from "../../../types/FileObject";
 import React from 'react';
 import {DatasetChart} from "./DatasetChart";
+import useTabs from "../hooks/useTabs";
 
 const ChartTabContent = (props: { file: FileObject }) => {
+
+    const {tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab} = useTabs();
     const {file} = props;
     const chartCard: ChartCard = {
         type: "ChartCard",
         props: {
             dataset: file,
-            column: '0' //TODO
+            column: '0'
         }
     }
     const [items, setItems] = useState([chartCard])
-    const {dispatch} = useStoreon('modal')
-     const openChartCardHandler = () => {
-        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(chartCard))) {
-            setItems(() => {
-                let updated = Object.assign([], items);
-                updated.splice(0, 0, chartCard)
-                return updated
-            })
-        } else {
-            alert("Уже открыто")
-        }
+     const openChartTabHandler = (file: FileObject, column: number) => {
+        let chartFile = file
+         chartFile.selectColumn = column
+         chartFile.id = chartFile.id + column
+        openTab(chartFile)
     }
     const closeCardHandler = (i: number) => {
         setItems(() => {

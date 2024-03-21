@@ -26,6 +26,7 @@ function TabPanel(props: { [x: string]: any; children: any; value: any; index: a
 
 const Dashboard = () => {
     const theme = useTheme();
+
     const {tabs, openTab, closeTab, closeTabByFile, activeTab, selectTab} = useTabs();
 
     const renderTab = (file: FileObject) => {
@@ -35,7 +36,7 @@ const Dashboard = () => {
             case 'algorithm':
                 return <AlgorithmTabContent file={file}/>
             case 'dataset':
-                return <DatasetTabContent file={file}/>
+                return <DatasetTabContent file={file} onSelectChart={openTab}/>
         }
     };
 
@@ -100,5 +101,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-

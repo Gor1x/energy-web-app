@@ -10,9 +10,9 @@ import { DatasetChart } from "./DatasetChart";
 import { FileObject } from "../../../types/FileObject";
 import { ChartCard, RunCard, TableCard } from "../../../types/CardsType";
 
-const DatasetTabContent = (props: { file: FileObject }) => {
+const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: FileObject) => void }) => {
     const { file } = props;
-    const [entries, setEntries] = useState<number>(10); // Состояние для количества записей
+    const [entries, setEntries] = useState<number>(10);
     const tableCard: RunCard | ChartCard | TableCard = {
         type: "TableCard",
         props: {
@@ -92,6 +92,7 @@ const DatasetTabContent = (props: { file: FileObject }) => {
             {/* TOOLBAR */}
             <DatasetTabHeader
                 openChartCardHandler={openChartCardHandler}
+                openSelestChartTab={props.onSelectChart}
                 file={file}
                 modalCloseDispatch={() => {
                     dispatch('modal/close')
