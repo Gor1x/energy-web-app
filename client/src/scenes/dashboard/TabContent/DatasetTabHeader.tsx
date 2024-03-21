@@ -43,7 +43,7 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
                     const chartFile: FileObject = {
                         id: file.id + column,
                         type: "chart",
-                        name: file.name,
+                        name: column.toString() + " from " + file.name,
                         user_id: file.user_id,
                         file_path: file.file_path,
                         num_rows: file.num_rows,
