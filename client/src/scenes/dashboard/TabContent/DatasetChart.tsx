@@ -32,7 +32,7 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
             from: "0",
-            to: "200",
+            to: "200", //max len data in chart
         })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: unknown) => line);
@@ -48,8 +48,8 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     const config: LineChartConfigType = {
         title: column.toString(),
         type: "Line",
-        height: "400px",
-        width: "100vw",
+        height: "500px",
+        width: "100%",
         xAxis: values.length,
         yAxis: [column],
         yNames: [column.toString()],

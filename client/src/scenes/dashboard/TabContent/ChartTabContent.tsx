@@ -9,57 +9,34 @@ import useTabs from "../hooks/useTabs";
 
 const ChartTabContent = (props: { file: FileObject }) => {
     const {file} = props;
+    let chartFile: FileObject = {
+                        id: file.file_id,
+                        type: "chart",
+                        name: file.selectColumn + " from " + file.name,
+                        user_id: file.user_id,
+                        file_path: file.file_path,
+                        num_rows: file.num_rows,
+                        selectColumn: file.selectColumn,
+                        file_id: file.file_id
+                    }
     const chartCard: ChartCard = {
         type: "ChartCard",
         props: {
-            dataset: file,
-            column: file.selectColumn
+            dataset: chartFile,
+            column: chartFile.selectColumn
         }
     }
-    const [items, setItems] = useState([chartCard])
-
-    const closeCardHandler = (i: number) => {
-        setItems(() => {
-            let updated = Object.assign([], items);
-            updated.splice(i, 1)
-            return updated
-        })
-    };
-
     return (
-        <Box height='100%'>
-            {/* GRID & CHARTS */}
             <Box
                 sx={{overflowY: 'scroll'}}
-                height="calc(100% - 40px)"
+                height="540px"
                 width="100%"
                 p='20px'
                 display="grid"
-                gridTemplateColumns="repeat(12, 1fr)"
                 gridAutoRows="80px"
                 gap="20px">
-                {items.map((item, i) => {
-                    return (<Card key={`card}`} rows={'4'} columns={'6'} onClose={() => closeCardHandler(i)}>
-                        <DatasetChart {...item} />
-                    </Card>)
-                })}
+                <DatasetChart {...chartCard} />
             </Box>
-        </Box>
     );
 }
-/* const openChartCardHandler = (column: number) => {
-        const chartCard: ChartCard = {
-            type: "ChartCard",
-            props: {
-                dataset: file,
-                column: column.toString()
-            }
-        };
-        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(chartCard))) {
-            setItems([...items, chartCard]);
-        } else {
-            alert("Уже открыто")
-        }
-    }
-*/
 export default ChartTabContent;

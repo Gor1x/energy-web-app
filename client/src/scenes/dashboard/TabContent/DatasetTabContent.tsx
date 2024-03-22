@@ -6,7 +6,6 @@ import { getNameWithExtension } from '../../../utils/getFileLabel';
 import Run from './Run';
 import { useStoreon } from 'storeon/react';
 import { DatasetTabHeader } from "./DatasetTabHeader";
-import { DatasetChart } from "./DatasetChart";
 import { FileObject } from "../../../types/FileObject";
 import { ChartCard, RunCard, TableCard } from "../../../types/CardsType";
 
@@ -37,21 +36,6 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
         openTableCardHandler()
     };
 
-/*       const openChartCardHandler = (column: number) => {
-        const chartCard: ChartCard = {
-            type: "ChartCard",
-            props: {
-                dataset: file,
-                column: column.toString()
-            }
-        };
-        if (!items.find((item) => JSON.stringify(item) === JSON.stringify(chartCard))) {
-            setItems([...items, chartCard]);
-        } else {
-            alert("Уже открыто")
-        }
-    }
-*/
     const openRunCardHandler = (algorithm: FileObject) => {
         const runCard: RunCard = {
             type: "RunCard",
@@ -91,8 +75,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
         <Box height='100%' width='100%'>
             {/* TOOLBAR */}
             <DatasetTabHeader
-  //              openChartCardHandler={openChartCardHandler}
-                openSelectChartTab={props.onSelectChart}
+               openSelectChartTab={props.onSelectChart}
                 file={file}
                 modalCloseDispatch={() => {
                     dispatch('modal/close')
@@ -139,23 +122,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
                                 </Card>
                             )
                         }
-                       /* case 'ChartCard':
-                            let chardCard : ChartCard = {
-                                type: item.type,
-                                props: {
-                                    // @ts-ignore
-                                    dataset: item.props?.dataset,
-                                    // @ts-ignore
-                                    column: item.props?.column
-                                }
-                            }
-                            return (
-                                <Card key={`card-${i}`} rows={'4'} columns={'6'} onClose={() => closeCardHandler(i)}>
-                                    <DatasetChart {...chardCard} />
-                                </Card>
-                            )
-                        */
-                        case 'RunCard':
+                    case 'RunCard':
                             let runCard: RunCard = {
                                 type: item.type,
                                 props: {

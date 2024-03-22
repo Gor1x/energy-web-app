@@ -12,8 +12,8 @@ export type RunCard = {
     type: string
     props: {
         title: string
-        algorithm_id: number
-        dataset_id: number
+        algorithm_id: string
+        dataset_id: string
     }
 }
 

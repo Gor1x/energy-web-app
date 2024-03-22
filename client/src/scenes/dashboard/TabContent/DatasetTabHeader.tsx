@@ -13,7 +13,6 @@ import useTabs from "../hooks/useTabs";
 type DatasetTabHeaderProps = {
     file: FileObject;
     openTableCardHandler: () => void;
-    //openChartCardHandler: (card: number) => void;
     openSelectChartTab: (file: FileObject) => void
     modalOpenDispatch: (modal: any) => void;
     modalCloseDispatch: () => void;
@@ -26,7 +25,6 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
         modalCloseDispatch,
         openRunCardHandler,
         openTableCardHandler,
-        //openChartCardHandler,
         openSelectChartTab,
         modalOpenDispatch,
     } = datasetTabHeaderProps
@@ -39,7 +37,6 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
                 dataset={file}
                 onSelect={(column: number) => {
                     modalCloseDispatch()
-                   // openChartCardHandler(column)
                     const chartFile: FileObject = {
                         id: file.id + column,
                         type: "chart",
@@ -47,7 +44,8 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
                         user_id: file.user_id,
                         file_path: file.file_path,
                         num_rows: file.num_rows,
-                        selectColumn: column.toString()
+                        selectColumn: column.toString(),
+                        file_id: file.id
                     }
                     openSelectChartTab(chartFile)
                 }}/>)}>
