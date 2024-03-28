@@ -32,13 +32,14 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
             from: "0",
-            to: "200", //max len data in chart
+            to: "20000", // max len data in chart
+            column: column
         })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: unknown) => line);
-                setValues(data.map((row : StringToNumber) => row[column]))
+                setValues(data.map((row: any) => row[column]));
             });
-    }, [column, dataset.id])
+    }, [column, dataset.id]);
 
     useEffect(() => {
         window.addEventListener('resize', triggerResize)

@@ -1,4 +1,4 @@
-import {SetStateAction, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import {authFetch} from '../auth';

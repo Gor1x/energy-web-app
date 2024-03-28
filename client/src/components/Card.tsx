@@ -1,9 +1,7 @@
-import {Box, IconButton, PaletteOptions, useTheme} from "@mui/material";
+import {Box, IconButton, useTheme} from "@mui/material";
 import {themeSettings} from "../theme";
 import CloseIcon from '@mui/icons-material/Close';
 import React, {ReactNode} from "react";
-import {PaletteColorOptions, SimplePaletteColorOptions} from "@mui/material/styles/createPalette";
-import {ThemeOptions} from "@mui/material/styles/createTheme";
 
 const Card: ({children, columns, rows, onClose}: {
     children: ReactNode;
@@ -20,7 +18,7 @@ const Card: ({children, columns, rows, onClose}: {
                  bgcolor={paletteBgColor}
                  gridColumn={`span ${columns}`}
                  gridRow={`span ${rows}`}
-                 width='1300px'
+                 width='1000px'
                  height={'100%'}
     >
         <Box>
