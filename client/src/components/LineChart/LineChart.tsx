@@ -5,9 +5,10 @@ import {LineChartConfigType} from "../../types/LineChartConfigType";
 
 const LineChart = ({config, resize} : {config: LineChartConfigType, resize: boolean}) => {
     const {data} = config
-
+    let i = 0;
     let {xAxis, yAxis} = data.reduce((accum, iter) => {
-        accum.xAxis.push(iter[config.xAxis])
+        accum.xAxis.push(i++)
+
         config.yAxis.forEach((lineName, index) => {
             if (!accum.yAxis[index]) {
                 accum.yAxis.push([iter[config.yAxis[index]]])
@@ -15,6 +16,7 @@ const LineChart = ({config, resize} : {config: LineChartConfigType, resize: bool
                 accum.yAxis[index].push(iter[config.yAxis[index]])
             }
         })
+
         return accum
     }, {xAxis: [] as number[], yAxis: [] as number[][]})
 

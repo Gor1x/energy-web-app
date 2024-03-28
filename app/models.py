@@ -57,6 +57,13 @@ class Dataset(db.Model):
 @event.listens_for(Dataset.__table__, 'after_create')
 def insert_default_datasets(*args, **kwargs):
     db.session.add(Dataset(user_id=-1, name='Meteo_0_test_1', num_rows=5931021, file_path='app\\default_datasets\\d1f538c3-79ba-4e48-946e-9fe870d2fa8c'))
+
+    db.session.add(Dataset(user_id=-1, name='Power_2021_2023', num_rows=5931021, file_path='app\\default_datasets\\35a90a02-8d81-46fe-b629-2a4f92199d52'))
+
+    db.session.add(Dataset(user_id=-1, name='Climate_2021_2023', num_rows=5931021, file_path='app\\default_datasets\\1784310f-e84e-479c-aa90-4768be200af5'))
+
+    db.session.add(Dataset(user_id=-1, name='Meteo_2021_2023', num_rows=5931021, file_path='app\\default_datasets\\8d94fddd-c3b1-484a-ba8b-34cc0d51db36'))
+
     db.session.commit()
 
 @event.listens_for(Algorithm.__table__, 'after_create')
