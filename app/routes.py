@@ -191,7 +191,7 @@ class DatasetResource(Resource):
             df["iddx"] = 1
             df["iddx"] = df["iddx"].cumsum()
             df = df.set_index("iddx")
-            df.to_csv(file_path, compression='gzip')
+            df.to_csv(file_path)
             json_file = f"{file_path}/index.json" 
             json.dump(pfsums, codecs.open(json_file, 'w', encoding='utf-8'), sort_keys=True, indent=4)
 
@@ -264,7 +264,7 @@ class DatasetDataByIdResource(Resource):
             from_file = np.searchsorted(pfsum, from_row, side='left')
             to_file = np.searchsorted(pfsum, to_row - 2, side='rigth')
             filenames = glob(normalize_path(f"{dataset.file_path}/*.part"))
-            df = dd.read_csv(filenames[from_file:to_file+1], compression='gzip').set_index('iddx')
+            df = dd.read_csv(filenames[from_file:to_file+1]).set_index('iddx')
             return make_response(df.loc[from_row:to_row-1].compute().to_json(orient='records'), 200)
             
             #return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
