@@ -17,7 +17,7 @@ export type LineChartOption = {
     },
     xAxis: {
         type: string,
-        data: number[],
+        data: string[],
         boundaryGap: boolean,
         splitLine: {
             show: boolean,

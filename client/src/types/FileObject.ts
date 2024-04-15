@@ -6,5 +6,6 @@ export type FileObject = {
     type: string
     num_rows: number
     selectColumn: string
+    selectDates: {fromDate: string, toDate: string}
     file_id: string
 }

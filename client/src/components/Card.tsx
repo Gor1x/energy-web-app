@@ -18,7 +18,7 @@ const Card: ({children, columns, rows, onClose}: {
                  bgcolor={paletteBgColor}
                  gridColumn={`span ${columns}`}
                  gridRow={`span ${rows}`}
-                 width='1000px'
+                 width='1250px'
                  height={'100%'}
     >
         <Box>

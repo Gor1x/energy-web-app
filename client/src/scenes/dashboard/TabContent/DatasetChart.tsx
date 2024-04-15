@@ -1,10 +1,10 @@
 import {useCallback, useEffect, useState} from "react";
 import {authFetch} from "../../../auth";
 import {Box} from "@mui/material";
-import LineChart from "../../../components/LineChart/LineChart";
 import * as React from 'react';
 import {ChartCard} from "../../../types/CardsType";
 import {LineChartConfigType} from "../../../types/LineChartConfigType";
+import LineChart from "../../../components/LineChart/LineChart";
 
 export function DatasetChart(datasetChartProps: ChartCard) {
     const {dataset, column} = datasetChartProps.props
@@ -12,6 +12,8 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     const [timer, setTimer] = useState(0)
     let valuesInitState: number[] = []
     const [values, setValues] = useState(valuesInitState)
+    let datesInitState: string[] = []
+    const [dates, setDates] = useState(datesInitState)
 
     const triggerResize = useCallback(() => {
         if (timer) {
@@ -32,14 +34,26 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
             from: "0",
-            to: "20000", // max len data in chart
+            to: Math.min(17000, dataset.num_rows).toString(),
             column: column
         })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: unknown) => line);
-                setValues(data.map((row: any) => row[column]));
+                setValues(data);
             });
     }, [column, dataset.id]);
+
+     useEffect(() => {
+            authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
+                from: "0",
+                to: Math.min(17000, dataset.num_rows).toString(),
+                column: "Date"
+            })).then(response => response.json())
+                .then(data_ => {
+                    const data = data_.map((line: unknown) => line);
+                    setDates(data);
+                });
+        }, [dataset.id]);
 
     useEffect(() => {
         window.addEventListener('resize', triggerResize)
@@ -51,7 +65,7 @@ export function DatasetChart(datasetChartProps: ChartCard) {
         type: "Line",
         height: "500px",
         width: "100%",
-        xAxis: values.length,
+        xAxis: dates,
         yAxis: [column],
         yNames: [column.toString()],
         data: values.map((value, i) => ({[column]: value, date: i}))

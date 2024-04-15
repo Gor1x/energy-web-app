@@ -249,6 +249,10 @@ class DatasetDataByIdResource(Resource):
         args = request.args
         from_row = int(args['from'])
         to_row = int(args['to'])
+        column = ""
+        if 'column' in args:
+            column = args['column']
+
         user_id=User.query.filter_by(username=get_jwt_identity()).first().id
         dataset = Dataset.query.get_or_404(id)
         if dataset.user_id == -1 or dataset.user_id == user_id:
@@ -265,8 +269,12 @@ class DatasetDataByIdResource(Resource):
             to_file = np.searchsorted(pfsum, to_row - 2, side='rigth')
             filenames = glob(normalize_path(f"{dataset.file_path}/*.part"))
             df = dd.read_csv(filenames[from_file:to_file+1]).set_index('iddx')
-            return make_response(df.loc[from_row:to_row-1].compute().to_json(orient='records'), 200)
-            
+
+            if column not in df.columns:
+                return make_response(df.loc[from_row:to_row-1].compute().to_json(orient='records'), 200)
+
+            return make_response(df.loc[from_row:to_row - 1, column].compute().to_json(orient='records'), 200)
+
             #return make_response(df.loc[(int(from_row)+1):int(to_row)].compute().to_json(orient='records'), 200)
         
 

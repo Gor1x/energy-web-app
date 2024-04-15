@@ -3,7 +3,7 @@ export type LineChartConfigType = {
     type: string,
     height: string,
     width: string,
-    xAxis: number,
+    xAxis: string[],
     yAxis: string[],
     yNames: string[],
     data: DatasType[]

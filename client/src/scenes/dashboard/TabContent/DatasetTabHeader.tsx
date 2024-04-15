@@ -6,9 +6,6 @@ import OpenChartModal from '../modals/OpenChartModal'
 import RunOnAlgorithmModal from '../modals/RunOnAlgorithmModal';
 import * as React from 'react';
 import {FileObject} from "../../../types/FileObject";
-import {ChartCard} from "../../../types/CardsType";
-import {File} from "node:buffer";
-import useTabs from "../hooks/useTabs";
 
 type DatasetTabHeaderProps = {
     file: FileObject;
@@ -35,7 +32,7 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
         <IconButton onClick={() => modalOpenDispatch(
             <OpenChartModal
                 dataset={file}
-                onSelect={(column: number) => {
+                onSelect={(column: string, selectDates: {fromDate: string, toDate: string}) => {
                     modalCloseDispatch()
                     const chartFile: FileObject = {
                         id: file.id + column,
@@ -45,6 +42,7 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
                         file_path: file.file_path,
                         num_rows: file.num_rows,
                         selectColumn: column.toString(),
+                        selectDates: selectDates,
                         file_id: file.id
                     }
                     openSelectChartTab(chartFile)

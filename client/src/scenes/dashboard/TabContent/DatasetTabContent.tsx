@@ -86,13 +86,13 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
                 openRunCardHandler={openRunCardHandler}
                 openTableCardHandler={openTableCardHandler}
             />
-            <label>Show</label>
+            {/*<label>Show</label>
             <select name="length" id="length-select" value={entries} onChange={handleEntriesChange}>
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
             </select>
-            <label> entries</label>
+            <label> entries</label>*/}
             {/* GRID & CHARTS */}
             <Box
                 sx={{overflowY: 'scroll'}}

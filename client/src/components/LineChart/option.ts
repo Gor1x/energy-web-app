@@ -7,7 +7,7 @@ type ColorStop = {
     offset: number;
     color: string;
 };
-export const lineChartOption = (xAxis: number[], yAxis: number[][], config: { yNames: { [p: string]: any } }) : LineChartOption => {
+export const lineChartOption = (xAxis: string[], yAxis: number[][], config: { yNames: { [p: string]: any } }) : LineChartOption => {
     let colorStops = [{
         offset: 0,
         color: colors[1]
