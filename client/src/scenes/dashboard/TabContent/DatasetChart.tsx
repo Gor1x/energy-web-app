@@ -7,6 +7,8 @@ import {LineChartConfigType} from "../../../types/LineChartConfigType";
 import LineChart from "../../../components/LineChart/LineChart";
 
 export function DatasetChart(datasetChartProps: ChartCard) {
+    const fromDate = datasetChartProps.props.dataset.selectDates.fromDate
+    const toDate = datasetChartProps.props.dataset.selectDates.toDate
     const {dataset, column} = datasetChartProps.props
     const [resize, setResize] = useState(false)
     const [timer, setTimer] = useState(0)
@@ -31,10 +33,13 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     type StringToNumber = {
         [key: string]: number
     }
+
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
             from: "0",
             to: Math.min(17000, dataset.num_rows).toString(),
+            from_date: fromDate,
+            to_date: toDate,
             column: column
         })).then(response => response.json())
             .then(data_ => {
@@ -42,11 +47,12 @@ export function DatasetChart(datasetChartProps: ChartCard) {
                 setValues(data);
             });
     }, [column, dataset.id]);
-
      useEffect(() => {
             authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
                 from: "0",
                 to: Math.min(17000, dataset.num_rows).toString(),
+                from_date: fromDate,
+                to_date: toDate,
                 column: "Date"
             })).then(response => response.json())
                 .then(data_ => {
@@ -54,6 +60,7 @@ export function DatasetChart(datasetChartProps: ChartCard) {
                     setDates(data);
                 });
         }, [dataset.id]);
+
 
     useEffect(() => {
         window.addEventListener('resize', triggerResize)

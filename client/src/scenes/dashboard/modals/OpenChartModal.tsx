@@ -16,6 +16,7 @@ const OpenChartModal = ({dataset, onSelect}: {
     const [columns, setColumns] = useState(initState);
     const [fromDate, setFromDate] = useState(initFrom);
     const [toDate, setToDate] = useState(initTo);
+    const [selectedColumn, setSelectedColumn] = useState<string>("");
 
     useEffect(() => {
         authFetch(`/datasets/data/${dataset.id}?from=1&to=2`)
@@ -24,12 +25,13 @@ const OpenChartModal = ({dataset, onSelect}: {
                 const data = data_.map((line: string) => line);
                 const column = Object.entries(data[0]).map(([key, _]) => key);
                 setColumns(column);
+                setSelectedColumn(column[0]); // Выберите первую колонку по умолчанию
             });
     }, []);
 
     const handleSelectDate = () => {
         if (fromDate && toDate) {
-            onSelect(columns[0], {fromDate, toDate});
+            onSelect(selectedColumn, { fromDate, toDate });
         } else {
         }
     };
@@ -52,8 +54,8 @@ const OpenChartModal = ({dataset, onSelect}: {
             </Typography>
             <MenuList>
                 {columns.map((column, i) => (
-                    <MenuItem key={`modal-column-${i}`}>
-                        <ListItemText sx={{color: primary}}>{column}</ListItemText>
+                    <MenuItem key={`modal-column-${i}`} onClick={() => setSelectedColumn(column)}>
+                        <ListItemText sx={{ color: primary }}>{column}</ListItemText>
                     </MenuItem>
                 ))}
             </MenuList>
@@ -81,10 +83,10 @@ const OpenChartModal = ({dataset, onSelect}: {
                     />
                 </MenuItem>
                 <MenuItem onClick={handleSelectDate}>
-                    <ListItemIcon sx={{color: primary}}>
-                        <FileOpenIcon/>
+                    <ListItemIcon sx={{ color: primary }}>
+                        <FileOpenIcon />
                     </ListItemIcon>
-                    <ListItemText sx={{color: primary}}>Выбрать</ListItemText>
+                    <ListItemText sx={{ color: primary }}>Выбрать</ListItemText>
                 </MenuItem>
             </MenuList>
         </Box>
