@@ -3,12 +3,15 @@ import {themeSettings} from "../theme";
 import CloseIcon from '@mui/icons-material/Close';
 import React, {ReactNode} from "react";
 
-const Card: ({children, columns, rows, onClose}: {
-    children: ReactNode;
+type CardProps = {
+    children: React.ReactNode;
     columns: string;
     rows: string;
-    onClose: {() : void}
-}) => React.JSX.Element = ({children, columns, rows, onClose}) => {
+    onClose: () => void;
+    closeable?: boolean;
+};
+
+const Card = ({ children, columns, rows, onClose, closeable = true }: CardProps) => {
     const theme = useTheme();
     const palette = themeSettings(theme.palette.mode).palette;
 
@@ -21,13 +24,13 @@ const Card: ({children, columns, rows, onClose}: {
                  width='1250px'
                  height={'100%'}
     >
-        <Box>
+        {closeable && <Box>
             <Box sx={{float: "right"}}>
                 <IconButton size="small" onClick={onClose}>
                     <CloseIcon fontSize="inherit"/>
                 </IconButton>
             </Box>
-        </Box>
+        </Box>}
         {children}
     </Box>)
 }
