@@ -117,7 +117,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
                                 }
                             }
                             return (
-                                <Card key={`card-${i}`} rows={'4'} columns={'6'} onClose={() => closeCardHandler(i)}>
+                                <Card key={`card-${i}`} rows={'4'} columns={'6'} onClose={() => closeCardHandler(i)} closeable={false}>
                                     <TableCSV {...tableCard} />
                                 </Card>
                             )
