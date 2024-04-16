@@ -282,8 +282,8 @@ class DatasetDataByIdResource(Resource):
             df = dd.read_csv(filenames[from_file:to_file + 1]).set_index('iddx')
 
             if 'Date' in df.columns and from_date != "" and to_date != "":
-                df['Date'] = dd.to_datetime(df['Date'])
-                mask = (df['Date'] >= from_date) & (df['Date'] <= to_date)
+                series = dd.to_datetime(df['Date'])
+                mask = (series >= from_date) & (series <= to_date)
                 df = df.loc[mask]
 
             if column not in df.columns:
