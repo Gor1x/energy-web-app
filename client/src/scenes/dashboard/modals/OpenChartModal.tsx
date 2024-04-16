@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {Box, ListItemIcon, ListItemText, MenuItem, MenuList, TextField, Typography, useTheme} from "@mui/material";
 import {authFetch} from "../../../auth";
-import {FileObject} from "../../../types/FileObject";
+import {FileObject, SelectDates} from "../../../types/FileObject";
 import FileOpenIcon from '@mui/icons-material/FileOpen';
 
 const OpenChartModal = ({dataset, onSelect}: {
     dataset: FileObject;
-    onSelect: (column: string, selectDates: { fromDate: string; toDate: string }) => void;
+    onSelect: (column: string, selectDates?: SelectDates) => void;
 }) => {
     const theme = useTheme();
     const primary = theme.palette.primary.dark;
@@ -31,11 +31,16 @@ const OpenChartModal = ({dataset, onSelect}: {
 
     const handleSelectDate = () => {
         if (fromDate && toDate) {
-            onSelect(selectedColumn, { fromDate, toDate });
+            onSelect(selectedColumn, {fromDate, toDate});
         } else {
+            onSelect(selectedColumn)
         }
     };
+    const [datesAreVisible, setDatesAreVisible] = useState(false)
 
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDatesAreVisible(event.target.checked);
+    };
     return (
         <Box
             sx={{
@@ -54,13 +59,22 @@ const OpenChartModal = ({dataset, onSelect}: {
             </Typography>
             <MenuList>
                 {columns.map((column, i) => (
-                    <MenuItem key={`modal-column-${i}`} onClick={() => setSelectedColumn(column)}>
-                        <ListItemText sx={{ color: primary }}>{column}</ListItemText>
+                    <MenuItem key={`modal-column-${i}`} selected={selectedColumn === column}
+                              onClick={() => setSelectedColumn(column)}>
+                        <ListItemText sx={{color: primary}}>{column}</ListItemText>
                     </MenuItem>
                 ))}
             </MenuList>
+            <label>
+                <input
+                    type="checkbox"
+                    checked={datesAreVisible}
+                    onChange={handleCheckboxChange}
+                />
+                Выбрать даты
+            </label>
             <MenuList>
-                <MenuItem>
+                <MenuItem hidden={!datesAreVisible}>
                     <TextField
                         label="От"
                         type="date"
@@ -71,7 +85,7 @@ const OpenChartModal = ({dataset, onSelect}: {
                         }}
                     />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem hidden={!datesAreVisible}>
                     <TextField
                         label="До"
                         type="date"
@@ -83,10 +97,10 @@ const OpenChartModal = ({dataset, onSelect}: {
                     />
                 </MenuItem>
                 <MenuItem onClick={handleSelectDate}>
-                    <ListItemIcon sx={{ color: primary }}>
-                        <FileOpenIcon />
+                    <ListItemIcon sx={{color: primary}}>
+                        <FileOpenIcon/>
                     </ListItemIcon>
-                    <ListItemText sx={{ color: primary }}>Выбрать</ListItemText>
+                    <ListItemText sx={{color: primary}}>Выбрать</ListItemText>
                 </MenuItem>
             </MenuList>
         </Box>
