@@ -25,7 +25,12 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
         openSelectChartTab,
         modalOpenDispatch,
     } = datasetTabHeaderProps
-    return <Box height='30px' width='100%'>
+    return <Box display='flex' padding='3px' height='30px' width='100%'
+    sx={{
+        boxShadow: '-5px 5px 5px -5px rgba(0, 0, 0, 0.5)',
+        zIndex: 1,
+        position: 'relative'
+    }}>
         <IconButton onClick={openTableCardHandler}>
             <TableRowsIcon/>
         </IconButton>
