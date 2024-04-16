@@ -7,4 +7,5 @@ export type Table = {
 export type ColumnsType = {
     dataField:string,
     text:string
+    headerStyle?: any
 }
