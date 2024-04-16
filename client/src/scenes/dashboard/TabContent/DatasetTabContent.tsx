@@ -72,7 +72,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
         })
     };
     return (
-        <Box height='100%' width='100%'>
+        <Box height='100%' width='100%' display="flex" flexDirection="column" >
             {/* TOOLBAR */}
             <DatasetTabHeader
                openSelectChartTab={props.onSelectChart}
@@ -98,10 +98,11 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
                 sx={{overflowY: 'scroll'}}
                 height="100%"
                 width="100%"
-                paddingLeft="20px"
+                paddingLeft="13px"
+                paddingTop="10px"
+                paddingBottom="10px"
                 display="grid"
-                gridTemplateColumns="repeat(12, 1fr)"
-                gap="20px">
+                gridTemplateColumns="repeat(12, 1fr)">
                 {items.map((item, i) => {
                     switch (item.type) {
                         case 'TableCard': {
