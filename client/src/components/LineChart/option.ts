@@ -7,13 +7,15 @@ type ColorStop = {
     offset: number;
     color: string;
 };
-export const lineChartOption = (xAxis: string[], yAxis: number[][], config: { yNames: { [p: string]: any } }) : LineChartOption => {
+export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
+    yNames: { [p: string]: any }
+}): LineChartOption => {
     let colorStops = [{
         offset: 0,
-        color: colors[1]
+        color: colors[2]
     }, {
         offset: 1,
-        color: 'rgba(199, 237, 250,0.2)'
+        color: 'rgba(0,184,250,0.2)'
     }] as ColorStop[];
     return ({
         tooltip: {
@@ -81,6 +83,7 @@ export const lineChartOption = (xAxis: string[], yAxis: number[][], config: { yN
         series: yAxis.map((trendData, index) => ({
             name: config.yNames[index],
             type: 'line',
+            sampling: 'lttb',
             smooth: true,
             showSymbol: false,
             symbol: 'circle',
@@ -88,19 +91,36 @@ export const lineChartOption = (xAxis: string[], yAxis: number[][], config: { yN
             data: trendData,
             areaStyle: {
                 normal: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, colorStops, false)
+                    color: new echarts.graphic.LinearGradient(0, 0, 1, 1, colorStops, false)
                 }
             },
             itemStyle: {
                 normal: {
-                    color: colors[1]
+                    color: colors[2]
                 }
             },
             lineStyle: {
                 normal: {
-                    width: 3
+                    width: 1
                 }
             }
-        }))
+        })),
+        dataZoom: [
+            {
+                type: 'inside', // Enable zooming by mouse wheel inside the chart area
+                xAxisIndex: [0], // Apply zooming to the x-axis
+                start: 0, // Initial zoom start percentage
+                end: 100, // Initial zoom end percentage
+                showDataShadow: true,
+                minSpan: 2
+            },
+            {
+                type: 'slider', // Show a slider for zooming and panning
+                xAxisIndex: [0], // Apply slider to the x-axis
+                start: 0, // Initial slider start percentage
+                end: 100, // Initial slider end percentage
+                minSpan: 2
+            },
+        ],
     });
 };
