@@ -102,7 +102,10 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
     //@ts-ignore
     const bgColorSidebar = colors?.background?.paper
     return (
-        <Box {...other}>
+        <Box {...other} sx={{
+        zIndex: 2,
+        position: 'relative'
+    }}>
             <MenuList
                 style={{
                     "height": "100%",
