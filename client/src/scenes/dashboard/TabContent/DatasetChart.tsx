@@ -7,8 +7,8 @@ import {LineChartConfigType} from "../../../types/LineChartConfigType";
 import LineChart from "../../../components/LineChart/LineChart";
 
 export function DatasetChart(datasetChartProps: ChartCard) {
-    const fromDate = datasetChartProps.props.dataset.selectDates.fromDate
-    const toDate = datasetChartProps.props.dataset.selectDates.toDate
+    const fromDate = datasetChartProps.props.dataset.selectDates?.fromDate
+    const toDate = datasetChartProps.props.dataset.selectDates?.toDate
     const {dataset, column} = datasetChartProps.props
     const [resize, setResize] = useState(false)
     const [timer, setTimer] = useState(0)
@@ -35,31 +35,41 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     }
 
     useEffect(() => {
-        authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
+        let urlSearchParams = new URLSearchParams({
             from: "0",
             to: Math.min(17000, dataset.num_rows).toString(),
-            from_date: fromDate,
-            to_date: toDate,
             column: column
-        })).then(response => response.json())
+        });
+        if (fromDate !== undefined) {
+            urlSearchParams.append('from_date', fromDate);
+        }
+        if (toDate !== undefined) {
+            urlSearchParams.append('to_date', toDate);
+        }
+        authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: unknown) => line);
                 setValues(data);
             });
     }, [column, dataset.id]);
-     useEffect(() => {
-            authFetch(`/datasets/data/${dataset.id}?` + new URLSearchParams({
-                from: "0",
-                to: Math.min(17000, dataset.num_rows).toString(),
-                from_date: fromDate,
-                to_date: toDate,
-                column: "Date"
-            })).then(response => response.json())
-                .then(data_ => {
-                    const data = data_.map((line: unknown) => line);
-                    setDates(data);
-                });
-        }, [dataset.id]);
+    useEffect(() => {
+        let urlSearchParams = new URLSearchParams({
+            from: "0",
+            to: Math.min(17000, dataset.num_rows).toString(),
+            column: "Date"
+        });
+        if (fromDate !== undefined) {
+            urlSearchParams.append('from_date', fromDate);
+        }
+        if (toDate !== undefined) {
+            urlSearchParams.append('to_date', toDate);
+        }
+        authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams).then(response => response.json())
+            .then(data_ => {
+                const data = data_.map((line: unknown) => line);
+                setDates(data);
+            });
+    }, [dataset.id]);
 
 
     useEffect(() => {
