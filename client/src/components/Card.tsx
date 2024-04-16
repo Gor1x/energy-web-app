@@ -21,7 +21,7 @@ const Card = ({ children, columns, rows, onClose, closeable = true }: CardProps)
                  bgcolor={paletteBgColor}
                  gridColumn={`span ${columns}`}
                  gridRow={`span ${rows}`}
-                 width='1250px'
+                 width='100%'
                  height={'100%'}
     >
         {closeable && <Box>
