@@ -5,7 +5,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import OpenChartModal from '../modals/OpenChartModal'
 import RunOnAlgorithmModal from '../modals/RunOnAlgorithmModal';
 import * as React from 'react';
-import {FileObject} from "../../../types/FileObject";
+import {FileObject, SelectDates} from "../../../types/FileObject";
 
 type DatasetTabHeaderProps = {
     file: FileObject;
@@ -31,13 +31,13 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
         zIndex: 1,
         position: 'relative'
     }}>
-        <IconButton onClick={openTableCardHandler}>
+        {false && <IconButton onClick={openTableCardHandler}>
             <TableRowsIcon/>
-        </IconButton>
+        </IconButton>}
         <IconButton onClick={() => modalOpenDispatch(
             <OpenChartModal
                 dataset={file}
-                onSelect={(column: string, selectDates: {fromDate: string, toDate: string}) => {
+                onSelect={(column: string, selectDates?: SelectDates) => {
                     modalCloseDispatch()
                     const chartFile: FileObject = {
                         id: file.id + column,
