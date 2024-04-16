@@ -15,7 +15,7 @@ import {ColumnsType, Table} from "../types/Table";
 export const TableCSV = (card: TableCard) => {
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(0)
-    let t :Table = {data: [], columns: []}
+    let t: Table = {data: [], columns: []}
     const [table, setTable] = useState(t)
     const updatePage = (page: number) => {
         setIsLoading(true);
@@ -25,17 +25,21 @@ export const TableCSV = (card: TableCard) => {
         if (to >= card.props.totalSize) {
             to = card.props.totalSize
         }
-        authFetch(`/${card.props.url}?` + new URLSearchParams({from: from.toString(), to: to.toString()})).then(response => response.json())
+        authFetch(`/${card.props.url}?` + new URLSearchParams({
+            from: from.toString(),
+            to: to.toString()
+        })).then(response => response.json())
             .then(data_ => {
                 const data = data_.map((line: string) => line);
                 const column: ColumnsType[] = []
                 for (const [key, _] of Object.entries(data[0])) {
                     column.push({
                         dataField: key,
-                        text: key
+                        text: key,
+                        headerStyle: {'width': '10em'}
                     })
                 }
-                let t :Table = {data: data, columns: column}
+                let t: Table = {data: data, columns: column}
                 setTable(t)
                 setIsLoading(false);
             });
@@ -58,16 +62,17 @@ export const TableCSV = (card: TableCard) => {
         withFirstAndLast: false,
         onPageChange: (page: number, _: any) => updatePage(page)
     });
-    return (
-        isLoading  ? <LoadingSpinner/>
-            :  <BootstrapTable
+    return (isLoading ?
+            <LoadingSpinner/>
+            : <BootstrapTable
                 bootstrap4
                 keyField='Unnamed: 0'
                 data={table.data}
                 columns={table.columns}
                 pagination={pagination}
                 remote
-                onTableChange={() => {}}
+                onTableChange={() => {
+                }}
                 striped
                 bordered
                 hover
