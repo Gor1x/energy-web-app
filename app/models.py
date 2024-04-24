@@ -56,11 +56,11 @@ class Dataset(db.Model):
 
 @event.listens_for(Dataset.__table__, 'after_create')
 def insert_default_datasets(*args, **kwargs):
-    db.session.add(Dataset(user_id=-1, name='Climate_2021_2023', num_rows=5931021, file_path='app\\default_datasets\\0ad7ba6c-73da-402a-92d6-52f4ba05a8df'))
+    db.session.add(Dataset(user_id=-1, name='Climate_2021_2023', num_rows=145337, file_path='app\\default_datasets\\0ad7ba6c-73da-402a-92d6-52f4ba05a8df'))
 
-    db.session.add(Dataset(user_id=-1, name='Meteo_2021_2023', num_rows=5931021, file_path='app\\default_datasets\\51724a33-bb2c-42c9-8ed3-cbd7f7b061e5'))
+    db.session.add(Dataset(user_id=-1, name='Meteo_2021_2023', num_rows=25495, file_path='app\\default_datasets\\51724a33-bb2c-42c9-8ed3-cbd7f7b061e5'))
 
-    db.session.add(Dataset(user_id=-1, name='Power_2021_2023', num_rows=5931021, file_path='app\\default_datasets\\b332e7fa-4425-4305-b8ac-dbc4466a9ffb'))
+    db.session.add(Dataset(user_id=-1, name='Power_2021_2023', num_rows=22892, file_path='app\\default_datasets\\b332e7fa-4425-4305-b8ac-dbc4466a9ffb'))
 
     db.session.commit()
 
