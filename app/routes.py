@@ -87,7 +87,7 @@ class RunResource(Resource):
             print(module)
             algorithms = alg.load_algorithms_from_module(module)
             dataset = dts.load_dataset(normalize_path(f"{dataset.file_path}/*.part"))
-            pred = algorithms[0].run(dataset.data)
+            pred = algorithms[0].run(np.nan_to_num(dataset.data))
             json_dump = json.dumps(pred, cls=NumpyEncoder)
             response = make_response(json_dump, 200)
             response.headers['Content-Type'] = 'application/json'
@@ -190,7 +190,9 @@ class DatasetResource(Resource):
 
             part_size = 60000
             # npart = (len(df) + part_size - 1)
-            df = dd.from_pandas(pd.read_csv(file), chunksize=part_size)
+            dataset = pd.read_csv(file)
+
+            df = dd.from_pandas(dataset, chunksize=part_size)
             # df = df.repartition(npartitions=npart)
             pfsums = np.cumsum(df.map_partitions(len).compute()).tolist()
             df["iddx"] = 1

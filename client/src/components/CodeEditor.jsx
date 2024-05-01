@@ -19,7 +19,9 @@ const CodeEditor = (props) => {
         <AceEditor
             style={{
                 'height': '100%',
-                'width': '100%'
+                'min-height': '400px',
+                'width': '100%',
+                'min-width': '1000px',
             }}
             mode="python"
             theme="github"

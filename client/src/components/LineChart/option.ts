@@ -1,5 +1,6 @@
 import * as echarts from 'echarts';
 import {LineChartOption} from "../../types/LineChartOptionType";
+import {LinearGradient} from "echarts/types/dist/shared";
 
 let colors = ['#BF5AF2', '#FFD60A', '#2d8cf0', '#FF443A', '#FF9F0C', '#31D158']
 
@@ -9,7 +10,53 @@ type ColorStop = {
 };
 export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
     yNames: { [p: string]: any }
-}): LineChartOption => {
+}): {
+    yAxis: {
+        axisLabel: { margin: number; textStyle: { fontSize: number } };
+        axisLine: { lineStyle: { color: string } };
+        splitLine: { lineStyle: { color: [string] } };
+        axisTick: { show: boolean };
+        type: string
+    };
+    xAxis: {
+        axisLabel: { margin: number; textStyle: { fontSize: number } };
+        data: string[];
+        axisLine: { lineStyle: { color: string } };
+        splitLine: { lineStyle: { color: [string] }; show: boolean; interval: string };
+        axisTick: { show: boolean };
+        type: string;
+        boundaryGap: boolean
+    };
+    series: {
+        symbol: string;
+        areaStyle: { normal: { color: LinearGradient } };
+        showSymbol: boolean;
+        data: number[];
+        lineStyle: { normal: { width: number } };
+        symbolSize: number;
+        sampling: string;
+        name: any;
+        itemStyle: { normal: { color: string } };
+        type: string;
+        smooth: boolean
+    }[];
+    tooltip: {
+        padding: number[];
+        backgroundColor: string;
+        extraCssText: string;
+        axisPointer: { lineStyle: { color: string } };
+        trigger: string;
+        textStyle: { color: string }
+    };
+    dataZoom: ({
+        minSpan: number;
+        xAxisIndex: number[];
+        showDataShadow: boolean;
+        start: number;
+        end: number;
+        type: string
+    } | { minSpan: number; xAxisIndex: number[]; start: number; end: number; type: string })[]
+} => {
     let colorStops = [{
         offset: 0,
         color: colors[2]

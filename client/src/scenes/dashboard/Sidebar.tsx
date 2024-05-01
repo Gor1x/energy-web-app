@@ -126,15 +126,15 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
                             dispatch('modal/close')
                         }}/>)
                 }>
-                    <ListItemIcon sx={{color:textColor}}>
-                        <MapIcon/>
-                    </ListItemIcon>
-                    <ListItemText sx={{color: textColor}}>Выбрать на карте</ListItemText>
-                    <div style={{height: '30px', width: '30px'}}/>
+
                 </MenuItem>
             </MenuList>
         </Box>
     );
 };
-
+/*<ListItemIcon sx={{color:textColor}}>
+                        <MapIcon/>
+                    </ListItemIcon>
+                    <ListItemText sx={{color: textColor}}>Выбрать на карте</ListItemText>
+                    <div style={{height: '30px', width: '30px'}}/>*/
 export default Sidebar;
