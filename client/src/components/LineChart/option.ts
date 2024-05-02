@@ -10,6 +10,7 @@ type ColorStop = {
 };
 export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
     yNames: { [p: string]: any }
+    chartType: string
 }): {
     yAxis: {
         axisLabel: { margin: number; textStyle: { fontSize: number } };
@@ -129,7 +130,7 @@ export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
         },
         series: yAxis.map((trendData, index) => ({
             name: config.yNames[index],
-            type: 'line',
+            type: config.chartType,
             sampling: 'lttb',
             smooth: true,
             showSymbol: false,

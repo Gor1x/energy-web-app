@@ -14,6 +14,7 @@ const ChartTabContent = (props: { file: FileObject }) => {
         file_path: file.file_path,
         num_rows: file.num_rows,
         selectColumn: file.selectColumn,
+        chartType: file.chartType,
         selectDates: file.selectDates,
         file_id: file.file_id
     }
@@ -21,7 +22,8 @@ const ChartTabContent = (props: { file: FileObject }) => {
         type: "ChartCard",
         props: {
             dataset: chartFile,
-            column: chartFile.selectColumn
+            column: chartFile.selectColumn,
+            chartType: file.chartType
         }
     }
     return (

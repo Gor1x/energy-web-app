@@ -9,6 +9,7 @@ import LineChart from "../../../components/LineChart/LineChart";
 export function DatasetChart(datasetChartProps: ChartCard) {
     const fromDate = datasetChartProps.props.dataset.selectDates?.fromDate
     const toDate = datasetChartProps.props.dataset.selectDates?.toDate
+    const chartType = datasetChartProps.props.chartType
     const {dataset, column} = datasetChartProps.props
     const [resize, setResize] = useState(false)
     const [timer, setTimer] = useState(0)
@@ -85,7 +86,8 @@ export function DatasetChart(datasetChartProps: ChartCard) {
         xAxis: dates,
         yAxis: [column],
         yNames: [column.toString()],
-        data: values.map((value, i) => ({[column]: value, date: i}))
+        data: values.map((value, i) => ({[column]: value, date: i})),
+        chartType: chartType
     };
 
     return (

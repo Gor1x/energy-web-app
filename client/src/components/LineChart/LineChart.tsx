@@ -6,12 +6,12 @@ import {LineChartConfigType} from "../../types/LineChartConfigType";
 const LineChart = ({config, resize} : {config: LineChartConfigType, resize: boolean}) => {
     const {data} = config
     let {yAxis} = data.reduce((accum, iter) => {
-        config.yAxis.forEach((lineName, index) => {
+        config.yAxis.forEach((lineName: string, index) => {
+            let namedElement = iter[lineName];
             if (!accum.yAxis[index]) {
-                accum.yAxis.push([iter[config.yAxis[index]]])
-            } else {
-                accum.yAxis[index].push(iter[config.yAxis[index]])
+                accum.yAxis.push([])
             }
+            accum.yAxis[index].push(namedElement)
         })
 
         return accum

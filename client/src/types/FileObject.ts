@@ -9,6 +9,7 @@ export type FileObject = {
     type: string
     num_rows: number
     selectColumn: string
+    chartType: string
     selectDates?: SelectDates
     file_id: string
 }

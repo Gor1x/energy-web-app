@@ -5,6 +5,7 @@ export type ChartCard =  {
     props: {
         dataset: FileObject
         column: string
+        chartType: string
     }
 }
 
