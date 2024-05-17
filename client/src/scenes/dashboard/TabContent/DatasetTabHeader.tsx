@@ -37,16 +37,16 @@ export function DatasetTabHeader(datasetTabHeaderProps: DatasetTabHeaderProps) {
         <IconButton onClick={() => modalOpenDispatch(
             <OpenChartModal
                 dataset={file}
-                onSelect={(column: string, chartType: string, selectDates?: SelectDates) => {
+                onSelect={(columns: string[], chartType: string, selectDates?: SelectDates) => {
                     modalCloseDispatch()
                     const chartFile: FileObject = {
-                        id: file.id + column,
+                        id: file.id + columns[0],
                         type: "chart",
-                        name: column.toString() + " from " + file.name,
+                        name: columns.toString() + " from " + file.name,
                         user_id: file.user_id,
                         file_path: file.file_path,
                         num_rows: file.num_rows,
-                        selectColumn: column.toString(),
+                        selectColumns: columns,
                         chartType: chartType,
                         selectDates: selectDates,
                         file_id: file.id

@@ -1,29 +1,31 @@
-import React from 'react'
-import Chart from '../Chart'
-import {lineChartOption} from './option'
-import {LineChartConfigType} from "../../types/LineChartConfigType";
+import React from 'react';
+import Chart from '../Chart';
+import { lineChartOption } from './option';
+import { LineChartConfigType } from "../../types/LineChartConfigType";
 
-const LineChart = ({config, resize} : {config: LineChartConfigType, resize: boolean}) => {
-    const {data} = config
-    let {yAxis} = data.reduce((accum, iter) => {
-        config.yAxis.forEach((lineName: string, index) => {
-            let namedElement = iter[lineName];
-            if (!accum.yAxis[index]) {
-                accum.yAxis.push([])
-            }
-            accum.yAxis[index].push(namedElement)
-        })
+const LineChart = ({ config, resize }: { config: LineChartConfigType, resize: boolean }) => {
+    const { data } = config;
 
-        return accum
-    }, {yAxis: [] as number[][]})
+    if (!Array.isArray(data)) {
+        console.error('Data should be an array');
+        return null;
+    }
 
-    let option = lineChartOption(config.xAxis, yAxis, config)
+    const yAxis: number[][] = config.yNames.map((lineName: string) => {
+        // @ts-ignore
+        return data.map((iter: { [key: string]: number }) => {
+            const value = iter[lineName];
+            return value;
+        });
+    });
+
+    const option = lineChartOption(config.xAxis, yAxis, config);
 
     return (
         <div>
-            {data && <Chart option={option} config={config} resize={resize}/>}
+            {data.length > 0 && <Chart option={option} config={config} resize={resize} />}
         </div>
-    )
+    );
 }
 
 export default LineChart;

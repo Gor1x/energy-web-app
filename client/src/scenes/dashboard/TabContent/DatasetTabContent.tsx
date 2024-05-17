@@ -95,7 +95,7 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
             <label> entries</label>*/}
             {/* GRID & CHARTS */}
             <Box
-                sx={{overflowY: 'scroll'}}
+                sx={{overflowY: 'scroll', scrollbarWidth: 'thin' }}
                 height="100%"
                 width="100%"
                 paddingLeft="13px"

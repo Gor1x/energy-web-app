@@ -9,11 +9,11 @@ const ChartTabContent = (props: { file: FileObject }) => {
     let chartFile: FileObject = {
         id: file.file_id,
         type: "chart",
-        name: file.selectColumn + " from " + file.name,
+        name: file.selectColumns[0] + " from " + file.name,
         user_id: file.user_id,
         file_path: file.file_path,
         num_rows: file.num_rows,
-        selectColumn: file.selectColumn,
+        selectColumns: file.selectColumns,
         chartType: file.chartType,
         selectDates: file.selectDates,
         file_id: file.file_id
@@ -22,13 +22,13 @@ const ChartTabContent = (props: { file: FileObject }) => {
         type: "ChartCard",
         props: {
             dataset: chartFile,
-            column: chartFile.selectColumn,
+            columns: chartFile.selectColumns,
             chartType: file.chartType
         }
     }
     return (
         <Box
-            sx={{overflowY: 'scroll'}}
+            sx={{overflowY: 'scroll' }}
             height="540px"
             width="100%"
             p='20px'

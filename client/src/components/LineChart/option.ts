@@ -1,17 +1,19 @@
 import * as echarts from 'echarts';
-import {LineChartOption} from "../../types/LineChartOptionType";
-import {LinearGradient} from "echarts/types/dist/shared";
+import { LineChartOption } from "../../types/LineChartOptionType";
+import { LinearGradient } from "echarts/types/dist/shared";
 
-let colors = ['#BF5AF2', '#FFD60A', '#2d8cf0', '#FF443A', '#FF9F0C', '#31D158']
+let colors = ['#BF5AF2', '#FFD60A', '#2d8cf0', '#FF443A', '#FF9F0C', '#31D158'];
 
 type ColorStop = {
     offset: number;
     color: string;
 };
-export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
-    yNames: { [p: string]: any }
-    chartType: string
-}): {
+
+export const lineChartOption = (
+    xAxis: string[],
+    yAxis: number[][],
+    config: { yNames: string[]; chartType: string }
+): {
     yAxis: {
         axisLabel: { margin: number; textStyle: { fontSize: number } };
         axisLine: { lineStyle: { color: string } };
@@ -36,11 +38,12 @@ export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
         lineStyle: { normal: { width: number } };
         symbolSize: number;
         sampling: string;
-        name: any;
+        name: string;
         itemStyle: { normal: { color: string } };
         type: string;
         smooth: boolean
     }[];
+    legend: { data: string[]; textStyle: { color: string } };
     tooltip: {
         padding: number[];
         backgroundColor: string;
@@ -58,14 +61,7 @@ export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
         type: string
     } | { minSpan: number; xAxisIndex: number[]; start: number; end: number; type: string })[]
 } => {
-    let colorStops = [{
-        offset: 0,
-        color: colors[2]
-    }, {
-        offset: 1,
-        color: 'rgba(0,184,250,0.2)'
-    }] as ColorStop[];
-    return ({
+    return {
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -128,47 +124,61 @@ export const lineChartOption = (xAxis: string[], yAxis: number[][], config: {
                 }
             }
         },
-        series: yAxis.map((trendData, index) => ({
-            name: config.yNames[index],
-            type: config.chartType,
-            sampling: 'lttb',
-            smooth: true,
-            showSymbol: false,
-            symbol: 'circle',
-            symbolSize: 6,
-            data: trendData,
-            areaStyle: {
-                normal: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 1, 1, colorStops, false)
+        series: yAxis.map((trendData, index) => {
+            let colorStops: ColorStop[] = [
+                {
+                    offset: 0,
+                    color: colors[index % colors.length]
                 }
-            },
-            itemStyle: {
-                normal: {
-                    color: colors[2]
+            ];
+            return {
+                name: config.yNames[index],
+                type: config.chartType,
+                sampling: 'lttb',
+                smooth: true,
+                showSymbol: false,
+                symbol: 'circle',
+                symbolSize: 6,
+                data: trendData,
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 1, 1, colorStops, false)
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: colors[index % colors.length]
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        width: 1
+                    }
                 }
-            },
-            lineStyle: {
-                normal: {
-                    width: 1
-                }
+            };
+        }),
+        legend: {
+            data: config.yNames,
+            textStyle: {
+                color: '#333'
             }
-        })),
+        },
         dataZoom: [
             {
-                type: 'inside', // Enable zooming by mouse wheel inside the chart area
-                xAxisIndex: [0], // Apply zooming to the x-axis
-                start: 0, // Initial zoom start percentage
-                end: 100, // Initial zoom end percentage
+                type: 'inside',
+                xAxisIndex: [0],
+                start: 0,
+                end: 100,
                 showDataShadow: true,
                 minSpan: 2
             },
             {
-                type: 'slider', // Show a slider for zooming and panning
-                xAxisIndex: [0], // Apply slider to the x-axis
-                start: 0, // Initial slider start percentage
-                end: 100, // Initial slider end percentage
+                type: 'slider',
+                xAxisIndex: [0],
+                start: 0,
+                end: 100,
                 minSpan: 2
             },
         ],
-    });
+    };
 };

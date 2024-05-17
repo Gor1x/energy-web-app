@@ -63,7 +63,6 @@ const Dashboard = () => {
                         <Tabs
                             value={activeTab}
                             onChange={(_, i) => selectTab(i)}
-                            variant="scrollable"
                             scrollButtons={false}
                             aria-label="scrollable prevent tabs example">
                             {tabs.map((file, index) =>

@@ -78,7 +78,7 @@ const AlgorithmTabContent = (props: { file: FileObject }) => {
             </Box>
             {/* GRID & CHARTS */}
             <Box
-                sx={{overflowY: 'scroll'}}
+                sx={{overflowY: 'scroll', scrollbarWidth: 'thin' }}
                 height="calc(100% - 40px)"
                 width="100%"
                 p='20px'

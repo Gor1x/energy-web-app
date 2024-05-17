@@ -1,98 +1,110 @@
+import * as React from "react";
 import {useCallback, useEffect, useState} from "react";
 import {authFetch} from "../../../auth";
 import {Box} from "@mui/material";
-import * as React from 'react';
 import {ChartCard} from "../../../types/CardsType";
-import {LineChartConfigType} from "../../../types/LineChartConfigType";
+import {DatasType, LineChartConfigType} from "../../../types/LineChartConfigType";
 import LineChart from "../../../components/LineChart/LineChart";
 
 export function DatasetChart(datasetChartProps: ChartCard) {
-    const fromDate = datasetChartProps.props.dataset.selectDates?.fromDate
-    const toDate = datasetChartProps.props.dataset.selectDates?.toDate
-    const chartType = datasetChartProps.props.chartType
-    const {dataset, column} = datasetChartProps.props
-    const [resize, setResize] = useState(false)
-    const [timer, setTimer] = useState(0)
-    let valuesInitState: number[] = []
-    const [values, setValues] = useState(valuesInitState)
-    let datesInitState: string[] = []
-    const [dates, setDates] = useState(datesInitState)
+    const fromDate = datasetChartProps.props.dataset.selectDates?.fromDate;
+    const toDate = datasetChartProps.props.dataset.selectDates?.toDate;
+    const chartType = datasetChartProps.props.chartType;
+    const { dataset, columns } = datasetChartProps.props;
+    const [resize, setResize] = useState(false);
+    const [timer, setTimer] = useState(0);
+    const [values, setValues] = useState<DatasType[]>([]);
+    const [dates, setDates] = useState<string[]>([]);
 
     const triggerResize = useCallback(() => {
         if (timer) {
             window.cancelAnimationFrame(timer);
         }
-        setTimer(window.requestAnimationFrame(function () {
-            setResize(true)
+        setTimer(window.requestAnimationFrame(() => {
+            setResize(true);
             setTimeout(() => {
-                setResize(false)
-            }, 0)
+                setResize(false);
+            }, 0);
         }));
-
-    }, [setResize, timer])
-
-    type StringToNumber = {
-        [key: string]: number
-    }
+    }, [setResize, timer]);
 
     useEffect(() => {
-        let urlSearchParams = new URLSearchParams({
-            from: "0",
-            to: Math.min(17000, dataset.num_rows).toString(),
-            column: column
-        });
-        if (fromDate !== undefined) {
-            urlSearchParams.append('from_date', fromDate);
-        }
-        if (toDate !== undefined) {
-            urlSearchParams.append('to_date', toDate);
-        }
-        authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams).then(response => response.json())
-            .then(data_ => {
-                const data = data_.map((line: unknown) => line);
-                setValues(data);
+        const fetchColumnData = async (column: string) => {
+            let urlSearchParams = new URLSearchParams({
+                from: "0",
+                to: Math.min(170000, dataset.num_rows).toString(),
+                column: column
             });
-    }, [column, dataset.id]);
+            if (fromDate !== undefined) {
+                urlSearchParams.append('from_date', fromDate);
+            }
+            if (toDate !== undefined) {
+                urlSearchParams.append('to_date', toDate);
+            }
+            const response = await authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams);
+            const data = await response.json();
+            return data.map((value: number, index: number) => ({ [column]: value, date: index }));
+        };
+
+        const fetchAllData = async () => {
+            const allData: DatasType[] = [];
+            for (const column of columns) {
+                const columnData = await fetchColumnData(column);
+                columnData.forEach((item: DatasType, index: number) => {
+                    if (!allData[index]) {
+                        allData[index] = { date: index };
+                    }
+                    allData[index] = { ...allData[index], ...item };
+                });
+            }
+            setValues(allData);
+        };
+
+        fetchAllData();
+    }, [columns, dataset.id, fromDate, toDate]);
+
     useEffect(() => {
-        let urlSearchParams = new URLSearchParams({
-            from: "0",
-            to: Math.min(17000, dataset.num_rows).toString(),
-            column: "Date"
-        });
-        if (fromDate !== undefined) {
-            urlSearchParams.append('from_date', fromDate);
-        }
-        if (toDate !== undefined) {
-            urlSearchParams.append('to_date', toDate);
-        }
-        authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams).then(response => response.json())
-            .then(data_ => {
-                const data = data_.map((line: unknown) => line);
-                setDates(data);
+        const fetchDates = async () => {
+            let urlSearchParams = new URLSearchParams({
+                from: "0",
+                to: Math.min(170000, dataset.num_rows).toString(),
+                column: "Date"
             });
-    }, [dataset.id]);
+            if (fromDate !== undefined) {
+                urlSearchParams.append('from_date', fromDate);
+            }
+            if (toDate !== undefined) {
+                urlSearchParams.append('to_date', toDate);
+            }
+            const response = await authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams);
+            const data = await response.json();
+            setDates(data.map((line: string) => line));
+        };
 
+        fetchDates();
+    }, [dataset.id, fromDate, toDate]);
 
     useEffect(() => {
-        window.addEventListener('resize', triggerResize)
-        return () => window.removeEventListener('resize', triggerResize)
-    }, [])
+        window.addEventListener('resize', triggerResize);
+        return () => window.removeEventListener('resize', triggerResize);
+    }, [triggerResize]);
 
     const config: LineChartConfigType = {
-        title: column.toString(),
+        title: columns.toString(),
         type: "Line",
         height: "500px",
         width: "100%",
         xAxis: dates,
-        yAxis: [column],
-        yNames: [column.toString()],
-        data: values.map((value, i) => ({[column]: value, date: i})),
+        yAxis: columns,
+        yNames: columns,
+        data: values,
         chartType: chartType
     };
 
     return (
         <Box>
-            {config && <LineChart config={config} resize={resize}/>}
+            {config && <LineChart config={config} resize={resize} />}
         </Box>
-    )
+    );
 }
+

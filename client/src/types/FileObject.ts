@@ -8,7 +8,7 @@ export type FileObject = {
     file_path: string
     type: string
     num_rows: number
-    selectColumn: string
+    selectColumns: string[]
     chartType: string
     selectDates?: SelectDates
     file_id: string
