@@ -91,14 +91,13 @@ export function DatasetChart(datasetChartProps: ChartCard) {
 
     const config: LineChartConfigType = {
         title: columns.toString(),
-        type: "Line",
+        type: chartType,
         height: "500px",
         width: "100%",
         xAxis: dates,
         yAxis: columns,
         yNames: columns,
         data: values,
-        chartType: chartType
     };
 
     return (

@@ -15,7 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 import app.Algorithm as alg
 import app.Dataset as dts
-from app.models import User, Algorithm, Dataset
+from app.dbService import User, Algorithm, Dataset
 
 running_ns = Namespace("run", description="Run")
 algorithm_ns = Namespace("algorithms", description="Algorithm")

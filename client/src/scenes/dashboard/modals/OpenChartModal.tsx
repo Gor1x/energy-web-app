@@ -115,11 +115,15 @@ const OpenChartModal = ({ dataset, onSelect }: {
                             onClick={() => setChartType("scatter")}>
                             <ListItemText sx={{ color: primary }}>{"scatter"}</ListItemText>
                         </MenuItem>
+                        <MenuItem key={`chart-column-bar`} selected={chartType === "bar"}
+                            onClick={() => setChartType("bar")}>
+                            <ListItemText sx={{ color: primary }}>{"bar"}</ListItemText>
+                        </MenuItem>
                     </MenuList>
                 </Grid>
             </Grid>
             <FormControlLabel
-                control={<Checkbox checked={datesAreVisible} onChange={handleCheckboxChange} sx={{ color: secondary }} />}
+                control={<Checkbox checked={datesAreVisible} onChange={handleCheckboxChange} sx={{ color: datesAreVisible ? primary : secondary }} />}
                 label="Выбрать даты"
             />
             {datesAreVisible && (

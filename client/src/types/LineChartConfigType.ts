@@ -6,8 +6,7 @@ export type LineChartConfigType = {
     xAxis: string[],
     yAxis: string[],
     yNames: string[],
-    data: DatasType[],
-    chartType: string
+    data: DatasType[]
 }
 
 export type DatasType = {

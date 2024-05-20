@@ -6,8 +6,8 @@ from flask_restx import Api
 
 from app.config import DevConfig
 from app.exts import db
-from app.models import User
-from app.routes import running_ns, algorithm_ns, dataset_ns, auth_ns
+from app.dbService import User
+from app.RoutesDataService import running_ns, algorithm_ns, dataset_ns, auth_ns
 
 
 def create_app():
