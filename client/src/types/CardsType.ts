@@ -15,6 +15,7 @@ export type RunCard = {
         title: string
         algorithm_id: string
         dataset_id: string
+        column: number
     }
 }
 

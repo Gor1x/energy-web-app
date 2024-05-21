@@ -9,7 +9,7 @@ import {getNameWithExtension} from "../../utils/getFileLabel";
 import * as React from 'react'
 import {FileObject} from "../../types/FileObject";
 
-function TabPanel(props: { [x: string]: any; children: any; value: any; index: any; }) {
+function TabPanel(props: { [x: string]: any; children: any; value: any; index: number; }) {
     const {children, value, index, ...other} = props;
 
     return (
@@ -87,7 +87,8 @@ const Dashboard = () => {
                     </Box>
                     <Box height='calc(100% - 50px)' width="available">
                         {tabs.map((file, i) =>
-                            (<TabPanel style={{height: '100%', width:"available"}} key={`tab-panel-${i}`} dir={theme.direction}
+                            (<TabPanel style={{height: '100%', width: "available"}} key={`tab-panel-${i}`}
+                                       dir={theme.direction}
                                        value={activeTab} index={i}>
                                 {renderTab(file)}
                             </TabPanel>)

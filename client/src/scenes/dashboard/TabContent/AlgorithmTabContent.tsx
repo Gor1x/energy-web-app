@@ -1,6 +1,5 @@
 import {useState} from 'react'
 import {Box, IconButton, useTheme} from "@mui/material";
-import {themeSettings} from "../../../theme";
 import CodeEditor from "../../../components/CodeEditor";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TableRowsIcon from '@mui/icons-material/TableRows';
@@ -31,7 +30,9 @@ const AlgorithmTabContent = (props: { file: FileObject }) => {
             props: {
                 title: `Результат запуска на ${getNameWithExtension(dataset)}`,
                 algorithm_id: props.file.id,
-                dataset_id: dataset.id
+                dataset_id: dataset.id,
+                // @ts-ignore
+                column: dataset.selectColumnForAlgorithm
             }
         };
         if (!items.find((item) => JSON.stringify(item) === JSON.stringify(runCard))) {
@@ -103,7 +104,9 @@ const AlgorithmTabContent = (props: { file: FileObject }) => {
                                     // @ts-ignore
                                     algorithm_id: item.props?.algorithm_id,
                                     // @ts-ignore
-                                    dataset_id: item.props?.dataset_id
+                                    dataset_id: item.props?.dataset_id,
+                                    // @ts-ignore
+                                    column: item.props?.column
                                 }
                             }
                             return (

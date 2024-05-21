@@ -74,25 +74,42 @@ class NumpyEncoder(json.JSONEncoder):
 
 @running_ns.route("/")
 class RunResource(Resource):
+    class NumpyEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            return super(NumpyEncoder, self).default(obj)
+
     @jwt_required()
     def get(self):
         args = request.args
+        ind_column = int(args['column'])
         user_id = User.query.filter_by(username=get_jwt_identity()).first().id
         algorithm = Algorithm.query.get_or_404(args['algorithm_id'])
         dataset = Dataset.query.get_or_404(args['dataset_id'])
         if (algorithm.user_id == -1 or algorithm.user_id == user_id) and (
                 dataset.user_id == -1 or dataset.user_id == user_id):
+
             module = os.path.splitext(algorithm.file_path)
             module = module[0].replace('\\', '.').replace('/', '.')
             print(module)
+
             algorithms = alg.load_algorithms_from_module(module)
             dataset = dts.load_dataset(normalize_path(f"{dataset.file_path}/*.part"))
-            pred = algorithms[0].run(np.nan_to_num(dataset.data))
+
+            # Переставляем первую и пятую колонки
+            data = dataset.data
+            ind_column = ind_column - 3
+            if data.shape[1] >= (ind_column + 1):
+                data[:, [0, ind_column]] = data[:, [ind_column, 0]]
+            else:
+                return make_response(json.dumps({"error": "Dataset does not have enough columns"}), 400)
+
+            pred = algorithms[0].run(np.nan_to_num(data))
             json_dump = json.dumps(pred, cls=NumpyEncoder)
             response = make_response(json_dump, 200)
             response.headers['Content-Type'] = 'application/json'
             return response
-
 
 @algorithm_ns.route("/")
 class AlgorithmResource(Resource):
@@ -256,16 +273,9 @@ class DatasetDataByIdResource(Resource):
         args = request.args
         from_row = int(args['from'])
         to_row = int(args['to'])
-        from_date = ""
-        if 'from_date' in args:
-            from_date = args['from_date']
-        to_date = ""
-        if 'to_date' in args:
-            to_date = args['to_date']
-        column = ""
-        if 'column' in args:
-            column = args['column']
-
+        from_date = args.get('from_date', "")
+        to_date = args.get('to_date', "")
+        column = args.get('column', "")
         user_id = User.query.filter_by(username=get_jwt_identity()).first().id
         dataset = Dataset.query.get_or_404(id)
         if dataset.user_id == -1 or dataset.user_id == user_id:

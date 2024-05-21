@@ -1,3 +1,4 @@
+import {RunCard} from "./CardsType";
 
 export type SelectDates = { fromDate: string, toDate: string };
 
@@ -9,7 +10,9 @@ export type FileObject = {
     type: string
     num_rows: number
     selectColumns: string[]
+    selectColumnForAlgorithm?: number
     chartType: string
     selectDates?: SelectDates
+    runCard?: RunCard
     file_id: string
 }

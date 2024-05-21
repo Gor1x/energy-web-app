@@ -1,9 +1,9 @@
 import * as React from "react";
-import {useCallback, useEffect, useState} from "react";
-import {authFetch} from "../../../auth";
-import {Box} from "@mui/material";
-import {ChartCard} from "../../../types/CardsType";
-import {DatasType, LineChartConfigType} from "../../../types/LineChartConfigType";
+import { useCallback, useEffect, useState } from "react";
+import { authFetch } from "../../../auth";
+import { Box } from "@mui/material";
+import { ChartCard, RunCard } from "../../../types/CardsType";
+import { DatasType, LineChartConfigType } from "../../../types/LineChartConfigType";
 import LineChart from "../../../components/LineChart/LineChart";
 
 export function DatasetChart(datasetChartProps: ChartCard) {
@@ -36,10 +36,10 @@ export function DatasetChart(datasetChartProps: ChartCard) {
                 column: column
             });
             if (fromDate !== undefined) {
-                urlSearchParams.append('from_date', fromDate);
+                urlSearchParams.append("from_date", fromDate);
             }
             if (toDate !== undefined) {
-                urlSearchParams.append('to_date', toDate);
+                urlSearchParams.append("to_date", toDate);
             }
             const response = await authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams);
             const data = await response.json();
@@ -71,10 +71,10 @@ export function DatasetChart(datasetChartProps: ChartCard) {
                 column: "Date"
             });
             if (fromDate !== undefined) {
-                urlSearchParams.append('from_date', fromDate);
+                urlSearchParams.append("from_date", fromDate);
             }
             if (toDate !== undefined) {
-                urlSearchParams.append('to_date', toDate);
+                urlSearchParams.append("to_date", toDate);
             }
             const response = await authFetch(`/datasets/data/${dataset.id}?` + urlSearchParams);
             const data = await response.json();
@@ -85,8 +85,24 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     }, [dataset.id, fromDate, toDate]);
 
     useEffect(() => {
-        window.addEventListener('resize', triggerResize);
-        return () => window.removeEventListener('resize', triggerResize);
+        const fetchRunResultData = async () => {
+            if (dataset.runCard) {
+                const result = await fetchRunResult(dataset.runCard);
+                const lastColumnName = columns[columns.length - 1];
+                const formattedResult = values.map((item, index) => ({
+                    ...item,
+                    [lastColumnName]: result[index]
+                }));
+                setValues(formattedResult);
+            }
+        };
+
+        fetchRunResultData();
+    }, [dataset.runCard, values, columns]);
+
+    useEffect(() => {
+        window.addEventListener("resize", triggerResize);
+        return () => window.removeEventListener("resize", triggerResize);
     }, [triggerResize]);
 
     const config: LineChartConfigType = {
@@ -107,3 +123,12 @@ export function DatasetChart(datasetChartProps: ChartCard) {
     );
 }
 
+const fetchRunResult = async (runCard: RunCard) => {
+    const response = await authFetch('/run/?' + new URLSearchParams({
+        algorithm_id: runCard.props.algorithm_id.toString(),
+        dataset_id: runCard.props.dataset_id.toString(),
+        column: runCard.props.column.toString(),
+    }));
+    const json = await response.json();
+    return json.map((value: number, index: number) => ({ [runCard.props.column]: value, date: index }));
+};

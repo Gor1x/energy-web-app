@@ -119,20 +119,20 @@ const Sidebar = (props: { [x: string]: any; onSelect: {(file: FileObject) : void
                 <ListTitle type="dataset"/>
                 {datasets.map((item: FileObject, i: string) => <Item key={`sidebar-dataset-${i}`} title={getNameWithExtension(item)}
                                                  file={item}/>)}
-                <MenuItem onClick={() =>
+            </MenuList>
+        </Box>
+    );
+};
+/*
+<MenuItem onClick={() =>
                     dispatch('modal/open',
                         <MapModal onClick={() => {
                             onSelect(datasets[0])
                             dispatch('modal/close')
                         }}/>)
                 }>
-
-                </MenuItem>
-            </MenuList>
-        </Box>
-    );
-};
-/*<ListItemIcon sx={{color:textColor}}>
+    </MenuItem>
+<ListItemIcon sx={{color:textColor}}>
                         <MapIcon/>
                     </ListItemIcon>
                     <ListItemText sx={{color: textColor}}>Выбрать на карте</ListItemText>

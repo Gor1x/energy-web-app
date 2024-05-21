@@ -3,11 +3,11 @@ import { Box } from "@mui/material";
 import TableCSV from '../../../components/TableCSV';
 import Card from '../../../components/Card';
 import { getNameWithExtension } from '../../../utils/getFileLabel';
-import Run from './Run';
 import { useStoreon } from 'storeon/react';
 import { DatasetTabHeader } from "./DatasetTabHeader";
 import { FileObject } from "../../../types/FileObject";
 import { ChartCard, RunCard, TableCard } from "../../../types/CardsType";
+import Run from "./Run";
 
 const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: FileObject) => void }) => {
     const { file } = props;
@@ -37,12 +37,15 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
     };
 
     const openRunCardHandler = (algorithm: FileObject) => {
+
         const runCard: RunCard = {
             type: "RunCard",
             props: {
                 title: `Результат запуска ${getNameWithExtension(algorithm)}`,
                 algorithm_id: algorithm.id,
-                dataset_id: file.id
+                dataset_id: file.id,
+                // @ts-ignore
+                column: file.selectColumnForAlgorithm
             }
         };
         if (!items.find((item) => JSON.stringify(item) === JSON.stringify(runCard))) {
@@ -132,7 +135,9 @@ const DatasetTabContent = (props: { file: FileObject, onSelectChart: (file: File
                                     // @ts-ignore
                                     algorithm_id: item.props?.algorithm_id,
                                     // @ts-ignore
-                                    dataset_id: item.props?.dataset_id
+                                    dataset_id: item.props?.dataset_id,
+                                    // @ts-ignore
+                                    column: item.props?.column
                                 }
                             }
                             return (
