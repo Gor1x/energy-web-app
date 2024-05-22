@@ -184,7 +184,7 @@ const OpenChartModal = ({dataset, onSelect}: {
                 </Grid>
                 <Grid item xs={12} sm={3}>
                     <Typography id="modal-modal-title" variant="h6" component="h2" sx={{mb: 2}}>
-                        Выберите столбец для алгоритма
+                        Выберите столбец для запуска алгоритма
                     </Typography>
                     <Box sx={{maxHeight: 400, overflowY: 'auto', scrollbarWidth: 'thin'}}>
                         <MenuList>

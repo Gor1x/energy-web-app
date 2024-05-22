@@ -2,7 +2,7 @@ import * as echarts from 'echarts';
 import { LineChartOption } from "../../types/LineChartOptionType";
 import { LinearGradient } from "echarts/types/dist/shared";
 
-let colors = ['#BF5AF2', '#FFD60A', '#2d8cf0', '#FF443A', '#FF9F0C', '#31D158'];
+let colors = ['#2d8cf0','#FFD60A', '#BF5AF2',  '#FF443A', '#FF9F0C', '#31D158'];
 
 type ColorStop = {
     offset: number;
